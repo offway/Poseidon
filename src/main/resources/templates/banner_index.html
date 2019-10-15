@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head th:replace="head"></head>
+    <title>Banner管理</title>
+    <link rel="stylesheet" href="https://admin.offway.cn/assets/css/jquery.datetimepicker.min.css"/>
+    <script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+    <style type="text/css">
+        .form-group img{
+            max-width:400px;
+            max-height:300px;
+        }
+    </style>
+</head>
+<body class="page-body">
+
+<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+
+    <div th:replace="sidebar-menu"></div>
+    <div class="main-content">
+        <!-- User Info, Notifications and activity Bar -->
+        <nav th:replace="navbar"></nav>
+        <div class="page-title">
+
+            <div class="title-env">
+                <h1 class="title">Banner管理</h1>
+                <p class="activityDescription"></p>
+            </div>
+
+            <div class="breadcrumb-env">
+
+                <ol class="breadcrumb bc-1">
+                    <li><a href="/"><i class="fa-home"></i>Home</a></li>
+                    <li><a>系统管理</a></li>
+                    <li class="active"><strong>Banner管理</strong></li>
+                </ol>
+
+            </div>
+
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <form role="form" class="form-inline">
+                    <div class="form-group ">
+                        <div class="input-group">
+                            <div class="input-group">
+                                <input type="text" name="id" class="form-control" style="height:35px" placeholder="id"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="input-group">
+                            <div class="input-group">
+                                <input type="text" name="remark" class="form-control" style="height:35px" placeholder="名称"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary btn-single searchBtn" style="height:35px">查询</button>
+                    </div>
+
+                </form>
+                <div class="form-group">
+                    <button class="btn btn-info ex" id="returnbanner" style="display: none; height:35px">返回</button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <table id="example-1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                </table>
+            </div>
+            <button class="btn btn-info add">添加</button>
+            <button class="btn btn-info edit">修改</button>
+            <button class="btn btn-info del">删除</button>
+            <button class="btn btn-info rank">统计</button>
+            <!--                <button class="btn btn-info up">上架</button>-->
+            <!--                <button class="btn btn-info down">下架</button>-->
+        </div>
+
+
+        <footer th:replace="footer"></footer>
+    </div>
+</div>
+
+<div class="modal fade in" id="modal-6">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">添加banner</h4>
+            </div>
+
+            <div class="modal-body">
+                <form role="form" id="saveForm">
+                    <input type="hidden" name="id"/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">品牌名称</label>
+                                <input type="text" class="form-control" name="remark" placeholder="品牌名称"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">开始时间</label>
+                                <input type="text" class="form-control" name="beginTime" id="beginTime" placeholder="开始时间" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">截止时间</label>
+                                <input type="text" class="form-control" name="endTime" id="endTime" placeholder="截止时间" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">封面图片</label>
+                                <input type="file" class="form-control" name="imageFile" placeholder="封面图片"/>
+                                <input type="hidden" class="form-control" name="banner" />
+                                <img alt="" src="" name="imageImage" style="display:none;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">排序</label>
+                                <input type="text" readonly="readonly" class="form-control" name="sort" value="0" placeholder="排序"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group redirectId">
+                                <label class="control-label">跳转品牌id</label>
+                                <input type="text" class="form-control" name="redirectId" placeholder="详情ID"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info save">保存</button>
+                <button type="button" class="btn btn-white bg-lg" style="display:none">数据提交中，请稍等....</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="preview" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog" style=" width: 800px;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">查看详情</h4>
+            </div>
+
+            <div class="modal-body" id="preview_body">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="previewAlt" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog" style=" width: 800px;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">查看详情</h4>
+            </div>
+
+            <div class="modal-body" id="preview_body_alt">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://admin.offway.cn/js/common.js"></script>
+<script src="assets/js/moment.min.js"></script>
+<script src="https://admin.offway.cn/assets/js/jquery.datetimepicker.full.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function topIt(id) {
+        var num = prompt("输入排序位置,从0开始,0为第一位", "0");
+        if (isNaN(num) || num == null) {
+            alert("请输入数字！");
+        } else {
+            $.post("/banner_top", {"id": id, "sort": num}, function (data) {
+                if (data) {
+                    table_global.fnDraw();
+                    toastr.success("操作已成功！", "温馨提示");
+                } else {
+                    toastr.error("操作失败", "温馨提示");
+                }
+            });
+        }
+    }
+
+    function upIt(id, self) {
+        $.post("/banner_up", {"id": id}, function (data) {
+            if (data) {
+                $(self).val("下架");
+                //remove old handler
+                $(self).prop("onclick", null);
+                $(self).removeAttr("onclick");
+                $(self).off("click");
+                //bind new
+                $(self).on("click", function () {
+                    downIt(id, self);
+                });
+                toastr.success("操作已成功！", "温馨提示");
+                table_global.fnDraw();
+            } else {
+                toastr.error("非管理员无权操作", "温馨提示");
+            }
+        });
+    }
+
+    function downIt(id, self) {
+        $.post("/banner_down", {"id": id}, function (data) {
+            if (data) {
+                $(self).val("上架");
+                //remove old handler
+                $(self).prop("onclick", null);
+                $(self).removeAttr("onclick");
+                $(self).off("click");
+                //bind new
+                $(self).on("click", function () {
+                    upIt(id, self);
+                });
+                toastr.success("操作已成功！", "温馨提示");
+                table_global.fnDraw();
+            } else {
+                toastr.error("非管理员无权操作", "温馨提示");
+            }
+        });
+    }
+
+    function appendToPreview(key, value) {
+        return '<div class="row">' +
+            '<div class="col-md-6" style="height: 100px;align-items: center;display: flex;"' +
+            key +
+            '</div>' +
+            '<div class="col-md-6">' +
+            value +
+            '</div>' +
+            '</div>';
+    }
+
+    function appendToPreviewList(one, two, three, four, five, six) {
+        return '<div class="row">' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            one +
+            '</div>' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            two +
+            '</div>' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            three +
+            '</div>' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            four +
+            '</div>' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            five +
+            '</div>' +
+            '<div class="col-md-2" style="height: 100px;align-items: center;display: flex;">' +
+            six +
+            '</div>' +
+            '</div>';
+    }
+
+    function formatTime(time) {
+        return new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+    }
+
+    function buildImg(url) {
+        return "<img width='100px' height='100px' src='#' />".replace("#", url);
+    }
+
+    function checkIt(id) {
+        $.post("/banner_listHistorySub", {"id": id}, function (data) {
+            if (data) {
+                var preview = $("#preview_body_alt");
+                var contentStr = appendToPreviewList("品牌名", "品牌ID", "图片", "创建时间", "开始时间", "结束时间");
+                for (var obj of data) {
+                    contentStr += appendToPreviewList(obj["banner"], obj["bannerId"], buildImg(obj["bannerImg"]), formatTime(obj["createTime"]), formatTime(obj["beginTime"]), formatTime(obj["endTime"]));
+                }
+                preview.html(contentStr);
+                jQuery('#previewAlt').modal('show', {backdrop: 'fade'});
+            } else {
+                toastr.error("操作失败", "温馨提示");
+            }
+        });
+    }
+
+    var qiniuUrl = [[${qiniuUrl}]];
+    var table_global;
+    jQuery(document).ready(function($)
+    {
+        $(".searchBtn").click(function(){
+            $("#checkbox-all").attr("checked", false);
+            oTable.fnDraw(); //or fnReloadAjax()
+            return false;
+        });
+
+        var oTable = $("#example-1").dataTable({
+            language: {
+                url: "../assets/Chinese.txt"
+            },
+            bFilter : false,
+            bServerSide : true,//服务器处理分页，默认是false，需要服务器处理，必须true
+            sAjaxDataProp : "aData",//是服务器分页的标志，必须有
+            sAjaxSource : "/banner_list",//通过ajax实现分页的url路径。
+            fnServerParams : function(aData){
+                var searchArray = $(".form-inline").serializeArray();
+                $.merge(aData, searchArray);
+            },
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: "id",
+                    width:"5%",
+                    orderable: false,
+                    className: 'select-checkbox',
+                    title: '<input type="checkbox" id="checkbox-all"/>',
+                    render: function ( data, type, full, meta ) {
+                        return '<input type="checkbox" name="activityId" value="'+data+'" />';
+                    }
+                },
+                {
+                    targets: 1,
+                    data: "id",
+                    title: "序号"
+                },
+                {
+                    targets: 2,
+                    data: "banner",
+                    title: "封面图片",
+                    render: function (data, type, row, meta) {
+                        return "<img src="+data+"></img>";
+                    }
+                },
+                {
+                    targets: 3,
+                    data: "redirectId",
+                    title: "跳转品牌ID"
+                },
+                {
+                    targets: 4,
+                    data: "beginTime",
+                    title: "开始时间",
+                    render: function (data, type, row, meta) {
+                        return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                    }
+                },
+                {
+                    targets: 5,
+                    data: "endTime",
+                    title: "截止时间",
+                    render: function (data, type, row, meta) {
+                        return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                    }
+                },
+                {
+                    targets: 6,
+                    data: "status",
+                    title: "是否上架",
+                    render: function (data, type, row, meta) {
+                        return "1" == data && new Date(row["endTime"]).getTime() > new Date().getTime() ?  "已上架": "<font color='blue'>未上架</font>" ;
+                    }
+                },
+                {
+                    targets: 7,
+                    data: "sort",
+                    title: "排序",
+                    render: function (data, type, row, meta) {
+                        return "1" == row["status"] ? data : "";
+                    }
+                },
+                {
+                    targets: 8,
+                    data: "createTime",
+                    title: "创建时间",
+                    render: function (data, type, row, meta) {
+                        return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                    }
+                },
+                {
+                    targets: 9,
+                    data: "remark",
+                    title: "品牌名称"
+                },
+                {
+                    targets: 10,
+                    data: "id",
+                    orderable: false,
+                    title: "操作",
+                    render:function (data, type, full, meta) {
+                        var str = "";
+                        if (full["status"] == "0") {
+                            str += '<input type="button" name="checkIt" onclick="upIt(' + data + ',this)" value="上架"/>';
+                        } else {
+                            str += '<input type="button" name="checkIt" onclick="downIt(' + data + ',this)" value="下架"/>';
+                        }
+                        return str;
+                    }
+                },
+                {
+                    targets: 11,
+                    data: "id",
+                    orderable: false,
+                    title: "操作",
+                    render: function (data, type, full, meta) {
+                        if (parseInt(full["status"]) == 1) {
+                            return '<input type="button" name="checkIt" onclick="topIt(' + data + ')" value="排序"/>';
+                        } else {
+                            // return '<input type="button" name="checkIt" disabled="disabled" value="下架无法排序"/>';
+                            return '';
+                        }
+                    }
+                }
+            ]
+        });
+        table_global = oTable;
+        jQuery.datetimepicker.setLocale('zh');
+        jQuery('#beginTime').datetimepicker(
+            {
+                "lang": "zh",
+                "format": "Y-m-d H:i:s",
+                "timepicker": true,
+                "datepicker": true,
+                "defaultDate": new Date(),
+                "defaultTime": "00:00:00"
+            }
+        );
+        jQuery('#endTime').datetimepicker(
+            {
+                "lang": "zh",
+                "format": "Y-m-d H:i:s",
+                "timepicker": true,
+                "datepicker": true,
+                "defaultDate": new Date(),
+                "defaultTime": "00:00:00"
+            }
+        );
+
+        function toggle(value) {
+            var url = $(".url");
+            var redirectId = $(".redirectId");
+            switch (parseInt(value)) {
+                case 0:
+                    url.show();
+                    redirectId.hide();
+                    break;
+                default:
+                    url.hide();
+                    redirectId.show();
+                    break;
+            }
+        }
+
+        $(".btn.btn-info.add").click(function () {
+            var form = $("#saveForm");
+            form.find("input:not(.notMe)").val("");
+            form.find("img").attr("src", "");
+            form.find("img").hide();
+            form.find("input[type='file']").show();
+            $(".imageShow").remove();
+            jQuery('#modal-6').modal({backdrop: 'static', keyboard: false});
+        });
+
+        $(".btn.btn-info.save").click(function(){
+            var footer = $(this).parent(".modal-footer");
+            footer.find("button").hide();
+            footer.find(".bg-lg").show();
+            var form = $("#saveForm");
+            var beginTime = form.find("input[name='beginTime']").val();
+            var endTime = form.find("input[name='endTime']").val();
+            var redirectId = form.find("input[name='redirectId']").val();
+            //文件
+            var imageVal = form.find("input[name='imageFile']")[0].value;
+            //已上传的图片地址
+            var imageVals = form.find("input[name='banner']").val();
+            if ((imageVals == "" && imageVal == "") || redirectId == "" || beginTime == "" || endTime == "") {
+                toastr.error("请填写完整数据后提交", "温馨提示");
+                footer.find("button").show();
+                footer.find(".bg-lg").hide();
+                return;
+            }
+
+            var imageFile = '';
+            //上传文件获得文件地址
+            if (imageVal != '') {
+                imageFile = form.find("input[name='imageFile']")[0].files[0];
+            }
+
+            //获取token
+            $.get("/qiniu/token", {}, function (token) {
+                if (token != '') {
+                    upload("banner", token, imageFile, function (res) {
+                    }, function (err) {
+                        console.log("上传imageFile异常:" + err);
+                    }, function (res) {
+                        //上传成功
+                        if (res != '') {
+                            form.find("input[name='" + res.param + "']").val(qiniuUrl + "/" + res.key);
+                        }
+                        //提交保存
+                        var postData = $("#saveForm").serializeArray();
+                        $.post("/banner_save", postData, function (data) {
+                            if (data) {
+                                footer.find("button").show();
+                                footer.find(".bg-lg").hide();
+                                jQuery('#modal-6').modal('hide');
+                                toastr.success("操作已成功！", "温馨提示");
+                                oTable.fnDraw();
+                            } else {
+                                footer.find("button").show();
+                                footer.find(".bg-lg").hide();
+                                toastr.error("操作失败", "温馨提示");
+                            }
+                        });
+                    });
+                } else {
+                    footer.find("button").show();
+                    footer.find(".bg-lg").hide();
+                    toastr.error("上传文件错误，请联系管理员", "温馨提示");
+                }
+            });
+        });
+
+        $(".btn.btn-info.edit").click(function () {
+            var activityId = $("input[name='activityId']:checked");
+            if (activityId.length != 1) {
+                toastr.error("请选择一条数据操作", "温馨提示");
+                return;
+            }
+            $.post("/banner_get", {"id": activityId.val()}, function (data) {
+                var form = $("#saveForm");
+                form.find("input[name='id']").val(data.id);
+                form.find("input[name='redirectId']").val(data.redirectId);
+                form.find("input[name='sort']").val(data.sort);
+                form.find("input[name='remark']").val(data.remark);
+                form.find("input[name='type']").val([data.type]);
+
+                var beginTimeStr = new Date(data["beginTime"]).Format('yyyy-MM-dd hh:mm:ss');
+                var endTimeStr = new Date(data["endTime"]).Format('yyyy-MM-dd hh:mm:ss');
+                form.find("input[name='beginTime']").val(beginTimeStr);
+                form.find("input[name='endTime']").val(endTimeStr);
+
+                if ('' != data.image) {
+                    form.find("input[name='banner']").val(data.banner);
+                    form.find("img[name='imageImage']").attr("src", data.banner);
+                    form.find("img[name='imageImage']").show();
+                    form.find(".btn.image").show();
+                }
+                jQuery('#modal-6').modal({backdrop: 'static', keyboard: false});
+            });
+        });
+
+        $(".btn.btn-info.del").click(function () {
+            var activityId = $("input[name='activityId']:checked");
+            if (activityId.length < 1) {
+                toastr.error("请至少选择一条数据操作", "温馨提示");
+                return;
+            }
+
+            var ids = [];
+            activityId.each(function (i, e) {
+                ids.push(e.value);
+            });
+
+            $.post("/banner_del", {"ids": ids}, function (data) {
+                if (data) {
+                    toastr.success("操作已成功！", "温馨提示");
+                    oTable.fnDraw();
+                }
+            });
+        });
+
+        $(".btn.btn-info.rank").click(function () {
+            $.post("/banner_listHistoryRank", {}, function (data) {
+                if (data) {
+                    var preview = $("#preview_body");
+                    var str = appendToPreviewList("次数", "品牌名", "品牌ID", "", "图片", "操作");
+                    for (var obj of data) {
+                        var btn = '<input type="button" onclick="checkIt(VVV)" value="查看" />'.replace("VVV", obj["id"]);
+                        str += appendToPreviewList(obj["bannerId"], obj["banner"], obj["id"], "", buildImg(obj["bannerImg"]), btn);
+                    }
+                    preview.html(str);
+                    jQuery('#preview').modal('show', {backdrop: 'fade'});
+                }
+            });
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+
+</html>
