@@ -1,7 +1,7 @@
 #服务相关配置
 server: 
 #HTTP端口
-  port: 8089
+  port: 8090
   session:  
     #session超时时间，单位秒
     timeout:  1800     
