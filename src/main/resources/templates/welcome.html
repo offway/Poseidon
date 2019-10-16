@@ -2,155 +2,141 @@
 <html lang="en">
 <head>
 	<head th:replace="head"></head>
-	<title></title>
+	<title>首页测试页面</title>
 	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
-	<style type="text/css">
-	.form-group img{
-		max-width:400px;
-		max-height:300px;
-	}
-	</style>
 </head>
-<body class="page-body">
-
-	<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
-			
-		<div th:replace="sidebar-menu"></div>
-		<div class="main-content">
-			<!-- User Info, Notifications and activity Bar -->
-			<nav th:replace="navbar"></nav>
-			<div class="page-title">
-				
-				<div class="title-env">
-					<h1 class="title"></h1>
-					<p class="activityDescription"></p>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<header th:replace="navbar"></header>
+	<aside th:replace="sidebar-menu"></aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">Blank page</h3>
 				</div>
-
-				<div class="breadcrumb-env">
-
-					<ol class="breadcrumb bc-1">
-						<li><a href="/"><i class="fa-home"></i>Home</a></li>
-						<li><a>系统管理</a></li>
-						<li class="active"><strong></strong></li>
-					</ol>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title"></h3>
-							<div class="panel-options">
+				<div class="right-title">
+					<div class="d-flex mt-10 justify-content-end">
+						<div class="d-md-flex mr-20 ml-10 d-none">
+							<div class="chart-text mr-10">
+								<p class="mb-0 font-size-12">THIS MONTH</p>
+								<h4 class="my-0 text-primary">$12,125</h4>
+							</div>
+							<div class="spark-chart">
+								<div id="thismonth"><canvas width="60" height="35" style="display: inline-block; width: 60px; height: 35px; vertical-align: top;"></canvas></div>
 							</div>
 						</div>
-						<div class="panel-body">
-							<form role="form" id="saveForm" class="form-horizontal">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label class="control-label">启动页图片</label>
-											<input type="file" class="form-control" name="logoFile" onchange="uploadFile(this)"/>
-											<input type="hidden" class="form-control" name="logo" />
-											<img alt="" src='' name="logoImg" style="display:none;"/>
-										</div>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-info save">保存</button>
-									<button type="button" class="btn btn-white bg-lg" style="display:none">数据提交中，请稍等....</button>
-								</div>
-							</form>
+						<div class="d-md-flex ml-10 d-none">
+							<div class="chart-text mr-10">
+								<p class="mb-0 font-size-12">LAST YEAR</p>
+								<h4 class="my-0 text-danger">$22,754</h4>
+							</div>
+							<div class="spark-chart">
+								<div id="lastyear"><canvas width="60" height="35" style="display: inline-block; width: 60px; height: 35px; vertical-align: top;"></canvas></div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<footer th:replace="footer"></footer>
 		</div>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<h4 class="box-title">Title</h4>
+						</div>
+						<div class="box-body">
+							This is some text within a card block.
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+							Footer
+						</div>
+						<!-- /.box-footer-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
 	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
 
-	<script src="https://admin.offway.cn/js/common.js"></script>
-	<script th:inline="javascript">
-	/*<![CDATA[*/
+<script th:inline="javascript">
+/*<![CDATA[*/
 
-	function uploadFile(self) {
-		var that = $(self);
-		if (self.files.length > 0) {
-			var file = self.files[0];
-			getQNToken(function (token) {
-				this.upload("", token, file, function () {
-					//
-				}, function (err) {
-					console.log("error");
-					console.log(err);
-				}, function (res) {
-					var url = qiniuUrl + "/" + res.key;
-					that.parent().find("[name=logo]").val(url);
-					that.parent().find("[name=logoImg]").attr("src", url);
-					that.parent().find("[name=logoImg]").attr("width", "300px");
-					that.parent().find("[name=logoImg]").attr("height", "300px");
-					that.parent().find("[name=logoImg]").show();
-				});
+function uploadFile(self) {
+	var that = $(self);
+	if (self.files.length > 0) {
+		var file = self.files[0];
+		getQNToken(function (token) {
+			this.upload("", token, file, function () {
+				//
+			}, function (err) {
+				console.log("error");
+				console.log(err);
+			}, function (res) {
+				var url = qiniuUrl + "/" + res.key;
+				that.parent().find("[name=logo]").val(url);
+				that.parent().find("[name=logoImg]").attr("src", url);
+				that.parent().find("[name=logoImg]").attr("width", "300px");
+				that.parent().find("[name=logoImg]").attr("height", "300px");
+				that.parent().find("[name=logoImg]").show();
 			});
-		} else {
-			confirm("未选择任何文件!");
-		}
-	}
-
-	function getQNToken(cb) {
-		$.get("/qiniu/token", {}, function (token) {
-			cb(token);
 		});
+	} else {
+		confirm("未选择任何文件!");
 	}
+}
 
-	var qiniuUrl = [[${qiniuUrl}]];
-    var image = [[${image}]];
-    jQuery(document).ready(function($)
-	{
-		var value = "启动页配置";
-		$("title").html(value);
-		$(".activityDescription").html(value);
-		$(".active strong").html(value);
-		$(".panel-title").html(value);
-		$("h1.title").html(value);
+function getQNToken(cb) {
+	$.get("/qiniu/token", {}, function (token) {
+		cb(token);
+	});
+}
 
+var qiniuUrl = [[${qiniuUrl}]];
+var image = [[${image}]];
+jQuery(document).ready(function($)
+{
+	//保存
+	$(".btn.btn-info.save").click(function () {
+		var footer = $(this).parent(".modal-footer");
+		footer.find("button").hide();
+		footer.find(".bg-lg").show();
 		var form = $("#saveForm");
-		form.find("input[name='logo']").val(image);
-		form.find("img[name='logoImg']").attr("src", image);
-		if (image != '') {
-			form.find("img[name='logoImg']").show();
+		//已上传的图片地址
+		var logo = form.find("input[name='logo']").val();
+		if (logo == '') {
+			toastr.error("请填写完整数据后提交", "温馨提示");
+			footer.find("button").show();
+			footer.find(".bg-lg").hide();
+			return;
 		}
-
-		//保存
-		$(".btn.btn-info.save").click(function () {
-			var footer = $(this).parent(".modal-footer");
-			footer.find("button").hide();
-			footer.find(".bg-lg").show();
-			var form = $("#saveForm");
-			//已上传的图片地址
-			var logo = form.find("input[name='logo']").val();
-			if (logo == '') {
-				toastr.error("请填写完整数据后提交", "温馨提示");
+		//提交保存
+		var data = form.serializeArray();
+		$.post("/welcome_save", data, function (data) {
+			if (data) {
 				footer.find("button").show();
 				footer.find(".bg-lg").hide();
-				return;
+				jQuery('#modal-6').modal('hide');
+				toastr.success("操作已成功！", "温馨提示");
+			} else {
+				footer.find("button").show();
+				footer.find(".bg-lg").hide();
+				toastr.error("操作失败", "温馨提示");
 			}
-			//提交保存
-			var data = form.serializeArray();
-			$.post("/welcome_save", data, function (data) {
-				if (data) {
-					footer.find("button").show();
-					footer.find(".bg-lg").hide();
-					jQuery('#modal-6').modal('hide');
-					toastr.success("操作已成功！", "温馨提示");
-				} else {
-					footer.find("button").show();
-					footer.find(".bg-lg").hide();
-					toastr.error("操作失败", "温馨提示");
-				}
-			});
 		});
 	});
-	/*]]>*/
-	</script>
+});
+/*]]>*/
+</script>
 </body>
 </html>

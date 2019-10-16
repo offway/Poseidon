@@ -40,13 +40,13 @@ Project:	AIUI Admin - Responsive Admin Template
 /******************* 
 import icon and fonts Styles 
 *******************/
-@import url(../../assets/vendor_components/font-awesome/css/font-awesome.css);
-@import url(../../assets/vendor_components/Ionicons/css/ionicons.css);
-@import url(../../assets/vendor_components/themify-icons/themify-icons.css);
-@import url(../../assets/vendor_components/linea-icons/linea.css);
-@import url(../../assets/vendor_components/glyphicons/glyphicon.css);
-@import url(../../assets/vendor_components/flag-icon/css/flag-icon.css);
-@import url(../../assets/vendor_components/material-design-iconic-font/css/materialdesignicons.css);
+@import url(/new/assets/vendor_components/font-awesome/css/font-awesome.css);
+@import url(/new/assets/vendor_components/Ionicons/css/ionicons.css);
+@import url(/new/assets/vendor_components/themify-icons/themify-icons.css);
+@import url(/new/assets/vendor_components/linea-icons/linea.css);
+@import url(/new/assets/vendor_components/glyphicons/glyphicon.css);
+@import url(/new/assets/vendor_components/flag-icon/css/flag-icon.css);
+@import url(/new/assets/vendor_components/material-design-iconic-font/css/materialdesignicons.css);
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
 
 /*------------------------------------------------------------------
@@ -142,7 +142,7 @@ img {
     position: relative;
 }
 .layout-boxed {
-    background: url(../../images//boxed-bg.png) fixed;
+    background: url(/new/images//boxed-bg.png) fixed;
 }
 .content-wrapper, .main-footer {
     margin-left: 230px;
@@ -748,7 +748,7 @@ a:active, a:focus, a:hover {
     margin: 15px 0;
 }
 .user-profile {
-    background-image:url(../../images/user-info.jpg);
+    background-image:url(/new/images/user-info.jpg);
 }
 .sidebar-menu .user-profile > a img {
     width: 30px;

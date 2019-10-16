@@ -1,160 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<head th:replace="head"></head>
 	<title>Login</title>
 	<style type="text/css">
-		.login-page {
-		    background: url('assets/images/login-groud.png');
-		    color: #fff;
-		    padding-top: 150px;
+		.wrapper {
+			background: url('assets/images/login-groud.png');
+			/*color: #fff;*/
+			/*padding-top: 150px;*/
 		}
 	</style>
 </head>
-<body class="page-body login-page">
-
-	
-	<div class="login-container">
-	
-		<div class="row">
-		
-			<div class="col-sm-6">
-			
-				<!-- Errors container -->
-				<div class="errors-container">
-				
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">用户登录</h3>
 				</div>
-				
-				<!-- Add class "fade-in-effect" for login form effect -->
-				<form method="post" role="form" id="login" class="login-form fade-in-effect">
-					
-					<div class="login-header">
-						<a href="dashboard-1.html" class="logo">
-							<img src="assets/images/pool.png" alt="" width="200" />
-							<span>Log In</span>
-						</a>
-						
-						<p>亲爱的用户，您可以登录后进入系统！</p>
-					</div>
-	
-					
-					<div class="form-group">
-						<label class="control-label" for="username">用户名</label>
-						<input type="text" class="form-control input-dark" name="username" id="username" autocomplete="off" />
-					</div>
-					
-					<div class="form-group">
-						<label class="control-label" for="passwd">密码</label>
-						<input type="password" class="form-control input-dark" name="passwd" id="passwd" autocomplete="off" />
-					</div>
-					
-					<div class="form-group">
-						<button type="submit" class="btn btn-dark  btn-block text-left loginBtn">
-							<i class="fa-lock"></i>
-							安全登录
-						</button>
-					</div>
-					
-				</form>
-				
 			</div>
-			
 		</div>
-		
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-7">
+					<!-- Errors container -->
+					<div class="errors-container"></div>
+					<div class="box">
+						<form method="post" role="form" id="login" class="login-form fade-in-effect">
+							<div class="login-header">
+								<a href="#" class="logo">
+									<img src="assets/images/pool.png" alt="" width="200" style="background-color: black;" />
+									<span>Log In</span>
+								</a>
+								<p>亲爱的用户，您可以登录后进入系统！</p>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="username">用户名</label>
+								<input type="text" class="form-control input-dark" name="username" id="username" autocomplete="off" />
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="passwd">密码</label>
+								<input type="password" class="form-control input-dark" name="passwd" id="passwd" autocomplete="off" />
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-dark  btn-block text-left loginBtn">
+									<i class="fa-lock"></i>
+									安全登录
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
 	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
 
+<script src="assets/js/TweenMax.min.js"></script>
+<script src="assets/js/resizeable.js"></script>
+<script src="assets/js/joinable.js"></script>
+<script src="assets/js/xenon-api.js"></script>
+<script src="assets/js/xenon-toggles.js"></script>
+<script src="assets/js/jquery-validate/jquery.validate.min.js"></script>
+<script src="assets/js/xenon-custom.js"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	jQuery(document).ready(function ($) {
+		// Reveal Login form
+		setTimeout(function () {
+			$(".fade-in-effect").addClass('in');
+		}, 1);
 
-
-	<!-- Bottom Scripts -->
-	<script src="assets/js/bootstrap.min.js"></script>
-	<script src="assets/js/TweenMax.min.js"></script>
-	<script src="assets/js/resizeable.js"></script>
-	<script src="assets/js/joinable.js"></script>
-	<script src="assets/js/xenon-api.js"></script>
-	<script src="assets/js/xenon-toggles.js"></script>
-	<script src="assets/js/jquery-validate/jquery.validate.min.js"></script>
-	<script src="assets/js/toastr/toastr.min.js"></script>
-
-
-	<!-- JavaScripts initializations and stuff -->
-	<script src="assets/js/xenon-custom.js"></script>
-	
-	<script type="text/javascript">
-		jQuery(document).ready(function($)
-		{
-			// Reveal Login form
-			setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
-			
-			
-			// Validation and Ajax action
-			$("form#login").validate({
-				rules: {
-					username: {
-						required: true
-					},
-					
-					passwd: {
-						required: true
-					}
+		// Validation and Ajax action
+		$("form#login").validate({
+			rules: {
+				username: {
+					required: true
 				},
-				
-				messages: {
-					username: {
-						required: '请输入用户名'
-					},
-					
-					passwd: {
-						required: '请输入密码'
-					}
-				},
-				
-				// Form Processing via AJAX
-				submitHandler: function(form)
-				{
-					show_loading_bar(70); // Fill progress bar to 70% (just a given value)
-					
-					var opts = {
-						"closeButton": true,
-						"debug": false,
-						"positionClass": "toast-top-full-width",
-						"onclick": null,
-						"showDuration": "300",
-						"hideDuration": "1000",
-						"timeOut": "5000",
-						"extendedTimeOut": "1000",
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					};
-						
-					
-					$.ajax({
-		        		url:"/authentication/form",
-		        		type:"post",
-		        		dataType:"json",
-		        		data:{
-		        			username:$(form).find('#username').val(),
-		            		password:$(form).find('#passwd').val(),
-		        		},
-		        		success:function(){
-		        			window.location.href="/";
-		        		},
-		        		error:function(data){
-		        			//toastr.error(JSON.parse(data.responseText).content, "登录异常", opts);
-		        			toastr.error("请检查用户名密码是否错误", "登录异常", opts);
-		        		}
-		        		
-		        	})
-					
+
+				passwd: {
+					required: true
 				}
-			});
-			
-			// Set Form focus
-			//$("form#login .form-group:has(.form-control):first .form-control").focus();
-		});
-	</script>
+			},
 
+			messages: {
+				username: {
+					required: '请输入用户名'
+				},
+
+				passwd: {
+					required: '请输入密码'
+				}
+			},
+
+			// Form Processing via AJAX
+			submitHandler: function (form) {
+				show_loading_bar(70); // Fill progress bar to 70% (just a given value)
+
+				var opts = {
+					"closeButton": true,
+					"debug": false,
+					"positionClass": "toast-top-full-width",
+					"onclick": null,
+					"showDuration": "300",
+					"hideDuration": "1000",
+					"timeOut": "5000",
+					"extendedTimeOut": "1000",
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				};
+
+				$.ajax({
+					url: "/authentication/form",
+					type: "post",
+					dataType: "json",
+					data: {
+						username: $(form).find('#username').val(),
+						password: $(form).find('#passwd').val(),
+					},
+					success: function () {
+						window.location.href = "/";
+					},
+					error: function (data) {
+						//toastr.error(JSON.parse(data.responseText).content, "登录异常", opts);
+						toastr.error("请检查用户名密码是否错误", "登录异常", opts);
+					}
+
+				})
+
+			}
+		});
+	});
+	/*]]>*/
+</script>
 </body>
 </html>
