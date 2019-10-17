@@ -26,6 +26,7 @@ public class RbacAuthorizeConfigProvider implements AuthorizeConfigProvider {
 		config
 			.antMatchers(HttpMethod.GET, "/assets/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/new/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/js/**").permitAll()
 			.antMatchers("/notify/**").permitAll()
 			.antMatchers(HttpMethod.GET, 
 					"/**/*.html",
