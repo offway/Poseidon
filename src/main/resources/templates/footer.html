@@ -33,13 +33,15 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script type="text/javascript">
-	var locaHref = window.location.href;
-	$("#main-menu").find("a").each(function (i, e) {
-		if (locaHref == e.href) {
-			e.parentElement.classList.add("active");
-			var c = e.parentElement.parentElement.parentElement.classList;
-			c.add("active");
-			c.add("menu-open");
-		}
-	});
+    setTimeout(function () {
+        var localHref = window.location.href;
+        $("#main-menu").find("a").each(function (i, e) {
+            if (localHref == e.href) {
+                e.parentElement.classList.add("active");
+                var c = e.parentElement.parentElement.parentElement.classList;
+                c.add("active");
+                c.add("menu-open");
+            }
+        });
+    }, 500);
 </script>
