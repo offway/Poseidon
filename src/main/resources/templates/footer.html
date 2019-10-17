@@ -23,6 +23,9 @@
 <!-- Sparkline -->
 <script src="new/assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 
+<!-- This is data table -->
+<script src="new/assets/vendor_components/datatable/datatables.min.js"></script>
+
 <!-- AIUI Admin App -->
 <script src="new/js/template.js"></script>
 
@@ -31,7 +34,7 @@
 
 <script type="text/javascript">
 	var locaHref = window.location.href;
-	$(".main-menu").find("a").each(function (i, e) {
+	$("#main-menu").find("a").each(function (i, e) {
 		if (locaHref == e.href) {
 			e.parentElement.classList.add("active");
 			var c = e.parentElement.parentElement.parentElement.classList;
