@@ -25,231 +25,182 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Main content -->
-		<section class="content">
+	<section class="content">
+		<div class="panel-body">
 			<div class="row">
-				<div class="col-12">
-					<div class="box">
-						<div class="box-header with-border">
-							<form role="form" class="form-inline">
-								<div class="form-group ">
-									<div class="input-group">
-										<input type="text" name="username" class="form-control" style="height:35px" placeholder="用户名"/>
-									</div>
-								</div>
-								<div class="form-group ">
-									<div class="input-group">
-										<input type="text" name="nickname" class="form-control" style="height:35px" placeholder="昵称"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<button class="btn btn-primary searchBtn" style="height:35px">查询</button>
-								</div>
-							</form>
-						</div>
-						<div class="box-body">
-							<div class="table-responsive">
-								<table id="example-1" class="table table-bordered table-striped">
-								</table>
-							</div>
-						</div>
-						<!-- /.box-body -->
-						<div class="box-footer">
-							<button class="btn btn-info add">添加</button>
-							<button class="btn btn-info edit">修改</button>
-							<button class="btn btn-info delete">删除</button>
-							<button class="btn btn-info resetPwd">重置密码</button>
-						</div>
-						<!-- /.box-footer-->
+			<form role="form" id="saveForm" class="form-horizontal">
+				<div class="form-group col-md-7">
+					<label class="control-label">类型</label>
+					<div class="radio">
+						<input name="type" type="radio" id="type_1" checked="checked" value="0"/>
+						<label for="type_1">重叠</label>
+					</div>
+					<div class="radio">
+						<input name="type" type="radio" id="type_2" value="1"/>
+						<label for="type_2">不重叠</label>
 					</div>
 				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">底图</label>
+					<input type="file" id="imageUnderUrl" name="imageUnderFile" placeholder="底图" onchange="uploadMainFile(this,'0')"/>
+					<img alt="" src="" name="imageUnder" style="display:none;" />
+					<input type="hidden" class="form-control" name="imageUnderUrl" />
+				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">文字图</label>
+					<input type="file" id="imageTextUrl" name="imageTextFile" placeholder="文字图" onchange="uploadMainFile(this,'1')"/>
+					<img alt="" src="" name="imageText" style="display:none;" />
+					<input type="hidden" class="form-control" name="imageTextUrl" />
+				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">滚动区域</label>
+					<div class="radio">
+						<input name="rollingType" type="radio" id="rollingType_1" checked="checked" onclick="rollingTypeRadio('0')"/>
+						<label for="rollingType_1">图片</label>
+					</div>
+					<div class="radio">
+						<input name="rollingType" type="radio" id="rollingType_2" onclick="rollingTypeRadio('1')"/>
+						<label for="rollingType_2">文字</label>
+					</div>
+				</div>
+				<div class="form-group col-md-7" id="rollingImageUrlDiv">
+					<input type="file" name="rollingImageFile" placeholder="滚动区域图片" onchange="uploadMainFile(this,'2')"/>
+					<img alt="" src="" id="rollingImage" name="rollingImage" style="display:none;" />
+					<input type="hidden" class="form-control" id="rollingImageUrl" name="rollingImageUrl" />
+				</div>
+				<div class="form-group col-md-7" id="rollingTxt" style="display: none">
+					<textarea class="form-control" rows="3" id="rollingText" name="rollingText"></textarea>
+				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">解锁</label>
+					<div class="radio">
+						<input name="unlock" type="radio" id="unlock_1" value="1" checked="checked" onclick="unlockRadio('1')"/>
+						<label for="unlock_1">开放</label>
+					</div>
+					<div class="radio">
+						<input name="unlock" type="radio" id="unlock_2" value="0" onclick="unlockRadio('0')"/>
+						<label for="unlock_2">解锁条件</label>
+					</div>
+				</div>
+				<div class="form-group col-md-7" id="unlockText" style="display: none">
+					<label class="control-label">订阅数</label>
+					<input type="text" class="form-control" id="subscribeCount" name="subscribeCount"/>
+					<label class="control-label">提示文字</label>
+					<input type="text" class="form-control" id="promptText" name="promptText"/>
+				</div>
+				<div class="actions clearfix">
+					<button type="button" class="btn btn-success save">保存</button>
+				</div>
+			</form>
 			</div>
-		</section>
-		<!-- /.content -->
+		</div>
+	</section>
 	</div>
-	<!-- /.content-wrapper -->
+
 	<footer th:replace="footer"></footer>
-</div>
-
-<div class="modal fade" id="modal-1">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">温馨提示</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span></button>
-			</div>
-			<div class="modal-body">
-				<p>您确定要删除选中用户吗？</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-				<button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="modal-6">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myLargeModalLabel">添加用户</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			</div>
-			<div class="modal-body">
-				<form role="form" id="saveForm">
-					<input type="hidden" name="id"/>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="control-label">用户名</label>
-								<input type="text" class="form-control" name="username" placeholder="用户名" onkeyup="this.value=this.value.replace(/[^\w_]/g,'');"/>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="control-label">昵称</label>
-								<input type="text" class="form-control" name="nickname" placeholder="昵称"/>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class=" control-label">选择角色</label>
-								<div class="col-md-12">
-									<select class="form-control" multiple="multiple" id="multi-select" name="roles">
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class=" control-label">选择品牌</label>
-								<div class="col-md-12">
-									<select class="form-control" multiple="multiple" id="multi-select1" name="brandIds">
-										<option  th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn btn-info save">保存</button>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal-dialog -->
 </div>
 
 <script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
 <script src="assets/js/select2/select2.min.js"></script>
 <script src="assets/js/multiselect/js/jquery.multi-select.js"></script>
 <script th:inline="javascript">
+
+	function unlockRadio(type) {
+		if (type == "0"){
+			$("#unlockText").show();
+		}else {
+			$("#unlockText").hide();
+			$("#promptText").val("");
+            $("#subscribeCount").val("");
+		}
+	}
+	
+	function rollingTypeRadio(type) {
+		if (type == "0"){
+			$("#rollingTxt").hide();
+			$("#rollingImageUrlDiv").show();
+			$("#rollingText").val("");
+		}else {
+			$("#rollingImageUrlDiv").hide();
+			$("#rollingTxt").show();
+			$("#rollingImage").attr("src", "");
+			$("#rollingImageUrl").val("");
+		}
+	}
+
+	function uploadMainFile(self,type) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				this.upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					if (type == "0"){
+						that.parent().find("[name=imageUnderUrl]").val(url);
+						that.parent().find("[name=imageUnder]").attr("src", url);
+						that.parent().find("[name=imageUnder]").attr("width", "100px");
+						that.parent().find("[name=imageUnder]").attr("height", "100px");
+						that.parent().find("[name=imageUnder]").show();
+					}else if (type == "1"){
+						that.parent().find("[name=imageTextUrl]").val(url);
+						that.parent().find("[name=imageText]").attr("src", url);
+						that.parent().find("[name=imageText]").attr("width", "100px");
+						that.parent().find("[name=imageText]").attr("height", "100px");
+						that.parent().find("[name=imageText]").show();
+					}else if (type == "2"){
+						that.parent().find("[name=rollingImageUrl]").val(url);
+						that.parent().find("[name=rollingImage]").attr("src", url);
+						that.parent().find("[name=rollingImage]").attr("width", "100px");
+						that.parent().find("[name=rollingImage]").attr("height", "100px");
+						that.parent().find("[name=rollingImage]").show();
+					}
+				});
+			});
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
+
+	function upload(param, token, file, next, error, complete) {
+		if (file == '') {
+			complete('');
+		} else {
+			var filename = file.name;
+			var postf = filename.substring(filename.lastIndexOf("."));
+
+			var config = {
+				useCdnDomain: true,
+				region: qiniu.region.z0
+			};
+			var putExtra = {
+				fname: "",
+				params: {"x:param": param},
+				mimeType: ["image/png", "image/jpeg", "image/gif"] || null
+			};
+			/* var observable = qiniu.upload(file, "image/wx/"+UUID.randomUUID()+postf, token,
+                    putExtra, config); */
+			var fname = filename.replace(postf, "");
+			var observable = qiniu.upload(file, "image/wx/" + param + "/" + (new Date().getTime()) + postf, token,
+					putExtra, config);
+			var subscription = observable.subscribe(next, error, complete);
+		}
+	}
+
+	function getQNToken(cb) {
+		$.get("/qiniu/token", {}, function (token) {
+			cb(token);
+		});
+	}
+	var qiniuUrl = [[${qiniuUrl}]];
 	/*<![CDATA[*/
 	jQuery(document).ready(function ($) {
-		var oTable = $("#example-1").dataTable({
-			language: {
-				url: "../assets/Chinese.txt"
-			},
-			bFilter: false,
-			bServerSide: true,//服务器处理分页，默认是false，需要服务器处理，必须true
-			sAjaxDataProp: "aData",//是服务器分页的标志，必须有
-			sAjaxSource: "/users-data",//通过ajax实现分页的url路径。
-			fnServerParams: function (aData) {
-				var searchArray = $(".form-inline").serializeArray();
-				$.merge(aData, searchArray);
-			},
-			order: [[0, "desc"]],
-			columnDefs: [
-				{
-					targets: 0,
-					data: "id",
-					width: "5%",
-					orderable: false,
-					title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
-					render: function (data, type, full, meta) {
-						var uuid = UUID.randomUUID();
-						return '<div class="checkbox"><input type="checkbox" name="userId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
-					}
-				},
-				{
-					targets: 1,
-					data: "id",
-					title: "序号"
-				},
-				{
-					targets: 2,
-					data: "username",
-					title: "用户名"
-				},
-				{
-					targets: 3,
-					data: "nickname",
-					title: "昵称"
-				},
-				{
-					targets: 4,
-					data: "createdtime",
-					title: "创建时间",
-					render: function (data, type, row, meta) {
-						return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-					}
-				}
-			]
-		});
+		$(".btn.btn-success.save").click(function () {
 
-		$(".searchBtn").click(function () {
-			$("#checkbox-all").attr("checked", false);
-			oTable.fnDraw();  //or fnReloadAjax()
-			return false;
-		});
-
-		$('#example-1').on('click', "#checkbox-all", function () {
-			var obj = $(this);
-			$("input[name='userId']").each(function (i, e) {
-				this.checked = obj[0].checked;
-			});
-		});
-
-		$(".btn.btn-info.delete").click(function () {
-			var userId = $("input[name='userId']:checked");
-			if (userId.length < 1) {
-				toastr.error("请至少选择一条数据操作", "温馨提示");
-				return;
-			}
-			jQuery('#modal-1').modal('show', {backdrop: 'fade'});
-		});
-
-		$(".deleteBtn").click(function () {
-			var ids = '';
-			$("input[name='userId']:checked").each(function (i, e) {
-				ids += e.value + ",";
-			});
-			$.post("/users-delete", {
-				ids: ids
-			}, function (data) {
-				if (data) {
-					jQuery('#modal-1').modal('hide');
-					toastr.success("您的操作已成功！", "温馨提示");
-					oTable.fnDraw(oTable.fnSettings());
-				} else {
-					toastr.error("操作失败,请稍后再试", "温馨提示");
-				}
-			});
-			return false;
 		});
 
 		$(".btn.btn-info.add").click(function () {
@@ -320,89 +271,6 @@
 				} else {
 					toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
 				}
-			});
-		});
-
-		$(".btn.btn-info.resetPwd").click(function () {
-			var userId = $("input[name='userId']:checked");
-			if (userId.length != 1) {
-				toastr.error("请选择一条数据操作", "温馨提示");
-				return;
-			}
-
-			$.post("/users-resetPwd", {id: userId.val()}, function (data) {
-				if (data) {
-					toastr.success("操作已成功！", "温馨提示");
-				} else {
-					toastr.error("操作失败", "温馨提示");
-				}
-			});
-		});
-
-		$(".btn.btn-info.edit").click(function () {
-
-			var userId = $("input[name='userId']:checked");
-			if (userId.length != 1) {
-				toastr.error("请选择一条数据操作", "温馨提示");
-				return;
-			}
-
-			$.get("/users-one", {id: userId.val()}, function (data) {
-				var form = $("#saveForm");
-				form.find("input[name='id']").val(data.user.id);
-				form.find("input[name='username']").val(data.user.username);
-				form.find("input[name='nickname']").val(data.user.nickname);
-				var roleIds = data.roleIds;
-				var brandIds = data.brandIds;
-				$.get("/roles-all", {}, function (data) {
-					$('#multi-select').empty();
-					$.each(data, function (i, e) {
-						if ($.inArray(e.id, roleIds) == -1) {
-							$('#multi-select').append("<option value=" + e.id + ">" + e.name + "</option>");
-						} else {
-							$('#multi-select').append("<option value=" + e.id + " selected='selected'>" + e.name + "</option>");
-						}
-
-					});
-
-					$("#multi-select").multiSelect({
-						afterInit: function () {
-							// Add alternative scrollbar to list
-							// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-						},
-						afterSelect: function () {
-							// Update scrollbar size
-							// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-						}
-					});
-
-					$('#multi-select').multiSelect('refresh');
-
-					var brands = [[${brands}]];
-
-					$('#multi-select1').empty();
-					$.each(brands, function (i, e) {
-						if ($.inArray(e.id, brandIds) == -1) {
-							$('#multi-select1').append("<option value=" + e.id + ">" + e.name + "</option>");
-						} else {
-							$('#multi-select1').append("<option value=" + e.id + " selected='selected'>" + e.name + "</option>");
-						}
-
-					});
-
-					$("#multi-select1").multiSelect({
-						afterInit: function () {
-							// Add alternative scrollbar to list
-							// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-						},
-						afterSelect: function () {
-							// Update scrollbar size
-							// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-						}
-					});
-					$('#multi-select1').multiSelect('refresh');
-					jQuery('#modal-6').modal('show', {backdrop: 'fade'});
-				});
 			});
 		});
 	});
