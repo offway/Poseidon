@@ -4,10 +4,7 @@ import cn.offway.Poseidon.service.QiniuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cn.offway.Poseidon.properties.QiniuProperties;
 
@@ -31,6 +28,11 @@ public class QiniuController {
 	@GetMapping("/token")
 	public String token(){
 		return qiniuService.token();
+	}
+
+	@GetMapping("/token_video")
+	public String tokenVideo(@RequestParam(name = "isVideo", required = false) String isVideo){
+		return qiniuService.tokenVideo(isVideo);
 	}
 	
 	@PostMapping("/delete")

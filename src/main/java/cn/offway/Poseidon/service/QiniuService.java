@@ -1,8 +1,10 @@
 package cn.offway.Poseidon.service;
 
 import java.io.IOException;
+import java.util.Date;
 
 import cn.offway.Poseidon.utils.Auth;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,7 +30,7 @@ public class QiniuService {
 
 	@Autowired
 	private QiniuProperties qiniuProperties;
-	
+
 	public String token(){
 		try {
 			Auth auth = Auth.create(qiniuProperties.getAccessKey(), qiniuProperties.getSecretKey());
@@ -41,9 +43,32 @@ public class QiniuService {
 			logger.error("获取七牛上传文件token异常",e);
 			return "";
 		}
-		
+
 	}
-	
+
+	public String tokenVideo(String isVideo){
+		try {
+			Auth auth = Auth.create(qiniuProperties.getAccessKey(), qiniuProperties.getSecretKey());
+			StringMap putPolicy = new StringMap();
+			if (isVideo != null){
+				long newdate = DateUtils.addSeconds(new Date(),3600).getTime();
+				putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize),\"fname\":$(fname),\"param\":\"$(x:param)\"}");
+				putPolicy.put("persistentOps","avthumb/mp4");
+				putPolicy.put("persistentNotifyUrl","https://admin.offway.cn/callback/qiniu/avthumb");
+				putPolicy.put("persistentPipeline","video");
+			}else {
+				putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize),\"fname\":$(fname),\"param\":\"$(x:param)\"}");
+			}
+			String upToken = auth.uploadToken(qiniuProperties.getBucket(), null, qiniuProperties.getExpireSeconds(), putPolicy);
+			return upToken;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("获取七牛上传文件token异常",e);
+			return "";
+		}
+
+	}
+
 	/**
 	 * 资源删除
 	 * @param name 资源名

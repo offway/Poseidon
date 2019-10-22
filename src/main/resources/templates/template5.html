@@ -41,8 +41,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-7">
+                        <div class="form-group col-md-2">
                             <div class="row form-group" id="imageUnder">
+                                <label class="control-label">底图</label>
                                 <input class="btn btn-info" id="imageUnderFile" name="imageUnderFile"
                                        onchange="uploadMainFile(this,'0')" placeholder="底图"
                                        type="file"/>
@@ -50,17 +51,19 @@
                                 <input class="form-control" name="imageUnderUrl" type="hidden"/>
                             </div>
                             <div class="row form-group" id="video">
+                                <label class="control-label">视频</label>
                                 <input class="btn btn-info" id="videoFile" name="videoFile"
                                        onchange="uploadMainFile(this,'1')" placeholder="视频"
                                        type="file"/>
                                 <input class="form-control" name="videoUrl" type="hidden"/>
                             </div>
-                            <div class="row form-group" id="videoCoverDiv" style="display: none">
-                                <input class="btn btn-info" id="videoCoverFile" name="videoCoverFile"
-                                       onchange="uploadMainFile(this,'2')" placeholder="视频封面"
-                                       type="file"/>
-                                <img alt="" id="imageThree" name="videoCover" src="" style="display:none;"/>
-                                <input class="form-control" id="videoCoverUrl" name="videoCoverUrl" type="hidden"/>
+                            <div class="row form-group" id="videoCoverDiv">
+                                <label class="control-label">视频封面</label>
+                                    <input class="btn btn-info" id="videoCoverFile" name="videoCoverFile"
+                                           onchange="uploadMainFile(this,'2')" placeholder="视频封面"
+                                           type="file"/>
+                                    <img alt="" id="imageThree" name="videoCover" src="" style="display:none;"/>
+                                    <input class="form-control" id="videoCoverUrl" name="videoCoverUrl" type="hidden"/>
                             </div>
                         </div>
                     </div>
@@ -118,7 +121,12 @@
         if (self.files.length > 0) {
             var file = self.files[0];
             getQNToken(function (token) {
-                this.upload("", token, file, function () {
+                bl= false;
+                if (type=='1'){
+                    sizevideo = 50;
+                    bl =true;
+                }
+                upload("", token, file, function () {
                     //
                 }, function (err) {
                     console.log("error");
@@ -132,11 +140,7 @@
                         that.parent().find("[name=imageUnder]").attr("height", "100px");
                         that.parent().find("[name=imageUnder]").show();
                     } else if (type == "1") {
-                        that.parent().find("[name=imageTwoUrl]").val(url);
-                        that.parent().find("[name=imageTwo]").attr("src", url);
-                        that.parent().find("[name=imageTwo]").attr("width", "100px");
-                        that.parent().find("[name=imageTwo]").attr("height", "100px");
-                        that.parent().find("[name=imageTwo]").show();
+                        that.parent().find("[name=videoUrl]").val(url);
                     } else if (type == "2") {
                         that.parent().find("[name=videoCoverUrl]").val(url);
                         that.parent().find("[name=videoCover]").attr("src", url);
@@ -144,14 +148,14 @@
                         that.parent().find("[name=videoCover]").attr("height", "100px");
                         that.parent().find("[name=videoCover]").show();
                     }
-                });
-            });
+                },bl);
+            },type);
         } else {
             confirm("未选择任何文件!");
         }
     }
 
-    function upload(param, token, file, next, error, complete) {
+    function upload(param, token, file, next, error, complete,isVideo) {
         if (file == '') {
             complete('');
         } else {
@@ -162,22 +166,41 @@
                 useCdnDomain: true,
                 region: qiniu.region.z0
             };
-            var putExtra = {
-                fname: "",
-                params: {"x:param": param},
-                mimeType: ["image/png", "image/jpeg", "image/gif"] || null
-            };
-            /* var observable = qiniu.upload(file, "image/wx/"+UUID.randomUUID()+postf, token,
-                    putExtra, config); */
-            var fname = filename.replace(postf, "");
-            var observable = qiniu.upload(file, "image/wx/" + param + "/" + (new Date().getTime()) + postf, token,
-                putExtra, config);
-            var subscription = observable.subscribe(next, error, complete);
+            if (isVideo){
+                var filename = file.name;
+                var postf = filename.substring(filename.lastIndexOf("."));
+                var putExtra = {
+                    fname: "",
+                    params: {"x:param": param},
+                    mimeType: ["video/x-flv", "video/mp4", "video/3gpp", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv"] || null
+                };
+                var newFileName = "video/wx/" + UUID.randomUUID() + postf;
+                var observable = qiniu.upload(file, newFileName, token,
+                    putExtra, config);
+                observable.subscribe(next, error, complete);
+            }else {
+                var putExtra = {
+                    fname: "",
+                    params: {"x:param": param},
+                    mimeType: ["image/png", "image/jpeg", "image/gif"] || null
+                };
+                /* var observable = qiniu.upload(file, "image/wx/"+UUID.randomUUID()+postf, token,
+                        putExtra, config); */
+                var fname = filename.replace(postf, "");
+                var observable = qiniu.upload(file, "image/wx/" + param + "/" + (new Date().getTime()) + postf, token,
+                    putExtra, config);
+                var subscription = observable.subscribe(next, error, complete);
+            }
+
         }
     }
 
-    function getQNToken(cb) {
-        $.get("/qiniu/token", {}, function (token) {
+    function getQNToken(cb,bol) {
+        var param = {};
+        if (bol == 1) {
+            param["isVideo"] = 1;
+        }
+        $.get("/qiniu/token_video", param, function (token) {
             cb(token);
         });
     }
