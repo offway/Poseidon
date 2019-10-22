@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head th:replace="head"></head>
+    <title>新加模板</title>
+    <script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+    <link href="assets/js/select2/select2.css" rel="stylesheet"/>
+    <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet"/>
+    <link href="assets/js/multiselect/css/multi-select.css" rel="stylesheet"/>
+</head>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <header th:replace="navbar"></header>
+    <aside th:replace="sidebar-menu"></aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header d-none d-md-block">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="page-title br-0">新加模板</h3>
+                </div>
+                <div class="right-title">
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="panel-body">
+                <div class="row">
+                    <form class="form-horizontal" id="saveForm" role="form">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">类型</label>
+                            <div class="radio">
+                                <input checked="checked" id="type_1" name="type" type="radio" value="0" onclick="typeRadio('0')"/>
+                                <label for="type_1">类型1</label>
+                                <input id="type_2" name="type" type="radio" value="1" onclick="typeRadio('1')"/>
+                                <label for="type_2">类型2</label>
+                                <input id="type_3" name="type" type="radio" value="2" onclick="typeRadio('2')"/>
+                                <label for="type_3">类型3</label>
+                                <input id="type_4" name="type" type="radio" value="3" onclick="typeRadio('3')"/>
+                                <label for="type_4">类型4</label>
+                                <input id="type_5" name="type" type="radio" value="4" onclick="typeRadio('4')"/>
+                                <label for="type_5">类型5</label>
+                                <input id="type_6" name="type" type="radio" value="5" onclick="typeRadio('5')"/>
+                                <label for="type_6">类型6</label>
+                                <input id="type_7" name="type" type="radio" value="6" onclick="typeRadio('6')"/>
+                                <label for="type_7">类型7</label>
+                                <input id="type_8" name="type" type="radio" value="7" onclick="typeRadio('7')"/>
+                                <label for="type_8">类型8</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <div id="imageOne" class="row form-group">
+                                <input id="imageOneFile" class="btn btn-info" name="imageOneFile" onchange="uploadMainFile(this,'0')" placeholder="底图"
+                                       type="file"/>
+                                <img alt="" name="imageOne" src="" style="display:none;"/>
+                                <input class="form-control" name="imageOneUrl" type="hidden"/>
+                            </div>
+							<div id="imageTwo" class="row form-group">
+								<input id="imageTwoFile" class="btn btn-info" name="imageTwoFile" onchange="uploadMainFile(this,'1')" placeholder="文字图"
+									   type="file"/>
+								<img alt="" name="imageTwo" src="" style="display:none;"/>
+								<input class="form-control" name="imageTwoUrl" type="hidden"/>
+							</div>
+							<div id="imageThreediv" class="row form-group" style="display: none">
+								<input id="imageThreeFile" class="btn btn-info" name="imageThreeFile" onchange="uploadMainFile(this,'2')" placeholder="文字图"
+									   type="file"/>
+								<img alt="" id="imageThree" name="imageThree" src="" style="display:none;"/>
+								<input class="form-control" id="imageThreeUrl" name="imageThreeUrl" type="hidden"/>
+							</div>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <label class="control-label">解锁</label>
+                            <div class="radio">
+                                <input checked="checked" id="unlock_1" name="unlock" onclick="unlockRadio('1')" type="radio"
+                                       value="1"/>
+                                <label for="unlock_1">开放</label>
+                            </div>
+                            <div class="radio">
+                                <input id="unlock_2" name="unlock" onclick="unlockRadio('0')" type="radio" value="0"/>
+                                <label for="unlock_2">解锁条件</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-7" id="unlockText" style="display: none">
+                            <label class="control-label">订阅数</label>
+                            <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
+                            <label class="control-label">提示文字</label>
+                            <input class="form-control" id="promptText" name="promptText" type="text"/>
+                        </div>
+                        <div class="actions clearfix">
+                            <button class="btn btn-success save" type="button">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer th:replace="footer"></footer>
+</div>
+
+<script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
+<script src="assets/js/select2/select2.min.js"></script>
+<script src="assets/js/multiselect/js/jquery.multi-select.js"></script>
+<script th:inline="javascript">
+
+    function unlockRadio(type) {
+        if (type == "0") {
+            $("#unlockText").show();
+        } else {
+            $("#unlockText").hide();
+            $("#promptText").val("");
+            $("#subscribeCount").val("");
+        }
+    }
+
+    function typeRadio(type) {
+		//类型[0-类型1(两张图片),1-类型2(三张图片),2-类型3(三张图片),3-类型4(三张图片),4-类型5(两张图片),5-类型6(两张图片),6-类型7(两张图片),7-类型8(两张图片)]
+        if (type=="1" || type == "2" || type == "3"){
+            $("#imageThreediv").show();
+        }else {
+            $("#imageThreediv").hide();
+            $("#imageThree").attr("src", "");
+            $("#imageThreeUrl").val("");
+        }
+    }
+
+    function uploadMainFile(self, type) {
+        var that = $(self);
+        if (self.files.length > 0) {
+            var file = self.files[0];
+            getQNToken(function (token) {
+                this.upload("", token, file, function () {
+                    //
+                }, function (err) {
+                    console.log("error");
+                    console.log(err);
+                }, function (res) {
+                    var url = qiniuUrl + "/" + res.key;
+                    if (type == "0") {
+                        that.parent().find("[name=imageOneUrl]").val(url);
+                        that.parent().find("[name=imageOne]").attr("src", url);
+                        that.parent().find("[name=imageOne]").attr("width", "100px");
+                        that.parent().find("[name=imageOne]").attr("height", "100px");
+                        that.parent().find("[name=imageOne]").show();
+                    } else if (type == "1") {
+                        that.parent().find("[name=imageTwoUrl]").val(url);
+                        that.parent().find("[name=imageTwo]").attr("src", url);
+                        that.parent().find("[name=imageTwo]").attr("width", "100px");
+                        that.parent().find("[name=imageTwo]").attr("height", "100px");
+                        that.parent().find("[name=imageTwo]").show();
+                    } else if (type == "2") {
+                        that.parent().find("[name=imageThreeUrl]").val(url);
+                        that.parent().find("[name=imageThree]").attr("src", url);
+                        that.parent().find("[name=imageThree]").attr("width", "100px");
+                        that.parent().find("[name=imageThree]").attr("height", "100px");
+                        that.parent().find("[name=imageThree]").show();
+                    }
+                });
+            });
+        } else {
+            confirm("未选择任何文件!");
+        }
+    }
+
+    function upload(param, token, file, next, error, complete) {
+        if (file == '') {
+            complete('');
+        } else {
+            var filename = file.name;
+            var postf = filename.substring(filename.lastIndexOf("."));
+
+            var config = {
+                useCdnDomain: true,
+                region: qiniu.region.z0
+            };
+            var putExtra = {
+                fname: "",
+                params: {"x:param": param},
+                mimeType: ["image/png", "image/jpeg", "image/gif"] || null
+            };
+            /* var observable = qiniu.upload(file, "image/wx/"+UUID.randomUUID()+postf, token,
+                    putExtra, config); */
+            var fname = filename.replace(postf, "");
+            var observable = qiniu.upload(file, "image/wx/" + param + "/" + (new Date().getTime()) + postf, token,
+                putExtra, config);
+            var subscription = observable.subscribe(next, error, complete);
+        }
+    }
+
+    function getQNToken(cb) {
+        $.get("/qiniu/token", {}, function (token) {
+            cb(token);
+        });
+    }
+
+    var qiniuUrl = [[${qiniuUrl}]];
+    /*<![CDATA[*/
+    jQuery(document).ready(function ($) {
+        $(".btn.btn-success.save").click(function () {
+
+        });
+
+        $(".btn.btn-info.add").click(function () {
+            $("#saveForm").find("input[name='id']").val("");
+            $.get("/roles-all", {}, function (data) {
+                $('#multi-select').empty();
+                $.each(data, function (i, e) {
+                    $('#multi-select').append("<option value=" + e.id + ">" + e.name + "</option>");
+                });
+                $("#multi-select").multiSelect({
+                    afterInit: function () {
+                        // Add alternative scrollbar to list
+                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                    },
+                    afterSelect: function () {
+                        // Update scrollbar size
+                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                    }
+                });
+                $('#multi-select').multiSelect('refresh');
+                $("#multi-select1").multiSelect({
+                    afterInit: function () {
+                        // Add alternative scrollbar to list
+                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                    },
+                    afterSelect: function () {
+                        // Update scrollbar size
+                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                    }
+                });
+                $('#multi-select1').multiSelect('refresh');
+                jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+            });
+        });
+
+        //保存
+        $(".btn.btn-info.save").click(function () {
+            var form = $("#saveForm");
+            var username = form.find("input[name='username']").val();
+            if (username == '') {
+                toastr.error("用户名不能为空", "温馨提示");
+                return;
+            }
+            var nickname = form.find("input[name='nickname']").val();
+            if (nickname == '') {
+                toastr.error("昵称不能为空", "温馨提示");
+                return;
+            }
+            var id = form.find("input[name='id']").val();
+            var brandIdsArray = $("#multi-select1").val();
+            var brandIds = "";
+            if (null != brandIdsArray) {
+                $.each(brandIdsArray, function (i, e) {
+                    brandIds += e + ","
+                });
+            }
+            $.post("/users-save", {
+                id: id,
+                username: username,
+                nickname: nickname,
+                roles: $("#multi-select").val(),
+                brandIds: brandIds
+            }, function (data) {
+                if (data) {
+                    jQuery('#modal-6').modal('hide');
+                    toastr.success("操作已成功！", "温馨提示");
+                    oTable.fnDraw(oTable.fnSettings());
+                } else {
+                    toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
+                }
+            });
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
