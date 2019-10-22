@@ -27,53 +27,49 @@
         </div>
         <section class="content">
             <div class="panel-body">
-                <div class="row">
-                    <form class="form-horizontal" id="saveForm" role="form">
+                <form class="form-horizontal" id="saveForm" role="form">
+                    <div class="row">
                         <div class="form-group col-md-12">
                             <label class="control-label">类型</label>
                             <div class="radio">
-                                <input checked="checked" id="type_1" name="type" type="radio" value="0" onclick="typeRadio('0')"/>
-                                <label for="type_1">类型1</label>
-                                <input id="type_2" name="type" type="radio" value="1" onclick="typeRadio('1')"/>
-                                <label for="type_2">类型2</label>
-                                <input id="type_3" name="type" type="radio" value="2" onclick="typeRadio('2')"/>
-                                <label for="type_3">类型3</label>
-                                <input id="type_4" name="type" type="radio" value="3" onclick="typeRadio('3')"/>
-                                <label for="type_4">类型4</label>
-                                <input id="type_5" name="type" type="radio" value="4" onclick="typeRadio('4')"/>
-                                <label for="type_5">类型5</label>
-                                <input id="type_6" name="type" type="radio" value="5" onclick="typeRadio('5')"/>
-                                <label for="type_6">类型6</label>
-                                <input id="type_7" name="type" type="radio" value="6" onclick="typeRadio('6')"/>
-                                <label for="type_7">类型7</label>
-                                <input id="type_8" name="type" type="radio" value="7" onclick="typeRadio('7')"/>
-                                <label for="type_8">类型8</label>
+                                <input checked="checked" id="type_1" name="type" type="radio"
+                                       value="0"/>
+                                <label for="type_1">底图</label>
+                                <input id="type_2" name="type" type="radio" value="1"/>
+                                <label for="type_2">无边框</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-7">
-                            <div id="imageOne" class="row form-group">
-                                <input id="imageOneFile" class="btn btn-info" name="imageOneFile" onchange="uploadMainFile(this,'0')" placeholder="底图"
+                            <div class="row form-group" id="imageUnder">
+                                <input class="btn btn-info" id="imageUnderFile" name="imageUnderFile"
+                                       onchange="uploadMainFile(this,'0')" placeholder="底图"
                                        type="file"/>
-                                <img alt="" name="imageOne" src="" style="display:none;"/>
-                                <input class="form-control" name="imageOneUrl" type="hidden"/>
+                                <img alt="" name="imageUnder" src="" style="display:none;"/>
+                                <input class="form-control" name="imageUnderUrl" type="hidden"/>
                             </div>
-							<div id="imageTwo" class="row form-group">
-								<input id="imageTwoFile" class="btn btn-info" name="imageTwoFile" onchange="uploadMainFile(this,'1')" placeholder="文字图"
-									   type="file"/>
-								<img alt="" name="imageTwo" src="" style="display:none;"/>
-								<input class="form-control" name="imageTwoUrl" type="hidden"/>
-							</div>
-							<div id="imageThreediv" class="row form-group" style="display: none">
-								<input id="imageThreeFile" class="btn btn-info" name="imageThreeFile" onchange="uploadMainFile(this,'2')" placeholder="文字图"
-									   type="file"/>
-								<img alt="" id="imageThree" name="imageThree" src="" style="display:none;"/>
-								<input class="form-control" id="imageThreeUrl" name="imageThreeUrl" type="hidden"/>
-							</div>
+                            <div class="row form-group" id="video">
+                                <input class="btn btn-info" id="videoFile" name="videoFile"
+                                       onchange="uploadMainFile(this,'1')" placeholder="视频"
+                                       type="file"/>
+                                <input class="form-control" name="videoUrl" type="hidden"/>
+                            </div>
+                            <div class="row form-group" id="videoCoverDiv" style="display: none">
+                                <input class="btn btn-info" id="videoCoverFile" name="videoCoverFile"
+                                       onchange="uploadMainFile(this,'2')" placeholder="视频封面"
+                                       type="file"/>
+                                <img alt="" id="imageThree" name="videoCover" src="" style="display:none;"/>
+                                <input class="form-control" id="videoCoverUrl" name="videoCoverUrl" type="hidden"/>
+                            </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
-                                <input checked="checked" id="unlock_1" name="unlock" onclick="unlockRadio('1')" type="radio"
+                                <input checked="checked" id="unlock_1" name="unlock" onclick="unlockRadio('1')"
+                                       type="radio"
                                        value="1"/>
                                 <label for="unlock_1">开放</label>
                             </div>
@@ -82,6 +78,8 @@
                                 <label for="unlock_2">解锁条件</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
                             <label class="control-label">订阅数</label>
                             <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
@@ -91,8 +89,8 @@
                         <div class="actions clearfix">
                             <button class="btn btn-success save" type="button">保存</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </section>
     </div>
@@ -115,17 +113,6 @@
         }
     }
 
-    function typeRadio(type) {
-		//类型[0-类型1(两张图片),1-类型2(三张图片),2-类型3(三张图片),3-类型4(三张图片),4-类型5(两张图片),5-类型6(两张图片),6-类型7(两张图片),7-类型8(两张图片)]
-        if (type=="1" || type == "2" || type == "3"){
-            $("#imageThreediv").show();
-        }else {
-            $("#imageThreediv").hide();
-            $("#imageThree").attr("src", "");
-            $("#imageThreeUrl").val("");
-        }
-    }
-
     function uploadMainFile(self, type) {
         var that = $(self);
         if (self.files.length > 0) {
@@ -139,11 +126,11 @@
                 }, function (res) {
                     var url = qiniuUrl + "/" + res.key;
                     if (type == "0") {
-                        that.parent().find("[name=imageOneUrl]").val(url);
-                        that.parent().find("[name=imageOne]").attr("src", url);
-                        that.parent().find("[name=imageOne]").attr("width", "100px");
-                        that.parent().find("[name=imageOne]").attr("height", "100px");
-                        that.parent().find("[name=imageOne]").show();
+                        that.parent().find("[name=imageUnderUrl]").val(url);
+                        that.parent().find("[name=imageUnder]").attr("src", url);
+                        that.parent().find("[name=imageUnder]").attr("width", "100px");
+                        that.parent().find("[name=imageUnder]").attr("height", "100px");
+                        that.parent().find("[name=imageUnder]").show();
                     } else if (type == "1") {
                         that.parent().find("[name=imageTwoUrl]").val(url);
                         that.parent().find("[name=imageTwo]").attr("src", url);
@@ -151,11 +138,11 @@
                         that.parent().find("[name=imageTwo]").attr("height", "100px");
                         that.parent().find("[name=imageTwo]").show();
                     } else if (type == "2") {
-                        that.parent().find("[name=imageThreeUrl]").val(url);
-                        that.parent().find("[name=imageThree]").attr("src", url);
-                        that.parent().find("[name=imageThree]").attr("width", "100px");
-                        that.parent().find("[name=imageThree]").attr("height", "100px");
-                        that.parent().find("[name=imageThree]").show();
+                        that.parent().find("[name=videoCoverUrl]").val(url);
+                        that.parent().find("[name=videoCover]").attr("src", url);
+                        that.parent().find("[name=videoCover]").attr("width", "100px");
+                        that.parent().find("[name=videoCover]").attr("height", "100px");
+                        that.parent().find("[name=videoCover]").show();
                     }
                 });
             });

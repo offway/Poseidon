@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author wn
  */
 @Controller
-public class Template4Controller {
+public class Template5Controller {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private QiniuProperties qiniuProperties;
 
-    @RequestMapping("/template4.html")
+    @RequestMapping("/template5.html")
     public String users(ModelMap map) {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
-        return "template4";
+        return "template5";
     }
 
 }
