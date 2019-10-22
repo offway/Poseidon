@@ -53,9 +53,9 @@
 				<div class="form-group col-md-7">
 					<label class="control-label">滚动区域</label>
 					<div class="radio">
-						<input name="rollingType" type="radio" id="rollingType_1" checked="checked" onclick="rollingTypeRadio('0')"/>
+						<input name="rollingType" type="radio" id="rollingType_1" value="0" checked="checked" onclick="rollingTypeRadio('0')"/>
 						<label for="rollingType_1">图片</label>
-						<input name="rollingType" type="radio" id="rollingType_2" onclick="rollingTypeRadio('1')"/>
+						<input name="rollingType" type="radio" id="rollingType_2" value="1" onclick="rollingTypeRadio('1')"/>
 						<label for="rollingType_2">文字</label>
 					</div>
 				</div>
@@ -70,10 +70,10 @@
 				<div class="form-group col-md-7">
 					<label class="control-label">解锁</label>
 					<div class="radio">
-						<input name="unlock" type="radio" id="unlock_1" value="1" checked="checked" onclick="unlockRadio('1')"/>
-						<label for="unlock_1">开放</label>
 						<input name="unlock" type="radio" id="unlock_2" value="0" onclick="unlockRadio('0')"/>
 						<label for="unlock_2">解锁条件</label>
+						<input name="unlock" type="radio" id="unlock_1" value="1" checked="checked" onclick="unlockRadio('1')"/>
+						<label for="unlock_1">开放</label>
 					</div>
 				</div>
 				<div class="form-group col-md-7" id="unlockText" style="display: none">
@@ -194,7 +194,35 @@
 	/*<![CDATA[*/
 	jQuery(document).ready(function ($) {
 		$(".btn.btn-success.save").click(function () {
-
+			var form = $("#saveForm");
+			var type = form.find("input[name='type']:checked").val();
+			var imageUnderUrl = form.find("input[name='imageUnderUrl']").val();
+			var imageTextUrl = form.find("input[name='imageTextUrl']").val();
+			var rollingType = form.find("input[name='rollingType']:checked").val();
+			var rollingImageUrl = form.find("input[name='rollingImageUrl']").val();
+			var rollingText = form.find("textarea[name='rollingText']").val();
+			var unlock = form.find("input[name='unlock']:checked").val();
+			var subscribeCount = form.find("input[name='subscribeCount']").val();
+			var promptText = form.find("input[name='promptText']").val();
+			if (type == "" || imageUnderUrl == "" || imageTextUrl == "") {
+				toastr.error("类型/底图/文字图为必填项", "温馨提示");
+				return;
+			}
+			if (rollingType == "0" && rollingImageUrl ==""){
+				toastr.error("滚动区域图片为必填项", "温馨提示");
+				return;
+			}else if (rollingType == "1" && rollingText =="" || rollingText == null){
+				toastr.error("滚动区域文字为必填项", "温馨提示");
+				return;
+			}
+			if(unlock == "0") {
+				if (subscribeCount == "" || promptText == ""){
+					toastr.error("订阅数/提示文字为必填项", "温馨提示");
+					return;
+				}
+			}
+			$.post("/asd",{},function (data) {
+			});
 		});
 
 		$(".btn.btn-info.add").click(function () {
@@ -227,44 +255,6 @@
 				});
 				$('#multi-select1').multiSelect('refresh');
 				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
-			});
-		});
-
-		//保存
-		$(".btn.btn-info.save").click(function () {
-			var form = $("#saveForm");
-			var username = form.find("input[name='username']").val();
-			if (username == '') {
-				toastr.error("用户名不能为空", "温馨提示");
-				return;
-			}
-			var nickname = form.find("input[name='nickname']").val();
-			if (nickname == '') {
-				toastr.error("昵称不能为空", "温馨提示");
-				return;
-			}
-			var id = form.find("input[name='id']").val();
-			var brandIdsArray = $("#multi-select1").val();
-			var brandIds = "";
-			if (null != brandIdsArray) {
-				$.each(brandIdsArray, function (i, e) {
-					brandIds += e + ","
-				});
-			}
-			$.post("/users-save", {
-				id: id,
-				username: username,
-				nickname: nickname,
-				roles: $("#multi-select").val(),
-				brandIds: brandIds
-			}, function (data) {
-				if (data) {
-					jQuery('#modal-6').modal('hide');
-					toastr.success("操作已成功！", "温馨提示");
-					oTable.fnDraw(oTable.fnSettings());
-				} else {
-					toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
-				}
 			});
 		});
 	});

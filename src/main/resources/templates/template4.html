@@ -73,13 +73,11 @@
                         <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
+                                <input id="unlock_2" name="unlock" onclick="unlockRadio('0')" type="radio" value="0"/>
+                                <label for="unlock_2">解锁条件</label>
                                 <input checked="checked" id="unlock_1" name="unlock" onclick="unlockRadio('1')" type="radio"
                                        value="1"/>
                                 <label for="unlock_1">开放</label>
-                            </div>
-                            <div class="radio">
-                                <input id="unlock_2" name="unlock" onclick="unlockRadio('0')" type="radio" value="0"/>
-                                <label for="unlock_2">解锁条件</label>
                             </div>
                         </div>
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
@@ -199,7 +197,29 @@
     /*<![CDATA[*/
     jQuery(document).ready(function ($) {
         $(".btn.btn-success.save").click(function () {
-
+            //类型[0-类型1(两张图片),1-类型2(三张图片),2-类型3(三张图片),3-类型4(三张图片),4-类型5(两张图片),5-类型6(两张图片),6-类型7(两张图片),7-类型8(两张图片)]
+            var form = $("#saveForm");
+            var type = form.find("input[name='type']:checked").val();
+            var imageOneUrl = form.find("input[name='imageOneUrl']").val();
+            var imageTwoUrl = form.find("input[name='imageTwoUrl']").val();
+            var imageThreeUrl = form.find("input[name='imageThreeUrl']").val();
+            var unlock = form.find("input[name='unlock']:checked").val();
+            var subscribeCount = form.find("input[name='subscribeCount']").val();
+            var promptText = form.find("input[name='promptText']").val();
+            if (imageOneUrl == "" || imageTwoUrl == ""){
+                toastr.error("图片为必填项", "温馨提示");
+                return;
+            }
+            if ((type == "1" || type == "2" || type == "3") && (imageOneUrl == "" || imageTwoUrl == "" || imageThreeUrl == "" )) {
+                toastr.error("图片必须为三张", "温馨提示");
+                return;
+            }
+            if(unlock == "0") {
+                if (subscribeCount == "" || promptText == ""){
+                    toastr.error("订阅数/提示文字为必填项", "温馨提示");
+                    return;
+                }
+            }
         });
 
         $(".btn.btn-info.add").click(function () {
@@ -232,44 +252,6 @@
                 });
                 $('#multi-select1').multiSelect('refresh');
                 jQuery('#modal-6').modal('show', {backdrop: 'fade'});
-            });
-        });
-
-        //保存
-        $(".btn.btn-info.save").click(function () {
-            var form = $("#saveForm");
-            var username = form.find("input[name='username']").val();
-            if (username == '') {
-                toastr.error("用户名不能为空", "温馨提示");
-                return;
-            }
-            var nickname = form.find("input[name='nickname']").val();
-            if (nickname == '') {
-                toastr.error("昵称不能为空", "温馨提示");
-                return;
-            }
-            var id = form.find("input[name='id']").val();
-            var brandIdsArray = $("#multi-select1").val();
-            var brandIds = "";
-            if (null != brandIdsArray) {
-                $.each(brandIdsArray, function (i, e) {
-                    brandIds += e + ","
-                });
-            }
-            $.post("/users-save", {
-                id: id,
-                username: username,
-                nickname: nickname,
-                roles: $("#multi-select").val(),
-                brandIds: brandIds
-            }, function (data) {
-                if (data) {
-                    jQuery('#modal-6').modal('hide');
-                    toastr.success("操作已成功！", "温馨提示");
-                    oTable.fnDraw(oTable.fnSettings());
-                } else {
-                    toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
-                }
             });
         });
     });

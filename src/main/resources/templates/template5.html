@@ -209,7 +209,29 @@
     /*<![CDATA[*/
     jQuery(document).ready(function ($) {
         $(".btn.btn-success.save").click(function () {
+            var form = $("#saveForm");
+            var type = form.find("input[name='type']:checked").val();
+            var imageOneUrl = form.find("input[name='imageUnderUrl']").val();
+            var imageTwoUrl = form.find("input[name='videoUrl']").val();
+            var imageThreeUrl = form.find("input[name='videoCoverUrl']").val();
+            var unlock = form.find("input[name='unlock']:checked").val();
+            var subscribeCount = form.find("input[name='subscribeCount']").val();
+            var promptText = form.find("input[name='promptText']").val();
 
+            if (type == "0" && imageOneUrl == ""){
+                toastr.error("底图为必填项", "温馨提示");
+                return;
+            }
+            if(imageTwoUrl == "" || imageThreeUrl == ""){
+                toastr.error("视频/视频封面为必填项", "温馨提示");
+                return;
+            }
+            if(unlock == "0") {
+                if (subscribeCount == "" || promptText == ""){
+                    toastr.error("订阅数/提示文字为必填项", "温馨提示");
+                    return;
+                }
+            }
         });
 
         $(".btn.btn-info.add").click(function () {
@@ -242,44 +264,6 @@
                 });
                 $('#multi-select1').multiSelect('refresh');
                 jQuery('#modal-6').modal('show', {backdrop: 'fade'});
-            });
-        });
-
-        //保存
-        $(".btn.btn-info.save").click(function () {
-            var form = $("#saveForm");
-            var username = form.find("input[name='username']").val();
-            if (username == '') {
-                toastr.error("用户名不能为空", "温馨提示");
-                return;
-            }
-            var nickname = form.find("input[name='nickname']").val();
-            if (nickname == '') {
-                toastr.error("昵称不能为空", "温馨提示");
-                return;
-            }
-            var id = form.find("input[name='id']").val();
-            var brandIdsArray = $("#multi-select1").val();
-            var brandIds = "";
-            if (null != brandIdsArray) {
-                $.each(brandIdsArray, function (i, e) {
-                    brandIds += e + ","
-                });
-            }
-            $.post("/users-save", {
-                id: id,
-                username: username,
-                nickname: nickname,
-                roles: $("#multi-select").val(),
-                brandIds: brandIds
-            }, function (data) {
-                if (data) {
-                    jQuery('#modal-6').modal('hide');
-                    toastr.success("操作已成功！", "温馨提示");
-                    oTable.fnDraw(oTable.fnSettings());
-                } else {
-                    toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
-                }
             });
         });
     });
