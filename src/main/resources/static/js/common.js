@@ -15,6 +15,76 @@ function post(URL, PARAMS) {
     return temp;
 }
 
+function getImgSize(file, cb) {
+    var f = file;//input.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var data = e.target.result;
+        //加载图片获取图片真实宽度和高度
+        var image = new Image();
+        image.onload = function () {
+            var width = image.width;
+            var height = image.height;
+            cb(width, height);
+        };
+        image.src = data;
+    };
+    reader.readAsDataURL(f);
+}
+
+function checkFileSize(file, MB) {
+    if (MB == null) {
+        MB = 5;
+    }
+    if (file != '' && file.size / 1024 / 1024 > MB) {
+        toastr.error("文件大小超过5M,请压缩处理后上传", "温馨提示");
+    }
+}
+
+window.upload = function upload(param, token, file, next, error, complete, sizeLimit, isVideo) {
+    if (file == '' || file == null) {
+        complete('');
+    } else {
+        checkFileSize(file, sizeLimit);
+        var config = {
+            useCdnDomain: true,
+            region: qiniu.region.z0
+        };
+        if (isVideo) {
+            var filename = file.name;
+            var postf = filename.substring(filename.lastIndexOf("."));
+            var putExtra = {
+                fname: "",
+                params: {"x:param": param},
+                mimeType: ["video/x-flv", "video/mp4", "video/3gpp", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv"] || null
+            };
+            var newFileName = "video/wx/" + UUID.randomUUID() + postf;
+            var observable = qiniu.upload(file, newFileName, token,
+                putExtra, config);
+            observable.subscribe(next, error, complete);
+        } else {
+            getImgSize(file, function (w, h) {
+                var filename = file.name;
+                var postf = filename.substring(filename.lastIndexOf("."));
+                var putExtra = {
+                    fname: "",
+                    params: {"x:param": param},
+                    mimeType: ["image/png", "image/jpeg", "image/gif"] || null
+                };
+                var newFileName = "image/wx/#W#/#H#/" + UUID.randomUUID() + postf;
+                newFileName = newFileName.replace("#W#", w).replace("#H#", h);
+                var observable = qiniu.upload(file, newFileName, token,
+                    putExtra, config);
+                observable.subscribe(next, error, complete);
+            });
+        }
+    }
+};
+
+function upload(param, token, file, next, error, complete, sizeLimit, isVideo) {
+    this.upload(param, token, file, next, error, complete, sizeLimit, isVideo);
+}
+
 //对Date的扩展，将 Date 转化为指定格式的String
 //月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 //年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
