@@ -277,7 +277,7 @@
     const $BTN = $('#export-btn');
     const $EXPORT = $('#export');
     const newTr = `
-<tr class="hide">
+<tr class="">
 <td class="pt-3-half" contenteditable="false">#</td>
 <td class="pt-3-half" contenteditable="true">
 <div class="form-group">
@@ -340,32 +340,19 @@
 </tr>`;
 
 	$('.table-add').on('click', 'i', () => {
-
-		const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table-line');
-
-		if ($tableID.find('tbody tr').length === 0) {
-
-			$('tbody').append(newTr);
-		}
-
-		$tableID.find('table').append($clone);
+		$('tbody').append(newTr);
 	});
 	$tableID.on('click', '.table-remove', function () {
-
 		$(this).parents('tr').detach();
 	});
 	$tableID.on('click', '.table-up', function () {
-
 		const $row = $(this).parents('tr');
-
 		if ($row.index() === 1) {
 			return;
 		}
-
 		$row.prev().before($row.get(0));
 	});
 	$tableID.on('click', '.table-down', function () {
-
 		const $row = $(this).parents('tr');
 		$row.next().after($row.get(0));
 	});
