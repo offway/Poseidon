@@ -228,6 +228,7 @@
 	}
 
 	function editIslock(data) {
+		var form = $("#saveForm");
 		form.find("input[name='type']["+data["islock"]+"]").attr("checked",true);
 		if (data["islock"] == "0"){
 			$("#unlockText").show();
@@ -291,15 +292,7 @@
 				}
 			}
 			var postData = $("#saveForm").serializeArray();
-			if(form.find("input[name='templateIdEdit']").val()!=""){
-				postData.put("templateId",form.find("input[name='templateIdEdit']").val());
-			}
-			if(form.find("input[name='lockId']").val() != ""){
-				postData.put("lockId",form.find("input[name='lockId']").val());
-			}
-			if(form.find("input[name='templateConfigId']").val()!=""){
-				postData.put("templateConfigId",form.find("input[name='templateConfigId']").val());
-			}
+			postData.push({"name": "templateId", "value": form.find("input[name='templateIdEdit']").val()});
 			$.post("/template1_save",postData,function (data) {
 				if (data){
 					toastr.success("操作已成功！", "温馨提示");
