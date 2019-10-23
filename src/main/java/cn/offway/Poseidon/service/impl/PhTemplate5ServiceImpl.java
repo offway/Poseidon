@@ -45,4 +45,9 @@ public class PhTemplate5ServiceImpl implements PhTemplate5Service {
 	public List<PhTemplate5> save(List<PhTemplate5> entities){
 		return phTemplate5Repository.save(entities);
 	}
+
+	@Override
+	public void updateVideoUrl(String video, String url){
+		phTemplate5Repository.updateVideoUrl(video,url);
+	}
 }
