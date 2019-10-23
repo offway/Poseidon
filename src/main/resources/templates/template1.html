@@ -30,6 +30,9 @@
 			<div class="row">
 			<form role="form" id="saveForm" class="form-horizontal">
 				<input type="hidden" name="goodsId" />
+				<input type="hidden" name="templateConfigId" />
+				<input type="hidden" name="templateIdEdit" />
+				<input type="hidden" name="lockId" />
 				<div class="form-group col-md-7">
 					<label class="control-label">类型</label>
 					<div class="radio">
@@ -191,12 +194,73 @@
 			cb(token);
 		});
 	}
+	
+	function editTemplate(data) {
+		var form = $("#saveForm");
+		form.find("input[name='type']["+data["type"]+"]").attr("checked",true);
+		form.find("input[name='imageUnderUrl']").val(data["imageUnderUrl"]);
+		form.find("[name=imageUnder]").attr("src", data["imageUnderUrl"]);
+		form.find("[name=imageUnder]").attr("width", "100px");
+		form.find("[name=imageUnder]").attr("height", "100px");
+		form.find("[name=imageUnder]").show();
+		form.find("input[name='imageTextUrl']").val(data["imageTextUrl"]);
+		form.find("[name=imageText]").attr("src", data["imageTextUrl"]);
+		form.find("[name=imageText]").attr("width", "100px");
+		form.find("[name=imageText]").attr("height", "100px");
+		form.find("[name=imageText]").show();
+		if (data["rollingType"] == "0"){
+			$("#rollingTxt").hide();
+			$("#rollingImageUrlDiv").show();
+			$("#rollingText").val("");
+			form.find("input[name='rollingImageUrl']").val(data["rollingImageUrl"]);
+			form.find("[name=rollingImage]").attr("src", data["rollingImageUrl"]);
+			form.find("[name=rollingImage]").attr("width", "100px");
+			form.find("[name=rollingImage]").attr("height", "100px");
+			form.find("[name=rollingImage]").show();
+		}else {
+			$("#rollingImageUrlDiv").hide();
+			$("#rollingTxt").show();
+			$("#rollingImage").attr("src", "");
+			$("#rollingImageUrl").val("");
+			form.find("textarea[name='rollingText']").val(data["rollingText"]);
+		}
+
+	}
+
+	function editIslock(data) {
+		form.find("input[name='type']["+data["islock"]+"]").attr("checked",true);
+		if (data["islock"] == "0"){
+			$("#unlockText").show();
+			form.find("input[name='promptText']").val(data["promptText"]);
+			form.find("input[name='subscribeCount']").val(data["subscribeCount"]);
+		}else {
+			$("#unlockText").hide();
+			$("#promptText").val("");
+			$("#subscribeCount").val("");
+		}
+	}
 	var qiniuUrl = [[${qiniuUrl}]];
 	var goodsId = [[${goodsId}]];
+	var templateId = [[${templateId}]];
+	var templateConfigId = [[${templateConfigId}]];
 	/*<![CDATA[*/
 	jQuery(document).ready(function ($) {
 		if (goodsId != ""){
 			$("#saveForm").find("input[name='goodsId']").val(goodsId);
+		}
+		if (templateConfigId != ""){
+			$("#saveForm").find("input[name='templateConfigId']").val(templateConfigId);
+		}
+		if (goodsId != "" && templateId != ""){
+			$.post("/template1_findone",{"goodsId":goodsId,"templateId":templateId},function (data) {
+				template1 = data["template1"];
+				lock = data["lock"];
+				var form = $("#saveForm");
+				form.find("input[name='templateIdEdit']").val(template1["id"]);
+				form.find("input[name='lockId']").val(lock["id"]);
+				editTemplate(template1);
+				editIslock(lock);
+			});
 		}
 		$(".btn.btn-success.save").click(function () {
 			var form = $("#saveForm");
@@ -206,7 +270,7 @@
 			var rollingType = form.find("input[name='rollingType']:checked").val();
 			var rollingImageUrl = form.find("input[name='rollingImageUrl']").val();
 			var rollingText = form.find("textarea[name='rollingText']").val();
-			var unlock = form.find("input[name='unlock']:checked").val();
+			var unlock = form.find("input[name='islock']:checked").val();
 			var subscribeCount = form.find("input[name='subscribeCount']").val();
 			var promptText = form.find("input[name='promptText']").val();
 			if (type == "" || imageUnderUrl == "" || imageTextUrl == "") {
@@ -227,6 +291,15 @@
 				}
 			}
 			var postData = $("#saveForm").serializeArray();
+			if(form.find("input[name='templateIdEdit']").val()!=""){
+				postData.put("templateId",form.find("input[name='templateIdEdit']").val());
+			}
+			if(form.find("input[name='lockId']").val() != ""){
+				postData.put("lockId",form.find("input[name='lockId']").val());
+			}
+			if(form.find("input[name='templateConfigId']").val()!=""){
+				postData.put("templateConfigId",form.find("input[name='templateConfigId']").val());
+			}
 			$.post("/template1_save",postData,function (data) {
 				if (data){
 					toastr.success("操作已成功！", "温馨提示");
@@ -234,39 +307,6 @@
 					toastr.error("操作失败!", "温馨提示");
 					return;
 				}
-			});
-		});
-
-		$(".btn.btn-info.add").click(function () {
-			$("#saveForm").find("input[name='id']").val("");
-			$.get("/roles-all", {}, function (data) {
-				$('#multi-select').empty();
-				$.each(data, function (i, e) {
-					$('#multi-select').append("<option value=" + e.id + ">" + e.name + "</option>");
-				});
-				$("#multi-select").multiSelect({
-					afterInit: function () {
-						// Add alternative scrollbar to list
-						// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-					},
-					afterSelect: function () {
-						// Update scrollbar size
-						// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-					}
-				});
-				$('#multi-select').multiSelect('refresh');
-				$("#multi-select1").multiSelect({
-					afterInit: function () {
-						// Add alternative scrollbar to list
-						// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-					},
-					afterSelect: function () {
-						// Update scrollbar size
-						// this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-					}
-				});
-				$('#multi-select1').multiSelect('refresh');
-				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
 			});
 		});
 	});

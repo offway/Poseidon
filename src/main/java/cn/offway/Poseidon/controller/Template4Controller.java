@@ -56,7 +56,7 @@ public class Template4Controller {
         PhTemplateConfig templateConfig = new PhTemplateConfig();
         templateConfig.setGoodsId(template4.getGoodsId());
         templateConfig.setName("template4");
-        templateConfig.setTemplateId(template4.getId());
+        templateConfig.setTemplateId(template4.getId().toString());
         templateConfig.setSort(0L);
         if ("1".equals(lock.getIslock())){
             templateConfig.setIslock("0");

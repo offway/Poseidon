@@ -2,6 +2,7 @@ package cn.offway.Poseidon.controller;
 
 import cn.offway.Poseidon.domain.PhLock;
 import cn.offway.Poseidon.domain.PhTemplate1;
+import cn.offway.Poseidon.domain.PhTemplate4;
 import cn.offway.Poseidon.domain.PhTemplateConfig;
 import cn.offway.Poseidon.properties.QiniuProperties;
 import cn.offway.Poseidon.service.PhLockService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户管理
@@ -40,25 +43,33 @@ public class Template1Controller {
     private PhTemplateConfigService templateConfigService;
 
     @RequestMapping("/template1.html")
-    public String users(ModelMap map,String goodsId,String lockId) {
+    public String users(ModelMap map,String goodsId,String templateId,String templateConfigId) {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
         map.addAttribute("goodsId",goodsId);
+        map.addAttribute("templateId",templateId);
+        map.addAttribute("templateConfigId",templateConfigId);
         return "template1";
     }
 
     @ResponseBody
     @RequestMapping("/template1_save")
-    public boolean save(PhTemplate1 template1, PhLock lock){
+    public boolean save(PhTemplate1 template1, PhLock lock,String templateId,String lockId,String templateConfigId){
+        PhTemplateConfig templateConfig = new PhTemplateConfig();
+        if (!"".equals(templateId) && !"".equals(lockId)){
+            template1.setId(Long.valueOf(templateId));
+            lock.setId(Long.valueOf(lockId));
+            templateConfig.setId(Long.valueOf(templateConfigId));
+        }
         template1.setCreateTime(new Date());
         PhTemplate1 template1save = template1Service.save(template1);
         lock.setCreateTime(new Date());
         lock.setTemplateType("0");
         lock.setTemplateId(template1save.getId());
         lockService.save(lock);
-        PhTemplateConfig templateConfig = new PhTemplateConfig();
+
         templateConfig.setGoodsId(template1.getGoodsId());
         templateConfig.setName("template1");
-        templateConfig.setTemplateId(template1.getId());
+        templateConfig.setTemplateId(template1.getId().toString());
         templateConfig.setSort(0L);
         if ("1".equals(lock.getIslock())){
             templateConfig.setIslock("0");
@@ -72,6 +83,17 @@ public class Template1Controller {
         templateConfig.setCreateTime(new Date());
         templateConfigService.save(templateConfig);
         return true;
+    }
+
+    @ResponseBody
+    @RequestMapping("/template1_findone")
+    public Map<String,Object> findone(String templateId,String goodsId){
+        Map<String,Object> map = new HashMap<>();
+        PhTemplate1 template1 = template1Service.findOne(Long.valueOf(templateId));
+        map.put("template1",template1);
+        PhLock lock = lockService.findByGoodsIdAndTemplateTypeAndTemplateId(Long.valueOf(goodsId),"0",Long.valueOf(templateId));
+        map.put("lock",lock);
+        return map;
     }
 
 }
