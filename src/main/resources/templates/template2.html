@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<head th:replace="head"></head>
+	<title>新加模板</title>
+	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+	<link rel="stylesheet" href="new/MDB-Free_4.8.11/css/mdb.css"/>
+    <style>
+        .fa-long-arrow-alt-down:before {
+            content: "\f309";
+        }
+
+        .fa-long-arrow-alt-up:before {
+            content: "\f30c";
+        }
+
+        .fa-plus:before {
+            content: "\f067";
+        }
+
+        .fa, .fas {
+            font-weight: 900;
+        }
+
+        .fa, .far, .fas {
+            font-family: "Font Awesome 5 Free";
+        }
+
+        .fa-2x {
+            font-size: 2em;
+        }
+
+        .fa, .fab, .fad, .fal, .far, .fas {
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<header th:replace="navbar"></header>
+	<aside th:replace="sidebar-menu"></aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">新加模板</h3>
+				</div>
+				<div class="right-title">
+				</div>
+			</div>
+		</div>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<form role="form" class="form-inline">
+							</form>
+						</div>
+						<div class="box-body">
+							<!-- Editable table -->
+							<div class="card">
+								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">Editable table</h3>
+								<div class="card-body">
+									<div id="table" class="table-editable">
+      									<span class="table-add float-right mb-3 mr-2">
+											<a href="#!" class="text-success">
+												<i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+											</a>
+										</span>
+										<table class="table table-bordered table-responsive-md table-striped text-center">
+											<thead>
+											<tr>
+												<th class="text-center">ID</th>
+												<th class="text-center">展示类型</th>
+												<th class="text-center">操作形式</th>
+												<th class="text-center">图片上传</th>
+												<th class="text-center">提示文案</th>
+												<th class="text-center">字体设置</th>
+												<th class="text-center">位置</th>
+												<th class="text-center">排序</th>
+												<th class="text-center">操作</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td class="pt-3-half" contenteditable="false">#</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<select name="type" class="form-control" onchange="toggleMode(this)">
+															<option value="0" selected="selected">效果图</option>
+															<option value="1">文字</option>
+														</select>
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<select name="way" class="form-control">
+															<option value="0">左滑</option>
+															<option value="1">自动</option>
+														</select>
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<input type="file" name="imageUrlFile" onchange="uploadFile(this)" />
+														<input type="hidden" name="imageUrl" />
+														<img src="" name="imageUrlImg" style="display: none;" />
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<input type="button" name="remarkBtn" class="form-control" placeholder="设置字体" disabled="disabled" />
+														<input type="hidden" name="remark" />
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<select name="location" class="form-control">
+															<option value="0">文字左上滑出</option>
+															<option value="1">文字右上滑出</option>
+															<option value="2">文字左下滑出</option>
+															<option value="3">文字右下滑出</option>
+															<option value="4">文字居中显示</option>
+														</select>
+													</div>
+												</td>
+												<td class="pt-3-half">
+													<span class="table-up">
+														<a href="#!" class="indigo-text">
+															<i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
+														</a>
+													</span>
+													<span class="table-down">
+														<a href="#!" class="indigo-text">
+															<i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
+														</a>
+													</span>
+												</td>
+												<td>
+              										<span class="table-remove">
+														<button type="button" class="btn btn-danger btn-rounded btn-sm my-0">删除</button>
+													</span>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<!-- Editable table -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+						</div>
+						<!-- /.box-footer-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">温馨提示</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p>您确定要删除选中用户吗？</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="modal-6">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myLargeModalLabel">添加用户</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="saveForm">
+					<input type="hidden" name="id"/>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">用户名</label>
+								<input type="text" class="form-control" name="username" placeholder="用户名" onkeyup="this.value=this.value.replace(/[^\w_]/g,'');"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">昵称</label>
+								<input type="text" class="form-control" name="nickname" placeholder="昵称"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class=" control-label">选择角色</label>
+								<div class="col-md-12">
+									<select class="form-control" multiple="multiple" id="multi-select" name="roles">
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class=" control-label">选择品牌</label>
+								<div class="col-md-12">
+									<select class="form-control" multiple="multiple" id="multi-select1" name="brandIds">
+										<option  th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-info save">保存</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
+<script src="new/MDB-Free_4.8.11/js/mdb.js"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+    const $tableID = $('#table');
+    const $BTN = $('#export-btn');
+    const $EXPORT = $('#export');
+    const newTr = `
+<tr class="hide">
+<td class="pt-3-half" contenteditable="false">#</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<select name="type" class="form-control" onchange="toggleMode(this)">
+<option value="0" selected="selected">效果图</option>
+<option value="1">文字</option>
+</select>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<select name="way" class="form-control">
+<option value="0">左滑</option>
+<option value="1">自动</option>
+</select>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<input type="file" name="imageUrlFile" onchange="uploadFile(this)" />
+<input type="hidden" name="imageUrl" />
+<img src="" name="imageUrlImg" style="display: none;" />
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<input type="button" name="remarkBtn" class="form-control" placeholder="设置字体" disabled="disabled" />
+<input type="hidden" name="remark" />
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<select name="location" class="form-control">
+<option value="0">文字左上滑出</option>
+<option value="1">文字右上滑出</option>
+<option value="2">文字左下滑出</option>
+<option value="3">文字右下滑出</option>
+<option value="4">文字居中显示</option>
+</select>
+</div>
+</td>
+  <td class="pt-3-half">
+    <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
+    <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
+  </td>
+  <td>
+    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">删除</button></span>
+  </td>
+</tr>`;
+
+	$('.table-add').on('click', 'i', () => {
+
+		const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table-line');
+
+		if ($tableID.find('tbody tr').length === 0) {
+
+			$('tbody').append(newTr);
+		}
+
+		$tableID.find('table').append($clone);
+	});
+	$tableID.on('click', '.table-remove', function () {
+
+		$(this).parents('tr').detach();
+	});
+	$tableID.on('click', '.table-up', function () {
+
+		const $row = $(this).parents('tr');
+
+		if ($row.index() === 1) {
+			return;
+		}
+
+		$row.prev().before($row.get(0));
+	});
+	$tableID.on('click', '.table-down', function () {
+
+		const $row = $(this).parents('tr');
+		$row.next().after($row.get(0));
+	});
+	// A few jQuery helpers for exporting only
+	jQuery.fn.pop = [].pop;
+	jQuery.fn.shift = [].shift;
+	$BTN.on('click', () => {
+
+		const $rows = $tableID.find('tr:not(:hidden)');
+		const headers = [];
+		const data = [];
+
+		// Get the headers (add special header logic here)
+		$($rows.shift()).find('th:not(:empty)').each(function () {
+
+			headers.push($(this).text().toLowerCase());
+		});
+
+		// Turn all existing rows into a loopable array
+		$rows.each(function () {
+			const $td = $(this).find('td');
+			const h = {};
+
+			// Use the headers from earlier to name our hash keys
+			headers.forEach((header, i) => {
+
+				h[header] = $td.eq(i).text();
+			});
+
+			data.push(h);
+		});
+
+		// Output the result
+		$EXPORT.text(JSON.stringify(data));
+	});
+
+	function toggleMode(self) {
+		var that = $(self);
+		var tr = that.parent().parent().parent();
+		if (that.val() == "0") {
+			tr.find("input[name='imageUrlFile']").removeAttr("disabled");
+			tr.find("input[name='promptText']").prop("disabled", "disabled");
+			tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
+		} else {
+			tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
+			tr.find("input[name='promptText']").removeAttr("disabled");
+			tr.find("input[name='remarkBtn']").removeAttr("disabled");
+		}
+	}
+
+	function uploadFile(self) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				this.upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					that.parent().find("[name=imageUrl]").val(url);
+					that.parent().find("[name=imageUrlImg]").attr("src", url);
+					that.parent().find("[name=imageUrlImg]").attr("width", "100px");
+					that.parent().find("[name=imageUrlImg]").attr("height", "100px");
+					that.parent().find("[name=imageUrlImg]").show();
+				});
+			});
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
+
+	function getQNToken(cb) {
+		$.get("/qiniu/token", {}, function (token) {
+			cb(token);
+		});
+	}
+
+	var qiniuUrl = [[${qiniuUrl}]];
+	jQuery(document).ready(function ($) {
+		// var oTable = $("#example-1").dataTable({
+		// 	language: {
+		// 		url: "../assets/Chinese.txt"
+		// 	},
+		// 	bFilter: false,
+		// 	bServerSide: true,//服务器处理分页，默认是false，需要服务器处理，必须true
+		// 	sAjaxDataProp: "aData",//是服务器分页的标志，必须有
+		// 	sAjaxSource: "/users-data",//通过ajax实现分页的url路径。
+		// 	fnServerParams: function (aData) {
+		// 		var searchArray = $(".form-inline").serializeArray();
+		// 		$.merge(aData, searchArray);
+		// 	},
+		// 	order: [[0, "desc"]],
+		// 	columnDefs: [
+		// 		{
+		// 			targets: 0,
+		// 			data: "id",
+		// 			width: "5%",
+		// 			orderable: false,
+		// 			title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
+		// 			render: function (data, type, full, meta) {
+		// 				var uuid = UUID.randomUUID();
+		// 				return '<div class="checkbox"><input type="checkbox" name="userId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
+		// 			}
+		// 		},
+		// 		{
+		// 			targets: 1,
+		// 			data: "id",
+		// 			title: "序号"
+		// 		},
+		// 		{
+		// 			targets: 2,
+		// 			data: "username",
+		// 			title: "用户名"
+		// 		},
+		// 		{
+		// 			targets: 3,
+		// 			data: "nickname",
+		// 			title: "昵称"
+		// 		},
+		// 		{
+		// 			targets: 4,
+		// 			data: "createdtime",
+		// 			title: "创建时间",
+		// 			render: function (data, type, row, meta) {
+		// 				return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+		// 			}
+		// 		}
+		// 	]
+		// });
+
+		$(".searchBtn").click(function () {
+			$("#checkbox-all").attr("checked", false);
+			oTable.fnDraw();  //or fnReloadAjax()
+			return false;
+		});
+
+		$('#example-1').on('click', "#checkbox-all", function () {
+			var obj = $(this);
+			$("input[name='userId']").each(function (i, e) {
+				this.checked = obj[0].checked;
+			});
+		});
+
+		$(".btn.btn-info.delete").click(function () {
+			var userId = $("input[name='userId']:checked");
+			if (userId.length < 1) {
+				toastr.error("请至少选择一条数据操作", "温馨提示");
+				return;
+			}
+			jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+		});
+
+		$(".deleteBtn").click(function () {
+			var ids = '';
+			$("input[name='userId']:checked").each(function (i, e) {
+				ids += e.value + ",";
+			});
+			$.post("/users-delete", {
+				ids: ids
+			}, function (data) {
+				if (data) {
+					jQuery('#modal-1').modal('hide');
+					toastr.success("您的操作已成功！", "温馨提示");
+					oTable.fnDraw(oTable.fnSettings());
+				} else {
+					toastr.error("操作失败,请稍后再试", "温馨提示");
+				}
+			});
+			return false;
+		});
+
+		$(".btn.btn-info.add").click(function () {
+			$("#saveForm").find("input[name='id']").val("");
+			$.get("/roles-all", {}, function (data) {
+				$.each(data, function (i, e) {
+					$('#multi-select').append("<option value=" + e.id + ">" + e.name + "</option>");
+				});
+				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+			});
+		});
+
+		//保存
+		$(".btn.btn-info.save").click(function () {
+			var form = $("#saveForm");
+			var username = form.find("input[name='username']").val();
+			if (username == '') {
+				toastr.error("用户名不能为空", "温馨提示");
+				return;
+			}
+			var nickname = form.find("input[name='nickname']").val();
+			if (nickname == '') {
+				toastr.error("昵称不能为空", "温馨提示");
+				return;
+			}
+			var id = form.find("input[name='id']").val();
+			var brandIdsArray = $("#multi-select1").val();
+			var brandIds = "";
+			if (null != brandIdsArray) {
+				$.each(brandIdsArray, function (i, e) {
+					brandIds += e + ","
+				});
+			}
+			$.post("/users-save", {
+				id: id,
+				username: username,
+				nickname: nickname,
+				roles: $("#multi-select").val(),
+				brandIds: brandIds
+			}, function (data) {
+				if (data) {
+					jQuery('#modal-6').modal('hide');
+					toastr.success("操作已成功！", "温馨提示");
+					oTable.fnDraw(oTable.fnSettings());
+				} else {
+					toastr.error("操作失败,请检查用户名是否存在", "温馨提示");
+				}
+			});
+		});
+
+		$(".btn.btn-info.resetPwd").click(function () {
+			var userId = $("input[name='userId']:checked");
+			if (userId.length != 1) {
+				toastr.error("请选择一条数据操作", "温馨提示");
+				return;
+			}
+
+			$.post("/users-resetPwd", {id: userId.val()}, function (data) {
+				if (data) {
+					toastr.success("操作已成功！", "温馨提示");
+				} else {
+					toastr.error("操作失败", "温馨提示");
+				}
+			});
+		});
+
+		$(".btn.btn-info.edit").click(function () {
+
+			var userId = $("input[name='userId']:checked");
+			if (userId.length != 1) {
+				toastr.error("请选择一条数据操作", "温馨提示");
+				return;
+			}
+
+			$.get("/users-one", {id: userId.val()}, function (data) {
+				var form = $("#saveForm");
+				form.find("input[name='id']").val(data.user.id);
+				form.find("input[name='username']").val(data.user.username);
+				form.find("input[name='nickname']").val(data.user.nickname);
+				var roleIds = data.roleIds;
+				var brandIds = data.brandIds;
+				$.get("/roles-all", {}, function (data) {
+					jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+				});
+			});
+		});
+	});
+	/*]]>*/
+</script>
+</body>
+</html>
