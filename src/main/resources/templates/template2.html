@@ -71,7 +71,7 @@
 						<div class="box-body">
 							<!-- Editable table -->
 							<div class="card">
-								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">Editable table</h3>
+								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">编辑模板内容</h3>
 								<div class="card-body">
 									<div id="table" class="table-editable">
       									<span class="table-add float-right mb-3 mr-2">
@@ -168,12 +168,65 @@
 											</tbody>
 										</table>
 									</div>
+                                    <div class="row col-md-3">
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="0" type="radio" id="addon_Option_1" checked="checked" onclick="toggleLock(0)" />
+                                                  <label for="addon_Option_1" style="padding-left: 20px;height: 13px;">开放</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="1" type="radio" id="addon_Option_2" onclick="toggleLock(1)" />
+                                                  <label for="addon_Option_2" style="padding-left: 20px;height: 13px;">解锁条件</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="1" type="radio" id="addon_Option_3" onclick="toggleLock(2)"/>
+                                                  <label for="addon_Option_3" style="padding-left: 20px;height: 13px;">提示文字</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                    </div>
+                                    <div class="row col-md-6" style="display: none;" id="subscribeCountDIV">
+                                        <div class="col-lg-12">
+                                            <div class="form-group validate">
+                                                <h5>订阅数<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" name="subscribeCount" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-6" style="display: none;" id="promptTextDIV">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <h5>提示文字<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" name="promptText" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
 							<!-- Editable table -->
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
+                            <button type="button" class="btn btn-danger save">保存</button>
 						</div>
 						<!-- /.box-footer-->
 					</div>
@@ -394,6 +447,25 @@
 			tr.find("input[name='remarkBtn']").removeAttr("disabled");
 		}
 	}
+
+    function toggleLock(v) {
+        var a = $("#subscribeCountDIV");
+        var b = $("#promptTextDIV");
+        switch (v) {
+            case 0:
+                a.hide();
+                b.hide();
+                break;
+            case 1:
+                a.show();
+                b.hide();
+                break;
+            case 2:
+                a.hide();
+                b.show();
+                break;
+        }
+    }
 
     var THE_FONT_BTN;
 
