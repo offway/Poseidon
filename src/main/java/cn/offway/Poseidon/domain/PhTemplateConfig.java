@@ -24,7 +24,7 @@ public class PhTemplateConfig implements Serializable {
     private String name;
 
     /** 模板id **/
-    private Long templateId;
+    private String templateId;
 
     /** 排序 **/
     private Long sort;
@@ -80,12 +80,12 @@ public class PhTemplateConfig implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "template_id", length = 11)
-    public Long getTemplateId() {
+    @Column(name = "template_id", length = 100)
+    public String getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(Long templateId) {
+    public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
 
