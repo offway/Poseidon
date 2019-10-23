@@ -28,6 +28,7 @@
         <section class="content">
             <div class="panel-body">
                 <form class="form-horizontal" id="saveForm" role="form">
+                    <input type="hidden" name="goodsId" />
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label class="control-label">类型</label>
@@ -71,13 +72,13 @@
                         <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
-                                <input checked="checked" id="unlock_1" name="unlock" onclick="unlockRadio('1')"
+                                <input checked="checked" id="unlock_1" name="islock" onclick="unlockRadio('1')"
                                        type="radio"
                                        value="1"/>
                                 <label for="unlock_1">开放</label>
                             </div>
                             <div class="radio">
-                                <input id="unlock_2" name="unlock" onclick="unlockRadio('0')" type="radio" value="0"/>
+                                <input id="unlock_2" name="islock" onclick="unlockRadio('0')" type="radio" value="0"/>
                                 <label for="unlock_2">解锁条件</label>
                             </div>
                         </div>
@@ -206,8 +207,12 @@
     }
 
     var qiniuUrl = [[${qiniuUrl}]];
+    var goodsId = [[${goodsId}]];
     /*<![CDATA[*/
     jQuery(document).ready(function ($) {
+        if (goodsId != ""){
+            $("#saveForm").find("input[name='goodsId']").val(goodsId);
+        }
         $(".btn.btn-success.save").click(function () {
             var form = $("#saveForm");
             var type = form.find("input[name='type']:checked").val();
@@ -232,6 +237,15 @@
                     return;
                 }
             }
+            var postData = $("#saveForm").serializeArray();
+            $.post("/template5_save",postData,function (data) {
+                if (data){
+                    toastr.success("操作已成功！", "温馨提示");
+                }else {
+                    toastr.error("操作失败!", "温馨提示");
+                    return;
+                }
+            });
         });
 
         $(".btn.btn-info.add").click(function () {

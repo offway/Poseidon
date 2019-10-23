@@ -54,7 +54,7 @@ public class QiniuService {
 				long newdate = DateUtils.addSeconds(new Date(),3600).getTime();
 				putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize),\"fname\":$(fname),\"param\":\"$(x:param)\"}");
 				putPolicy.put("persistentOps","avthumb/mp4");
-				putPolicy.put("persistentNotifyUrl","https://admin.offway.cn/callback/qiniu/avthumb");
+				putPolicy.put("persistentNotifyUrl","http://athena.offway.cn/qiniu/avthumb");
 				putPolicy.put("persistentPipeline","video");
 			}else {
 				putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize),\"fname\":$(fname),\"param\":\"$(x:param)\"}");

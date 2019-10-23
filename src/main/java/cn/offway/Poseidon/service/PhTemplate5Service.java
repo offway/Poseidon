@@ -20,4 +20,6 @@ public interface PhTemplate5Service{
     void delete(Long id);
 
     List<PhTemplate5> save(List<PhTemplate5> entities);
+
+    void updateVideoUrl(String video, String url);
 }
