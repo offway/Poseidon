@@ -197,7 +197,8 @@
 	
 	function editTemplate(data) {
 		var form = $("#saveForm");
-		form.find("input[name='type']["+data["type"]+"]").attr("checked",true);
+		form.find("input[name=type][value="+data["type"]+"]").attr("checked",true);
+		form.find("input[name=rollingType][value="+data["rollingType"]+"]").attr("checked",true);
 		form.find("input[name='imageUnderUrl']").val(data["imageUnderUrl"]);
 		form.find("[name=imageUnder]").attr("src", data["imageUnderUrl"]);
 		form.find("[name=imageUnder]").attr("width", "100px");
@@ -229,7 +230,7 @@
 
 	function editIslock(data) {
 		var form = $("#saveForm");
-		form.find("input[name='type']["+data["islock"]+"]").attr("checked",true);
+		form.find("input[name=islock][value="+data["islock"]+"]").attr("checked",true);
 		if (data["islock"] == "0"){
 			$("#unlockText").show();
 			form.find("input[name='promptText']").val(data["promptText"]);

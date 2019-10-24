@@ -64,11 +64,6 @@ public class Template1Controller {
         }
         template1.setCreateTime(new Date());
         PhTemplate1 template1save = template1Service.save(template1);
-        lock.setCreateTime(new Date());
-        lock.setTemplateType("0");
-        lock.setTemplateId(template1save.getId());
-        lockService.save(lock);
-
         templateConfig.setGoodsId(template1.getGoodsId());
         templateConfig.setName("template1");
         templateConfig.setTemplateId(template1.getId().toString());
@@ -83,7 +78,12 @@ public class Template1Controller {
         }
         templateConfig.setStatus("0");
         templateConfig.setCreateTime(new Date());
-        templateConfigService.save(templateConfig);
+        templateConfig = templateConfigService.save(templateConfig);
+        lock.setCreateTime(new Date());
+        lock.setTemplateType("0");
+        lock.setPid(templateConfig.getId());
+        lock.setTemplateId(template1save.getId());
+        lockService.save(lock);
         return true;
     }
 
