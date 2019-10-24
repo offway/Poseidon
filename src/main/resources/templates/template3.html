@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<head th:replace="head"></head>
+	<title>新加模板</title>
+	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+	<link rel="stylesheet" href="new/MDB-Free_4.8.11/css/mdb.css"/>
+    <style>
+        .fa-long-arrow-alt-down:before {
+            content: "\f309";
+        }
+
+        .fa-long-arrow-alt-up:before {
+            content: "\f30c";
+        }
+
+        .fa-plus:before {
+            content: "\f067";
+        }
+
+        .fa, .fas {
+            font-weight: 900;
+        }
+
+        .fa, .far, .fas {
+            font-family: "Font Awesome 5 Free";
+        }
+
+        .fa-2x {
+            font-size: 2em;
+        }
+
+        .fa, .fab, .fad, .fal, .far, .fas {
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<header th:replace="navbar"></header>
+	<aside th:replace="sidebar-menu"></aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">新加模板</h3>
+				</div>
+				<div class="right-title">
+				</div>
+			</div>
+		</div>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<form role="form" class="form-inline">
+							</form>
+						</div>
+						<div class="box-body">
+							<form role="form" id="saveForm">
+							<input type="hidden" name="pid" id="pid" />
+							<input type="hidden" name="gid" id="gid" />
+							<input type="hidden" name="id" id="id" />
+							<!-- Editable table -->
+							<div class="card">
+								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">编辑模板内容</h3>
+								<div class="card-body">
+									<div class="row col-md-6">
+										<div class="col-lg-12">
+											<div class="form-group">
+												<h5>标题<span class="text-danger">*</span></h5>
+												<div class="controls">
+													<input type="text" name="imageTag" class="form-control" placeholder="标题,12字以内"/>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row col-md-6">
+										<div class="col-lg-12">
+											<div class="form-group">
+												<h5>背景图<span class="text-danger">*</span></h5>
+												<div class="controls">
+													<input type="file" name="imageUnderFile" class="form-control" onchange="uploadImg(this)"/>
+													<input type="hidden" name="imageUnder"/>
+													<img src="" name="imageUnderImg" style="display: none;"/>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="table" class="table-editable">
+      									<span class="table-add float-right mb-3 mr-2">
+											<a href="#!" class="text-success">
+												<i class="fas fa-plus fa-2x" aria-hidden="true"></i>
+											</a>
+										</span>
+										<table class="table table-bordered table-responsive-md table-striped text-center">
+											<thead>
+											<tr>
+												<th class="text-center">ID</th>
+												<th class="text-center">角色</th>
+												<th class="text-center">操作形式</th>
+												<th class="text-center">音频上传</th>
+												<th class="text-center">排序</th>
+												<th class="text-center">操作</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td class="pt-3-half" contenteditable="false">#</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<select name="role" class="form-control">
+														</select>
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<select name="way" class="form-control">
+															<option value="0">左滑</option>
+															<option value="1">自动</option>
+														</select>
+													</div>
+												</td>
+												<td class="pt-3-half" contenteditable="true">
+													<div class="form-group">
+														<label></label>
+														<input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
+														<input type="hidden" name="audioUrl" />
+													</div>
+												</td>
+												<td class="pt-3-half">
+													<span class="table-up">
+														<a href="#!" class="indigo-text">
+															<i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
+														</a>
+													</span>
+													<span class="table-down">
+														<a href="#!" class="indigo-text">
+															<i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
+														</a>
+													</span>
+												</td>
+												<td>
+              										<span class="table-remove">
+														<button type="button" class="btn btn-danger btn-rounded btn-sm my-0">删除</button>
+													</span>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+                                    <div class="row col-md-3">
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="0" type="radio" id="addon_Option_1" checked="checked" onclick="toggleLock(0)" />
+                                                  <label for="addon_Option_1" style="padding-left: 20px;height: 13px;">开放</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="1" type="radio" id="addon_Option_2" onclick="toggleLock(1)" />
+                                                  <label for="addon_Option_2" style="padding-left: 20px;height: 13px;">解锁条件</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                        <div class="col-lg-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                  <input name="islock" value="1" type="radio" id="addon_Option_3" onclick="toggleLock(2)"/>
+                                                  <label for="addon_Option_3" style="padding-left: 20px;height: 13px;">提示文字</label>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.col-lg-6 -->
+                                    </div>
+                                    <div class="row col-md-6" style="display: none;" id="subscribeCountDIV">
+                                        <div class="col-lg-12">
+                                            <div class="form-group validate">
+                                                <h5>订阅数<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" name="subscribeCount" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-6" style="display: none;" id="promptTextDIV">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <h5>提示文字<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" name="promptTextLock" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+							</div>
+							<!-- Editable table -->
+							</form>
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+                            <button type="button" class="btn btn-danger save" onclick="saveObj()">保存</button>
+						</div>
+						<!-- /.box-footer-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">温馨提示</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p>您确定要删除选中用户吗？</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="modal-2">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myLargeModalLabel">字体设置</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="fontForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class=" control-label">大小</label>
+								<div class="col-md-12">
+									<select class="form-control" name="size">
+                                        <option value="0">XS</option>
+                                        <option value="1">S</option>
+                                        <option value="2">M</option>
+                                        <option value="3">L</option>
+                                        <option value="4">XL</option>
+									</select>
+								</div>
+							</div>
+						</div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class=" control-label">颜色</label>
+                                <div class="col-md-12">
+                                    <select class="form-control" name="color">
+                                        <option value="0">赤</option>
+                                        <option value="1">橙</option>
+                                        <option value="2">黄</option>
+                                        <option value="3">绿</option>
+                                        <option value="5">青</option>
+                                        <option value="6">蓝</option>
+                                        <option value="7">紫</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-info save" onclick="saveFont()">保存</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
+<script src="new/MDB-Free_4.8.11/js/mdb.js"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+    const $tableID = $('#table');
+    const $BTN = $('#export-btn');
+    const $EXPORT = $('#export');
+    const newTr = `
+<tr class="">
+<td class="pt-3-half" contenteditable="false">#</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<select name="role" class="form-control">
+</select>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<select name="way" class="form-control">
+<option value="0">左滑</option>
+<option value="1">自动</option>
+</select>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group">
+<label></label>
+<input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
+<input type="hidden" name="audioUrl" />
+</div>
+</td>
+  <td class="pt-3-half">
+    <span class="table-up"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a></span>
+    <span class="table-down"><a href="#!" class="indigo-text"><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a></span>
+  </td>
+  <td>
+    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">删除</button></span>
+  </td>
+</tr>`;
+
+	$('.table-add').on('click', 'i', () => {
+		$('tbody').append(newTr);
+	});
+	$tableID.on('click', '.table-remove', function () {
+		$(this).parents('tr').detach();
+	});
+	$tableID.on('click', '.table-up', function () {
+		const $row = $(this).parents('tr');
+		if ($row.index() === 1) {
+			return;
+		}
+		$row.prev().before($row.get(0));
+	});
+	$tableID.on('click', '.table-down', function () {
+		const $row = $(this).parents('tr');
+		$row.next().after($row.get(0));
+	});
+	// A few jQuery helpers for exporting only
+	jQuery.fn.pop = [].pop;
+	jQuery.fn.shift = [].shift;
+	$BTN.on('click', () => {
+
+		const $rows = $tableID.find('tr:not(:hidden)');
+		const headers = [];
+		const data = [];
+
+		// Get the headers (add special header logic here)
+		$($rows.shift()).find('th:not(:empty)').each(function () {
+
+			headers.push($(this).text().toLowerCase());
+		});
+
+		// Turn all existing rows into a loopable array
+		$rows.each(function () {
+			const $td = $(this).find('td');
+			const h = {};
+
+			// Use the headers from earlier to name our hash keys
+			headers.forEach((header, i) => {
+
+				h[header] = $td.eq(i).text();
+			});
+
+			data.push(h);
+		});
+
+		// Output the result
+		$EXPORT.text(JSON.stringify(data));
+	});
+
+    function toggleMode(self) {
+        var that = $(self);
+        var tr = that.parent().parent().parent();
+        if (that.val() == "0") {
+            tr.find("input[name='imageUrlFile']").removeAttr("disabled");
+            tr.find("input[name='promptText']").prop("readonly", "readonly");
+            tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
+        } else {
+            tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
+            tr.find("input[name='promptText']").removeAttr("readonly");
+            tr.find("input[name='remarkBtn']").removeAttr("disabled");
+        }
+    }
+
+    function toggleLock(v) {
+        var a = $("#subscribeCountDIV");
+        var b = $("#promptTextDIV");
+        switch (v) {
+            case 0:
+                a.hide();
+                b.hide();
+                break;
+            case 1:
+                a.show();
+                b.hide();
+                break;
+            case 2:
+                a.hide();
+                b.show();
+                break;
+        }
+    }
+
+    var THE_FONT_BTN;
+
+    function showFont(self) {
+        THE_FONT_BTN = $(self);
+        jQuery('#modal-2').modal('show', {backdrop: 'fade'});
+    }
+
+    function saveFont() {
+        var form = $("#fontForm");
+        var size = form.find("select[name='size']").val();
+        var color = form.find("select[name='color']").val();
+        if (THE_FONT_BTN) {
+            var remarkEle = THE_FONT_BTN.parent().find("input[name='remark']");
+            var jsonObj = {
+                "size": size,
+                "coloe": color
+            };
+            remarkEle.val(JSON.stringify(jsonObj));
+        }
+        jQuery('#modal-2').modal('hide');
+    }
+
+	function uploadAudio(self) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				this.upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					that.parent().find("[name=audioUrl]").val(url);
+				}, 5, false, true);
+			});
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
+
+	function uploadImg(self) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				this.upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					that.parent().find("[name=imageUnder]").val(url);
+					that.parent().find("[name=imageUnderImg]").attr("src", url);
+					that.parent().find("[name=imageUnderImg]").attr("width", "100px");
+					that.parent().find("[name=imageUnderImg]").attr("height", "100px");
+					that.parent().find("[name=imageUnderImg]").show();
+				}, 5, false, false);
+			});
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
+
+    function getQNToken(cb) {
+        $.get("/qiniu/token", {}, function (token) {
+            cb(token);
+        });
+    }
+
+	function saveObj() {
+		var postData = $("#saveForm").serializeArray();
+		$.post("/template2_save", postData, function (data) {
+			if (data) {
+				toastr.success("操作已成功！", "温馨提示");
+			} else {
+				toastr.error("操作失败!", "温馨提示");
+			}
+		});
+	}
+
+	var qiniuUrl = [[${qiniuUrl}]];
+	var pid = [[${pid}]];
+	var gid = [[${gid}]];
+	var id = [[${id}]];
+	jQuery(document).ready(function ($) {
+		if (pid && gid) {
+			$("#pid").val(pid);
+			$("#gid").val(gid);
+			if (id) {
+				$("#id").val(id);
+				$('tbody').empty();
+				$.post("/template3_get", {"gid": gid, "pid": pid}, function (data) {
+					if (data) {
+						console.log(data);
+						var form = $("#saveForm");
+						//restore data
+						for (var item of data["data"]) {
+							$('tbody').append(newTr);
+							for (var key in item) {
+								var ele = form.find("input[name='" + key + "']").last();
+								switch (ele.attr("type")) {
+									case "radio":
+										ele.val([item[key]]);
+										break;
+									default:
+										ele.val(item[key]);
+								}
+								//try image
+								var imgEle = form.find("img[name='" + key + "Img']").last();
+								imgEle.attr("src", item[key]);
+								imgEle.attr("width", 100);
+								imgEle.attr("length", 100);
+								imgEle.show();
+								//try select
+								var selectEle = form.find("select[name='" + key + "']").last();
+								selectEle.val(item[key]);
+								if (key == "type") {
+									toggleMode(selectEle);
+								}
+							}
+						}
+						//restore lock
+						if (data["lock"]) {
+							form.find("input[name='islock']").val([data["lock"]["islock"]]);
+							form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
+							form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
+							if (data["lock"]["islock"] == "0") {
+								$("#saveForm").find("input[name='islock']").first().click()
+								// toggleLock(0);
+							} else if (data["lock"]["subscribeCount"] != "") {
+								$("#saveForm").find("input[name='islock']").eq(1).click()
+								// toggleLock(1);
+							} else {
+								$("#saveForm").find("input[name='islock']").last().click();
+								// toggleLock(2);
+							}
+						}
+					}
+				});
+			} else {
+
+			}
+		} else {
+			alert("数据非法！！");
+		}
+	});
+	/*]]>*/
+</script>
+</body>
+</html>
