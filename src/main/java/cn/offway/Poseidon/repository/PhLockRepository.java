@@ -11,8 +11,12 @@ import cn.offway.Poseidon.domain.PhLock;
  * @author wn
  * @version $v: 1.0.0, $time:2019-10-21 14:46:27 Exp $
  */
-public interface PhLockRepository extends JpaRepository<PhLock,Long>,JpaSpecificationExecutor<PhLock> {
+public interface PhLockRepository extends JpaRepository<PhLock, Long>, JpaSpecificationExecutor<PhLock> {
 
-	/** 此处写一些自定义的方法 **/
-	PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId,String type,Long templateId);
+    /**
+     * 此处写一些自定义的方法
+     **/
+    PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId, String type, Long templateId);
+
+    PhLock findByGoodsIdAndTemplateTypeAndPid(Long goodsId, String type, Long pid);
 }

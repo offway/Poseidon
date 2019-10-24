@@ -69,6 +69,9 @@
 							</form>
 						</div>
 						<div class="box-body">
+							<form role="form" id="saveForm">
+							<input type="hidden" name="pid" id="pid" value="1" />
+							<input type="hidden" name="gid" id="gid" value="1" />
 							<!-- Editable table -->
 							<div class="card">
 								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">编辑模板内容</h3>
@@ -125,7 +128,7 @@
 												<td class="pt-3-half" contenteditable="true">
 													<div class="form-group">
 														<label></label>
-														<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+														<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
 													</div>
 												</td>
 												<td class="pt-3-half" contenteditable="true">
@@ -215,7 +218,7 @@
                                             <div class="form-group">
                                                 <h5>提示文字<span class="text-danger">*</span></h5>
                                                 <div class="controls">
-                                                    <input type="text" name="promptText" class="form-control"/>
+                                                    <input type="text" name="promptTextLock" class="form-control"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -223,10 +226,11 @@
 								</div>
 							</div>
 							<!-- Editable table -->
+							</form>
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
-                            <button type="button" class="btn btn-danger save">保存</button>
+                            <button type="button" class="btn btn-danger save" onclick="saveObj()">保存</button>
 						</div>
 						<!-- /.box-footer-->
 					</div>
@@ -353,7 +357,7 @@
 <td class="pt-3-half" contenteditable="true">
 <div class="form-group">
 <label></label>
-<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
 </div>
 </td>
 <td class="pt-3-half" contenteditable="true">
@@ -439,11 +443,11 @@
         var tr = that.parent().parent().parent();
         if (that.val() == "0") {
             tr.find("input[name='imageUrlFile']").removeAttr("disabled");
-            tr.find("input[name='promptText']").prop("disabled", "disabled");
+            tr.find("input[name='promptText']").prop("readonly", "readonly");
             tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
         } else {
             tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
-            tr.find("input[name='promptText']").removeAttr("disabled");
+            tr.find("input[name='promptText']").removeAttr("readonly");
             tr.find("input[name='remarkBtn']").removeAttr("disabled");
         }
     }
@@ -519,10 +523,77 @@
         });
     }
 
-	var qiniuUrl = [[${qiniuUrl}]];
-	jQuery(document).ready(function ($) {
+	function saveObj() {
+		var postData = $("#saveForm").serializeArray();
+		$.post("/template2_save", postData, function (data) {
+			if (data) {
+				toastr.success("操作已成功！", "温馨提示");
+			} else {
+				toastr.error("操作失败!", "温馨提示");
+			}
+		});
+	}
 
-	});
+    var qiniuUrl = [[${qiniuUrl}]];
+    var pid = [[${pid}]];
+    var gid = [[${gid}]];
+    jQuery(document).ready(function ($) {
+        if (pid && gid) {
+            $("#pid").val(pid);
+            $("#gid").val(gid);
+            $('tbody').empty();
+            $.post("/template2_get", {"gid": gid, "pid": pid}, function (data) {
+                if (data) {
+                    console.log(data);
+                    var form = $("#saveForm");
+                    //restore data
+                    for (var item of data["data"]) {
+                        $('tbody').append(newTr);
+                        for (var key in item) {
+                            var ele = form.find("input[name='" + key + "']").last();
+                            switch (ele.attr("type")) {
+                                case "radio":
+                                    ele.val([item[key]]);
+                                    break;
+                                default:
+                                    ele.val(item[key]);
+                            }
+                            //try image
+                            var imgEle = form.find("img[name='" + key + "Img']").last();
+                            imgEle.attr("src", item[key]);
+                            imgEle.attr("width", 100);
+                            imgEle.attr("length", 100);
+                            imgEle.show();
+                            //try select
+                            var selectEle = form.find("select[name='" + key + "']").last();
+                            selectEle.val(item[key]);
+                            if (key == "type") {
+                                toggleMode(selectEle);
+                            }
+                        }
+                    }
+					//restore lock
+					if (data["lock"]) {
+						form.find("input[name='islock']").val([data["lock"]["islock"]]);
+						form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
+						form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
+						if (data["lock"]["islock"] == "0") {
+							$("#saveForm").find("input[name='islock']").first().click()
+							// toggleLock(0);
+						} else if (data["lock"]["subscribeCount"] != "") {
+							$("#saveForm").find("input[name='islock']").eq(1).click()
+							// toggleLock(1);
+						} else {
+							$("#saveForm").find("input[name='islock']").last().click();
+							// toggleLock(2);
+						}
+					}
+                }
+            });
+        } else {
+            alert("数据非法！！");
+        }
+    });
 	/*]]>*/
 </script>
 </body>
