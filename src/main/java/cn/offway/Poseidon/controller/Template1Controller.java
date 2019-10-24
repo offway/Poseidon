@@ -61,7 +61,8 @@ public class Template1Controller {
             template1.setId(Long.valueOf(templateId));
             lock.setId(Long.valueOf(lockId));
             templateConfig.setId(Long.valueOf(templateConfigId));
-        }else {
+        }
+        if("".equals(templateId) || "".equals(lockId)){
             template1.setCreateTime(new Date());
             templateConfig.setCreateTime(new Date());
             lock.setCreateTime(new Date());
