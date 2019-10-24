@@ -20,6 +20,8 @@ public class PhLock implements Serializable {
     /** 所属杂志ID **/
     private Long goodsId;
 
+    private Long pid;
+
     /** 模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板] **/
     private String templateType;
 
@@ -126,4 +128,12 @@ public class PhLock implements Serializable {
         this.remark = remark;
     }
 
+    @Column(name = "pid", length = 11)
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
 }
