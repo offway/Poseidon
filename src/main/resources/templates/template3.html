@@ -77,6 +77,25 @@
 							<div class="card">
 								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">编辑模板内容</h3>
 								<div class="card-body">
+                                    <div class="row col-md-12">
+                                        <div class="col-lg-2">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input name="roleName" value="我" type="text" readonly="readonly" placeholder="角色名称" />
+                                                </span>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <img src="" name="roleIconImg" style="display: none;"/>
+                                                    <input type="file" name="roleIconFile" class="form-control" onchange="uploadIcon(this)"/>
+                                                    <input type="hidden" name="roleIcon"/>
+                                                </span>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <input type="button" value="添加角色" class="btn btn-rounded btn-success" onclick="addRole(this)" />
+                                        <!-- /.col-lg-6 -->
+                                    </div>
 									<div class="row col-md-6">
 										<div class="col-lg-12">
 											<div class="form-group">
@@ -351,6 +370,27 @@
     <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">删除</button></span>
   </td>
 </tr>`;
+    const newRole = `
+<div class="col-lg-2">
+<div class="input-group">
+    <span class="input-group-addon">
+        <input name="roleName" value="" type="text" placeholder="角色名称" />
+    </span>
+</div>
+<div class="input-group">
+    <span class="input-group-addon">
+        <img src="" name="roleIconImg" style="display: none;"/>
+        <input type="file" name="roleIconFile" class="form-control" onchange="uploadIcon(this)"/>
+        <input type="hidden" name="roleIcon"/>
+    </span>
+</div>
+<div class="input-group">
+    <span class="input-group-addon">
+        <input type="button" class="form-control btn btn-rounded btn-danger" value="删除角色" onclick="delNode(this)"/>
+    </span>
+</div>
+</div>
+`;
 
 	$('.table-add').on('click', 'i', () => {
 		$('tbody').append(newTr);
@@ -435,6 +475,14 @@
         }
     }
 
+    function addRole(self) {
+        $(self).parent().before(newRole);
+    }
+
+    function delNode(self) {
+        $(self).parent().parent().parent().remove();
+    }
+
     var THE_FONT_BTN;
 
     function showFont(self) {
@@ -500,6 +548,30 @@
 			confirm("未选择任何文件!");
 		}
 	}
+
+    function uploadIcon(self) {
+        var that = $(self);
+        if (self.files.length > 0) {
+            var file = self.files[0];
+            getQNToken(function (token) {
+                this.upload("", token, file, function () {
+                    //
+                }, function (err) {
+                    console.log("error");
+                    console.log(err);
+                }, function (res) {
+                    var url = qiniuUrl + "/" + res.key;
+                    that.parent().find("[name=roleIcon]").val(url);
+                    that.parent().find("[name=roleIconImg]").attr("src", url);
+                    that.parent().find("[name=roleIconImg]").attr("width", "100px");
+                    that.parent().find("[name=roleIconImg]").attr("height", "100px");
+                    that.parent().find("[name=roleIconImg]").show();
+                }, 5, false, false);
+            });
+        } else {
+            confirm("未选择任何文件!");
+        }
+    }
 
     function getQNToken(cb) {
         $.get("/qiniu/token", {}, function (token) {
