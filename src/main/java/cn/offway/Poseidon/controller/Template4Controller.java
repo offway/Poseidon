@@ -42,7 +42,7 @@ public class Template4Controller {
     private PhTemplateConfigService templateConfigService;
 
     @RequestMapping("/template4.html")
-    public String users(ModelMap map, String goodsId, String lockId,String templateId,String templateConfigId) {
+    public String users(ModelMap map, String goodsId,String templateId,String templateConfigId) {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
         map.addAttribute("goodsId", goodsId);
         map.addAttribute("templateId",templateId);
