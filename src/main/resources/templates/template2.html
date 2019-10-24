@@ -128,7 +128,7 @@
 												<td class="pt-3-half" contenteditable="true">
 													<div class="form-group">
 														<label></label>
-														<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+														<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
 													</div>
 												</td>
 												<td class="pt-3-half" contenteditable="true">
@@ -357,7 +357,7 @@
 <td class="pt-3-half" contenteditable="true">
 <div class="form-group">
 <label></label>
-<input type="text" name="promptText" class="form-control" placeholder="提示文案" disabled="disabled" />
+<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
 </div>
 </td>
 <td class="pt-3-half" contenteditable="true">
@@ -443,11 +443,11 @@
         var tr = that.parent().parent().parent();
         if (that.val() == "0") {
             tr.find("input[name='imageUrlFile']").removeAttr("disabled");
-            tr.find("input[name='promptText']").prop("disabled", "disabled");
+            tr.find("input[name='promptText']").prop("readonly", "readonly");
             tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
         } else {
             tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
-            tr.find("input[name='promptText']").removeAttr("disabled");
+            tr.find("input[name='promptText']").removeAttr("readonly");
             tr.find("input[name='remarkBtn']").removeAttr("disabled");
         }
     }
