@@ -10,11 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户管理
@@ -39,22 +42,30 @@ public class Template5Controller {
     private PhTemplateConfigService templateConfigService;
 
     @RequestMapping("/template5.html")
-    public String users(ModelMap map, String goodsId, String lockId) {
+    public String users(ModelMap map, String goodsId,String templateId,String templateConfigId) {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
         map.addAttribute("goodsId", goodsId);
+        map.addAttribute("templateId",templateId);
+        map.addAttribute("templateConfigId",templateConfigId);
         return "template5";
     }
 
     @ResponseBody
     @RequestMapping("/template5_save")
-    public boolean save(PhTemplate5 template5, PhLock lock) {
-        template5.setCreateTime(new Date());
-        template5 = template5Service.save(template5);
-        lock.setCreateTime(new Date());
-        lock.setTemplateType("4");
-        lock.setTemplateId(template5.getId());
-        lockService.save(lock);
+    @Transactional
+    public boolean save(PhTemplate5 template5, PhLock lock,String templateId,String lockId,String templateConfigId) {
         PhTemplateConfig templateConfig = new PhTemplateConfig();
+        if (!"".equals(templateId) && !"".equals(lockId)){
+            template5.setId(Long.valueOf(templateId));
+            lock.setId(Long.valueOf(lockId));
+            templateConfig.setId(Long.valueOf(templateConfigId));
+        }
+        if("".equals(templateId) || "".equals(lockId)){
+            template5.setCreateTime(new Date());
+            templateConfig.setCreateTime(new Date());
+            lock.setCreateTime(new Date());
+        }
+        template5 = template5Service.save(template5);
         templateConfig.setGoodsId(template5.getGoodsId());
         templateConfig.setName("template5");
         templateConfig.setTemplateId(template5.getId().toString());
@@ -68,9 +79,23 @@ public class Template5Controller {
             templateConfig.setConditionsRemark("达到"+lock.getSubscribeCount().toString()+"人后解锁");
         }
         templateConfig.setStatus("0");
-        templateConfig.setCreateTime(new Date());
         templateConfigService.save(templateConfig);
+        lock.setTemplateType("4");
+        lock.setTemplateId(template5.getId());
+        lock.setPid(templateConfig.getId());
+        lockService.save(lock);
         return true;
+    }
+
+    @ResponseBody
+    @RequestMapping("/template5_findone")
+    public Map<String,Object> findone(String templateId,String goodsId){
+        Map<String,Object> map =new HashMap<>();
+        PhTemplate5 template5 = template5Service.findOne(Long.valueOf(templateId));
+        map.put("template5",template5);
+        PhLock lock = lockService.findByGoodsIdAndTemplateTypeAndTemplateId(Long.valueOf(goodsId),"4",Long.valueOf(templateId));
+        map.put("lock",lock);
+        return map;
     }
 
 }

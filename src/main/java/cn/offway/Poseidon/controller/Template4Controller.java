@@ -42,7 +42,7 @@ public class Template4Controller {
     private PhTemplateConfigService templateConfigService;
 
     @RequestMapping("/template4.html")
-    public String users(ModelMap map, String goodsId, String lockId,String templateId,String templateConfigId) {
+    public String users(ModelMap map, String goodsId,String templateId,String templateConfigId) {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
         map.addAttribute("goodsId", goodsId);
         map.addAttribute("templateId",templateId);
@@ -59,7 +59,8 @@ public class Template4Controller {
             template4.setId(Long.valueOf(templateId));
             lock.setId(Long.valueOf(lockId));
             templateConfig.setId(Long.valueOf(templateConfigId));
-        }else {
+        }
+        if("".equals(templateId) || "".equals(lockId)){
             template4.setCreateTime(new Date());
             templateConfig.setCreateTime(new Date());
             lock.setCreateTime(new Date());

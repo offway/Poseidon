@@ -29,6 +29,9 @@
             <div class="panel-body">
                 <form class="form-horizontal" id="saveForm" role="form">
                     <input type="hidden" name="goodsId" />
+                    <input type="hidden" name="templateConfigId" />
+                    <input type="hidden" name="templateIdEdit" />
+                    <input type="hidden" name="lockId" />
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label class="control-label">类型</label>
@@ -90,9 +93,9 @@
                             <label class="control-label">提示文字</label>
                             <input class="form-control" id="promptText" name="promptText" type="text"/>
                         </div>
-                        <div class="actions clearfix">
-                            <button class="btn btn-success save" type="button">保存</button>
-                        </div>
+                    </div>
+                    <div class="actions clearfix">
+                        <button class="btn btn-success save" type="button">保存</button>
                     </div>
                 </form>
             </div>
@@ -111,6 +114,36 @@
         if (type == "0") {
             $("#unlockText").show();
         } else {
+            $("#unlockText").hide();
+            $("#promptText").val("");
+            $("#subscribeCount").val("");
+        }
+    }
+
+    function editTemplate(data) {
+        var form = $("#saveForm");
+        form.find("input[name=type][value="+data["type"]+"]").attr("checked",true);
+        form.find("input[name='imageUnderUrl']").val(data["imageUnderUrl"]);
+        form.find("[name=imageUnder]").attr("src", data["imageUnderUrl"]);
+        form.find("[name=imageUnder]").attr("width", "100px");
+        form.find("[name=imageUnder]").attr("height", "100px");
+        form.find("[name=imageUnder]").show();
+        form.find("input[name='videoUrl']").val(data["videoUrl"]);
+        form.find("input[name='videoCoverUrl']").val(data["videoCoverUrl"]);
+        form.find("[name=videoCover]").attr("src", data["videoCoverUrl"]);
+        form.find("[name=videoCover]").attr("width", "100px");
+        form.find("[name=videoCover]").attr("height", "100px");
+        form.find("[name=videoCover]").show();
+    }
+
+    function editIslock(data) {
+        var form = $("#saveForm");
+        form.find("input[name=islock][value="+data["islock"]+"]").attr("checked",true);
+        if (data["islock"] == "0"){
+            $("#unlockText").show();
+            form.find("input[name='promptText']").val(data["promptText"]);
+            form.find("input[name='subscribeCount']").val(data["subscribeCount"]);
+        }else {
             $("#unlockText").hide();
             $("#promptText").val("");
             $("#subscribeCount").val("");
@@ -208,10 +241,26 @@
 
     var qiniuUrl = [[${qiniuUrl}]];
     var goodsId = [[${goodsId}]];
+    var templateId = [[${templateId}]];
+    var templateConfigId = [[${templateConfigId}]];
     /*<![CDATA[*/
     jQuery(document).ready(function ($) {
         if (goodsId != ""){
             $("#saveForm").find("input[name='goodsId']").val(goodsId);
+        }
+        if (templateConfigId != ""){
+            $("#saveForm").find("input[name='templateConfigId']").val(templateConfigId);
+        }
+        if (goodsId != "" && templateId != ""){
+            $.post("/template5_findone",{"goodsId":goodsId,"templateId":templateId},function (data) {
+                template5 = data["template5"];
+                lock = data["lock"];
+                var form = $("#saveForm");
+                form.find("input[name='templateIdEdit']").val(template5["id"]);
+                form.find("input[name='lockId']").val(lock["id"]);
+                editTemplate(template5);
+                editIslock(lock);
+            });
         }
         $(".btn.btn-success.save").click(function () {
             var form = $("#saveForm");
@@ -238,6 +287,7 @@
                 }
             }
             var postData = $("#saveForm").serializeArray();
+            postData.push({"name": "templateId", "value": form.find("input[name='templateIdEdit']").val()});
             $.post("/template5_save",postData,function (data) {
                 if (data){
                     toastr.success("操作已成功！", "温馨提示");
@@ -245,39 +295,6 @@
                     toastr.error("操作失败!", "温馨提示");
                     return;
                 }
-            });
-        });
-
-        $(".btn.btn-info.add").click(function () {
-            $("#saveForm").find("input[name='id']").val("");
-            $.get("/roles-all", {}, function (data) {
-                $('#multi-select').empty();
-                $.each(data, function (i, e) {
-                    $('#multi-select').append("<option value=" + e.id + ">" + e.name + "</option>");
-                });
-                $("#multi-select").multiSelect({
-                    afterInit: function () {
-                        // Add alternative scrollbar to list
-                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                    },
-                    afterSelect: function () {
-                        // Update scrollbar size
-                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                    }
-                });
-                $('#multi-select').multiSelect('refresh');
-                $("#multi-select1").multiSelect({
-                    afterInit: function () {
-                        // Add alternative scrollbar to list
-                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
-                    },
-                    afterSelect: function () {
-                        // Update scrollbar size
-                        // this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
-                    }
-                });
-                $('#multi-select1').multiSelect('refresh');
-                jQuery('#modal-6').modal('show', {backdrop: 'fade'});
             });
         });
     });

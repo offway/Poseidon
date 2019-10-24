@@ -62,7 +62,11 @@ public class Template1Controller {
             lock.setId(Long.valueOf(lockId));
             templateConfig.setId(Long.valueOf(templateConfigId));
         }
-        template1.setCreateTime(new Date());
+        if("".equals(templateId) || "".equals(lockId)){
+            template1.setCreateTime(new Date());
+            templateConfig.setCreateTime(new Date());
+            lock.setCreateTime(new Date());
+        }
         PhTemplate1 template1save = template1Service.save(template1);
         templateConfig.setGoodsId(template1.getGoodsId());
         templateConfig.setName("template1");
@@ -77,9 +81,7 @@ public class Template1Controller {
             templateConfig.setConditionsRemark("达到"+lock.getSubscribeCount().toString()+"人后解锁");
         }
         templateConfig.setStatus("0");
-        templateConfig.setCreateTime(new Date());
         templateConfig = templateConfigService.save(templateConfig);
-        lock.setCreateTime(new Date());
         lock.setTemplateType("0");
         lock.setPid(templateConfig.getId());
         lock.setTemplateId(template1save.getId());
