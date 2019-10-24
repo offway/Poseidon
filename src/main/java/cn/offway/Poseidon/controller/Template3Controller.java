@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class Template3Controller {
@@ -89,5 +91,15 @@ public class Template3Controller {
             return true;
         }
         return false;
+    }
+
+    @ResponseBody
+    @RequestMapping("/template3_get")
+    public Map<String, Object> get(Long pid, Long gid, Long id) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("data", template3Service.findOne(id));
+        //模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板]
+        data.put("lock", lockService.findByGoodsIdAndTemplateTypeAndConfigId(gid, "2", pid));
+        return data;
     }
 }
