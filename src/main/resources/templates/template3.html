@@ -540,7 +540,7 @@
 				}, function (res) {
 					var url = qiniuUrl + "/" + res.key;
 					that.parent().find("[name=audioUrl]").val(url);
-				}, 5, false, true);
+				}, 50, false, true);
 			});
 		} else {
 			confirm("未选择任何文件!");
@@ -710,8 +710,6 @@
                         }
                     }
                 });
-            } else {
-
             }
         } else {
             alert("数据非法！！");

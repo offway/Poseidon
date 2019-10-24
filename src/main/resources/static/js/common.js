@@ -67,7 +67,7 @@ window.upload = function upload(param, token, file, next, error, complete, sizeL
             putExtra = {
                 fname: "",
                 params: {"x:param": param},
-                mimeType: ["audio/aac", "video/x-msvideo", "audio/midi audio/x-midi", "audio/mpeg", "audio/ogg", "audio/opus", "audio/wav", "audio/webm"] || null
+                mimeType: ["audio/mp3"] || null
             };
             newFileName = "audio/wx/" + UUID.randomUUID() + postf;
             observable = qiniu.upload(file, newFileName, token,
