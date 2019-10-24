@@ -19,9 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class Template2Controller {
@@ -99,6 +97,16 @@ public class Template2Controller {
             }
         }
         return false;
+    }
+
+    @ResponseBody
+    @RequestMapping("/template2_get")
+    public Map<String, Object> get(Long pid, Long gid) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("data", template2Service.findByPid(pid));
+        //模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板]
+        data.put("lock", lockService.findByGoodsIdAndTemplateTypeAndConfigId(gid, "1", pid));
+        return data;
     }
 
 }

@@ -6,8 +6,14 @@ import cn.offway.Poseidon.service.PhTemplate2Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,6 +49,20 @@ public class PhTemplate2ServiceImpl implements PhTemplate2Service {
     @Override
     public void deleteByPid(Long pid) {
         phTemplate2Repository.deleteByPid(pid);
+    }
+
+    @Override
+    public List<PhTemplate2> findByPid(Long pid) {
+        return phTemplate2Repository.findAll(new Specification<PhTemplate2>() {
+            @Override
+            public Predicate toPredicate(Root<PhTemplate2> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> params = new ArrayList<>();
+                params.add(cb.equal(root.get("pid"), pid));
+                Predicate[] predicates = new Predicate[params.size()];
+                query.where(params.toArray(predicates));
+                return null;
+            }
+        });
     }
 
     @Override

@@ -21,5 +21,7 @@ public interface PhTemplate2Service {
 
     void deleteByPid(Long pid);
 
+    List<PhTemplate2> findByPid(Long pid);
+
     List<PhTemplate2> save(List<PhTemplate2> entities);
 }
