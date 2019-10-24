@@ -1,17 +1,26 @@
 package cn.offway.Poseidon.controller;
 
+import cn.offway.Poseidon.domain.PhLock;
+import cn.offway.Poseidon.domain.PhTemplate;
+import cn.offway.Poseidon.domain.PhTemplate3;
+import cn.offway.Poseidon.domain.PhTemplateConfig;
 import cn.offway.Poseidon.properties.QiniuProperties;
 import cn.offway.Poseidon.service.PhLockService;
 import cn.offway.Poseidon.service.PhTemplate3Service;
 import cn.offway.Poseidon.service.PhTemplateConfigService;
 import cn.offway.Poseidon.service.PhTemplateService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 @Controller
 public class Template3Controller {
@@ -35,5 +44,50 @@ public class Template3Controller {
         map.addAttribute("gid", gid);
         map.addAttribute("id", id);
         return "template3";
+    }
+
+    @ResponseBody
+    @RequestMapping("/template3_save")
+    @Transactional
+    public boolean save(Long pid, Long gid, PhTemplate3 template3, Long islock, String subscribeCount, String promptTextLock) {
+        PhTemplate template = templateService.findOne(gid);
+        PhTemplateConfig templateConfig = templateConfigService.findOne(pid);
+        if (template != null && templateConfig != null) {
+            template3.setCreateTime(new Date());
+            template3.setGoodsId(gid);
+            // if edit
+            if (template3.getId() != null) {
+                PhTemplate3 template3Saved = template3Service.findOne(template3.getId());
+                if (template3Saved != null) {
+                    template3.setCreateTime(template3Saved.getCreateTime());
+                    template3.setRemark(template3Saved.getRemark());
+                }
+            }
+            PhTemplate3 savedObj = template3Service.save(template3);
+            // update config
+            templateConfig.setTemplateId(String.valueOf(savedObj.getId()));
+            templateConfigService.save(templateConfig);
+            // update lock
+            //模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板]
+            PhLock lock = lockService.findByGoodsIdAndTemplateTypeAndConfigId(gid, "2", pid);
+            if (lock == null) {
+                lock = new PhLock();
+                lock.setCreateTime(new Date());
+                lock.setTemplateType("2");
+                lock.setPid(pid);
+                lock.setGoodsId(gid);
+            }
+            //是否解锁[0-否,1-是]
+            lock.setIslock(String.valueOf(islock));
+            if (StringUtils.isNotBlank(subscribeCount)) {
+                lock.setSubscribeCount(Long.valueOf(subscribeCount));
+            }
+            if (StringUtils.isNotBlank(promptTextLock)) {
+                lock.setPromptText(promptTextLock);
+            }
+            lockService.save(lock);
+            return true;
+        }
+        return false;
     }
 }

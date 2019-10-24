@@ -392,9 +392,31 @@
 </div>
 `;
 
-	$('.table-add').on('click', 'i', () => {
-		$('tbody').append(newTr);
-	});
+    var ROLE_MAP = {};
+    $('.table-add').on('click', 'i', () => {
+        $('tbody').append(newTr);
+        var form = $("#saveForm");
+        var roleNames = form.find("input[name='roleName']");
+        var names = [];
+        roleNames.each(function (i, v) {
+            names.push($(v).val());
+        });
+        var roleIcons = form.find("input[name='roleIcon']");
+        var icons = [];
+        roleIcons.each(function (i, v) {
+            icons.push($(v).val());
+        });
+        // update global role map
+        var selectStr = "";
+        ROLE_MAP = {};
+        for (var i in names) {
+            ROLE_MAP[names[i]] = icons[i];
+            selectStr += `<option value="AAA">BBB</option>`.replace("AAA", names[i]).replace("BBB", names[i]);
+        }
+        //update role select
+        var roleEle = form.find("select[name='role']").last();
+        roleEle.html(selectStr);
+    });
 	$tableID.on('click', '.table-remove', function () {
 		$(this).parents('tr').detach();
 	});
@@ -579,16 +601,34 @@
         });
     }
 
-	function saveObj() {
-		var postData = $("#saveForm").serializeArray();
-		$.post("/template2_save", postData, function (data) {
-			if (data) {
-				toastr.success("操作已成功！", "温馨提示");
-			} else {
-				toastr.error("操作失败!", "温馨提示");
-			}
-		});
-	}
+    function saveObj() {
+        var postData = $("#saveForm").serializeArray();
+        var jsonArr = [];
+        var jsonObj = {};
+        for (var obj of postData) {
+            switch (obj["name"]) {
+                case "role":
+                    jsonObj[obj["name"]] = obj["value"];
+                    jsonObj["icon"] = ROLE_MAP[obj["value"]];
+                    break;
+                case "way":
+                    jsonObj[obj["name"]] = obj["value"];
+                    break;
+                case "audioUrl":
+                    jsonObj[obj["name"]] = obj["value"];
+                    jsonArr.push(JSON.parse(JSON.stringify(jsonObj)));
+                    break;
+            }
+        }
+        postData.push({"name": "content", "value": JSON.stringify(jsonArr)});//append jsonStr
+        $.post("/template3_save", postData, function (data) {
+            if (data) {
+                toastr.success("操作已成功！", "温馨提示");
+            } else {
+                toastr.error("操作失败!", "温馨提示");
+            }
+        });
+    }
 
 	var qiniuUrl = [[${qiniuUrl}]];
 	var pid = [[${pid}]];
