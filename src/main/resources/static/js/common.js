@@ -41,7 +41,7 @@ function checkFileSize(file, MB) {
     }
 }
 
-window.upload = function upload(param, token, file, next, error, complete, sizeLimit, isVideo) {
+window.upload = function upload(param, token, file, next, error, complete, sizeLimit, isVideo, isAudio) {
     if (file == '' || file == null) {
         complete('');
     } else {
@@ -50,16 +50,27 @@ window.upload = function upload(param, token, file, next, error, complete, sizeL
             useCdnDomain: true,
             region: qiniu.region.z0
         };
+        var filename = file.name;
+        var postf = filename.substring(filename.lastIndexOf("."));
+        var putExtra, newFileName, observable;
         if (isVideo) {
-            var filename = file.name;
-            var postf = filename.substring(filename.lastIndexOf("."));
-            var putExtra = {
+            putExtra = {
                 fname: "",
                 params: {"x:param": param},
                 mimeType: ["video/x-flv", "video/mp4", "video/3gpp", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv"] || null
             };
-            var newFileName = "video/wx/" + UUID.randomUUID() + postf;
-            var observable = qiniu.upload(file, newFileName, token,
+            newFileName = "video/wx/" + UUID.randomUUID() + postf;
+            observable = qiniu.upload(file, newFileName, token,
+                putExtra, config);
+            observable.subscribe(next, error, complete);
+        } else if (isAudio) {
+            putExtra = {
+                fname: "",
+                params: {"x:param": param},
+                mimeType: ["audio/aac", "video/x-msvideo", "audio/midi audio/x-midi", "audio/mpeg", "audio/ogg", "audio/opus", "audio/wav", "audio/webm"] || null
+            };
+            newFileName = "audio/wx/" + UUID.randomUUID() + postf;
+            observable = qiniu.upload(file, newFileName, token,
                 putExtra, config);
             observable.subscribe(next, error, complete);
         } else {
@@ -81,8 +92,8 @@ window.upload = function upload(param, token, file, next, error, complete, sizeL
     }
 };
 
-function upload(param, token, file, next, error, complete, sizeLimit, isVideo) {
-    this.upload(param, token, file, next, error, complete, sizeLimit, isVideo);
+function upload(param, token, file, next, error, complete, sizeLimit, isVideo, isAudio) {
+    this.upload(param, token, file, next, error, complete, sizeLimit, isVideo, isAudio);
 }
 
 //对Date的扩展，将 Date 转化为指定格式的String
