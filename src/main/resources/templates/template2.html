@@ -69,6 +69,9 @@
 							</form>
 						</div>
 						<div class="box-body">
+							<form role="form" id="saveForm">
+							<input type="hidden" name="pid" id="pid" value="1" />
+							<input type="hidden" name="gid" id="gid" value="1" />
 							<!-- Editable table -->
 							<div class="card">
 								<h3 class="card-header text-center font-weight-bold text-uppercase py-4">编辑模板内容</h3>
@@ -215,7 +218,7 @@
                                             <div class="form-group">
                                                 <h5>提示文字<span class="text-danger">*</span></h5>
                                                 <div class="controls">
-                                                    <input type="text" name="promptText" class="form-control"/>
+                                                    <input type="text" name="promptTextLock" class="form-control"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -223,10 +226,11 @@
 								</div>
 							</div>
 							<!-- Editable table -->
+							</form>
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
-                            <button type="button" class="btn btn-danger save">保存</button>
+                            <button type="button" class="btn btn-danger save" onclick="saveObj()">保存</button>
 						</div>
 						<!-- /.box-footer-->
 					</div>
@@ -519,9 +523,27 @@
         });
     }
 
-	var qiniuUrl = [[${qiniuUrl}]];
-	jQuery(document).ready(function ($) {
+	function saveObj() {
+		var postData = $("#saveForm").serializeArray();
+		$.post("/template2_save", postData, function (data) {
+			if (data) {
+				toastr.success("操作已成功！", "温馨提示");
+			} else {
+				toastr.error("操作失败!", "温馨提示");
+			}
+		});
+	}
 
+	var qiniuUrl = [[${qiniuUrl}]];
+	var pid = [[${pid}]];
+	var gid = [[${gid}]];
+	jQuery(document).ready(function ($) {
+		if (pid) {
+			$("#pid").val(pid);
+		}
+		if (gid) {
+			$("#gid").val(gid);
+		}
 	});
 	/*]]>*/
 </script>

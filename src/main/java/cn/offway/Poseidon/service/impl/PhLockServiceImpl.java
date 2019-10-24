@@ -1,15 +1,14 @@
 package cn.offway.Poseidon.service.impl;
 
-import java.util.List;
-
+import cn.offway.Poseidon.domain.PhLock;
+import cn.offway.Poseidon.repository.PhLockRepository;
+import cn.offway.Poseidon.service.PhLockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.offway.Poseidon.service.PhLockService;
 
-import cn.offway.Poseidon.domain.PhLock;
-import cn.offway.Poseidon.repository.PhLockRepository;
+import java.util.List;
 
 
 /**
@@ -21,33 +20,38 @@ import cn.offway.Poseidon.repository.PhLockRepository;
 @Service
 public class PhLockServiceImpl implements PhLockService {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private PhLockRepository phLockRepository;
-	
-	@Override
-	public PhLock save(PhLock phLock){
-		return phLockRepository.save(phLock);
-	}
-	
-	@Override
-	public PhLock findOne(Long id){
-		return phLockRepository.findOne(id);
-	}
+    @Autowired
+    private PhLockRepository phLockRepository;
 
-	@Override
-	public void delete(Long id){
-		phLockRepository.delete(id);
-	}
+    @Override
+    public PhLock save(PhLock phLock) {
+        return phLockRepository.save(phLock);
+    }
 
-	@Override
-	public List<PhLock> save(List<PhLock> entities){
-		return phLockRepository.save(entities);
-	}
+    @Override
+    public PhLock findOne(Long id) {
+        return phLockRepository.findOne(id);
+    }
 
-	@Override
-	public PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId, String type, Long templateId){
-		return phLockRepository.findByGoodsIdAndTemplateTypeAndTemplateId(goodsId,type,templateId);
-	}
+    @Override
+    public void delete(Long id) {
+        phLockRepository.delete(id);
+    }
+
+    @Override
+    public List<PhLock> save(List<PhLock> entities) {
+        return phLockRepository.save(entities);
+    }
+
+    @Override
+    public PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId, String type, Long templateId) {
+        return phLockRepository.findByGoodsIdAndTemplateTypeAndTemplateId(goodsId, type, templateId);
+    }
+
+    @Override
+    public PhLock findByGoodsIdAndTemplateTypeAndConfigId(Long goodsId, String type, Long configId) {
+        return phLockRepository.findByGoodsIdAndTemplateTypeAndPid(goodsId, type, configId);
+    }
 }
