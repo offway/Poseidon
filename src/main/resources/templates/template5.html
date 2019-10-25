@@ -32,6 +32,7 @@
                     <input type="hidden" name="templateConfigId" />
                     <input type="hidden" name="templateIdEdit" />
                     <input type="hidden" name="lockId" />
+                    <input type="hidden" name="createTime" />
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label class="control-label">类型</label>
@@ -73,6 +74,12 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-7">
+                            <label class="control-label">提示文字</label>
+                            <input class="form-control" id="promptText" name="promptText" type="text"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
                                 <input checked="checked" id="unlock_1" name="islock" onclick="unlockRadio('1')"
@@ -90,8 +97,6 @@
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
                             <label class="control-label">订阅数</label>
                             <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
-                            <label class="control-label">提示文字</label>
-                            <input class="form-control" id="promptText" name="promptText" type="text"/>
                         </div>
                     </div>
                     <div class="actions clearfix">
@@ -123,6 +128,7 @@
     function editTemplate(data) {
         var form = $("#saveForm");
         form.find("input[name=type][value="+data["type"]+"]").attr("checked",true);
+        form.find("input[name='createTime']").val(new Date(data["createTime"]).Format("yyyy-MM-dd hh:mm:ss"));
         form.find("input[name='imageUnderUrl']").val(data["imageUnderUrl"]);
         form.find("[name=imageUnder]").attr("src", data["imageUnderUrl"]);
         form.find("[name=imageUnder]").attr("width", "100px");
