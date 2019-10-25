@@ -33,8 +33,9 @@
 				<input type="hidden" name="templateConfigId" />
 				<input type="hidden" name="templateIdEdit" />
 				<input type="hidden" name="lockId" />
+				<input type="hidden" name="createTime" />
 				<div class="form-group col-md-7">
-					<label class="control-label">类型</label>
+					<label class="control-label">页面内切换形式</label>
 					<div class="radio">
 						<input name="type" type="radio" id="type_1" checked="checked" value="0"/>
 						<label for="type_1">重叠</label>
@@ -43,24 +44,40 @@
 					</div>
 				</div>
 				<div class="form-group col-md-7">
-					<label class="control-label">底图</label>
+					<label class="control-label">背景图</label>
 					<input type="file" id="imageUnderUrl" name="imageUnderFile" placeholder="底图" onchange="uploadMainFile(this,'0')"/>
 					<img alt="" src="" name="imageUnder" style="display:none;" />
 					<input type="hidden" class="form-control" name="imageUnderUrl" />
 				</div>
 				<div class="form-group col-md-7">
-					<label class="control-label">文字图</label>
+					<label class="control-label">前景图</label>
 					<input type="file" id="imageTextUrl" name="imageTextFile" placeholder="文字图" onchange="uploadMainFile(this,'1')"/>
 					<img alt="" src="" name="imageText" style="display:none;" />
 					<input type="hidden" class="form-control" name="imageTextUrl" />
 				</div>
 				<div class="form-group col-md-7">
-					<label class="control-label">滚动区域</label>
+					<label class="control-label">浮窗位置</label>
+					<div class="radio">
+<!--						//** 浮窗位置[0-左下,1-左上,2-正局中,3-右上,4-右下] **/-->
+						<input name="rollingPosition" type="radio" id="rollingPosition_1" value="0" checked="checked"/>
+						<label for="rollingPosition_1">左下</label>
+						<input name="rollingPosition" type="radio" id="rollingPosition_2" value="1"/>
+						<label for="rollingPosition_2">左上</label>
+						<input name="rollingPosition" type="radio" id="rollingPosition_3" value="2"/>
+						<label for="rollingPosition_3">正居中</label>
+						<input name="rollingPosition" type="radio" id="rollingPosition_4" value="3"/>
+						<label for="rollingPosition_4">右上</label>
+						<input name="rollingPosition" type="radio" id="rollingPosition_5" value="4"/>
+						<label for="rollingPosition_5">右下</label>
+					</div>
+				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">浮窗形式</label>
 					<div class="radio">
 						<input name="rollingType" type="radio" id="rollingType_1" value="0" checked="checked" onclick="rollingTypeRadio('0')"/>
-						<label for="rollingType_1">图片</label>
+						<label for="rollingType_1">图片形式</label>
 						<input name="rollingType" type="radio" id="rollingType_2" value="1" onclick="rollingTypeRadio('1')"/>
-						<label for="rollingType_2">文字</label>
+						<label for="rollingType_2">文本形式</label>
 					</div>
 				</div>
 				<div class="form-group col-md-7" id="rollingImageUrlDiv">
@@ -70,6 +87,10 @@
 				</div>
 				<div class="form-group col-md-7" id="rollingTxt" style="display: none">
 					<textarea class="form-control" rows="3" id="rollingText" name="rollingText"></textarea>
+				</div>
+				<div class="form-group col-md-7">
+					<label class="control-label">提示文字</label>
+					<input type="text" class="form-control" id="promptText" name="promptText"/>
 				</div>
 				<div class="form-group col-md-7">
 					<label class="control-label">解锁</label>
@@ -83,8 +104,6 @@
 				<div class="form-group col-md-7" id="unlockText" style="display: none">
 					<label class="control-label">订阅数</label>
 					<input type="text" class="form-control" id="subscribeCount" name="subscribeCount"/>
-					<label class="control-label">提示文字</label>
-					<input type="text" class="form-control" id="promptText" name="promptText"/>
 				</div>
 				<div class="actions clearfix">
 					<button type="button" class="btn btn-success save">保存</button>
@@ -199,7 +218,9 @@
 		var form = $("#saveForm");
 		form.find("input[name=type][value="+data["type"]+"]").attr("checked",true);
 		form.find("input[name=rollingType][value="+data["rollingType"]+"]").attr("checked",true);
+		form.find("input[name=rollingPosition][value="+data["rollingPosition"]+"]").attr("checked",true);
 		form.find("input[name='imageUnderUrl']").val(data["imageUnderUrl"]);
+		form.find("input[name='createTime']").val(new Date(data["createTime"]).Format("yyyy-MM-dd hh:mm:ss"));
 		form.find("[name=imageUnder]").attr("src", data["imageUnderUrl"]);
 		form.find("[name=imageUnder]").attr("width", "100px");
 		form.find("[name=imageUnder]").attr("height", "100px");
@@ -287,7 +308,7 @@
 				return;
 			}
 			if(unlock == "0") {
-				if (subscribeCount == "" || promptText == ""){
+				if (subscribeCount == ""){
 					toastr.error("订阅数/提示文字为必填项", "温馨提示");
 					return;
 				}

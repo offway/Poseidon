@@ -58,7 +58,7 @@ ph:
     path: D:/workspace/Poseidon/src/main/resources/static
     server: http://127.0.0.1:8088
 qiniu:
-  url: http://qiniu.offway.cn
+  url: https://qiniu.offway.cn
   access-key: WU33Cpp1WJZAf4oIIHknc2ga3ZhQpgJo3UL-JUdB
   secret-key: ALb95JFSVi3mvSScoQa564HzDby_y2EasUhhmniV
   bucket: offwaypro

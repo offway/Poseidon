@@ -1,5 +1,7 @@
 package cn.offway.Poseidon.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -29,6 +31,9 @@ public class PhTemplate1 implements Serializable {
     /** 文字图 **/
     private String imageTextUrl;
 
+    /** 浮窗位置[0-左下,1-左上,2-正局中,3-右上,4-右下] **/
+    private String rollingPosition;
+
     /** 滚动区域类型[0-图片,1-文字] **/
     private String rollingType;
 
@@ -39,7 +44,11 @@ public class PhTemplate1 implements Serializable {
     private String rollingText;
 
     /** 创建时间 **/
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    /** 提示文字 **/
+    private String promptText;
 
     /** 备注 **/
     private String remark;
@@ -136,6 +145,24 @@ public class PhTemplate1 implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Column(name = "rolling_position", length = 2)
+    public String getRollingPosition() {
+        return rollingPosition;
+    }
+
+    public void setRollingPosition(String rollingPosition) {
+        this.rollingPosition = rollingPosition;
+    }
+
+    @Column(name = "prompt_text", length = 100)
+    public String getPromptText() {
+        return promptText;
+    }
+
+    public void setPromptText(String promptText) {
+        this.promptText = promptText;
     }
 
 }

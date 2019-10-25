@@ -1,5 +1,7 @@
 package cn.offway.Poseidon.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -38,6 +40,7 @@ public class PhLock implements Serializable {
     private String promptText;
 
     /** 创建时间 **/
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /** 备注 **/
