@@ -33,6 +33,7 @@
                         <input type="hidden" name="templateConfigId" />
                         <input type="hidden" name="templateIdEdit" />
                         <input type="hidden" name="lockId" />
+                        <input type="hidden" name="createTime" />
                         <div class="form-group col-md-12">
                             <label class="control-label">类型</label>
                             <div class="radio">
@@ -75,6 +76,10 @@
 							</div>
                         </div>
                         <div class="form-group col-md-7">
+                            <label class="control-label">提示文字</label>
+                            <input class="form-control" id="promptText" name="promptText" type="text"/>
+                        </div>
+                        <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
                                 <input id="unlock_2" name="islock" onclick="unlockRadio('0')" type="radio" value="0"/>
@@ -87,8 +92,6 @@
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
                             <label class="control-label">订阅数</label>
                             <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
-                            <label class="control-label">提示文字</label>
-                            <input class="form-control" id="promptText" name="promptText" type="text"/>
                         </div>
                         <div class="actions clearfix">
                             <button class="btn btn-success save" type="button">保存</button>
@@ -200,6 +203,7 @@
     function editTemplate(data) {
         var form = $("#saveForm");
         form.find("input[name=type][value="+data["type"]+"]").attr("checked",true);
+        form.find("input[name='createTime']").val(new Date(data["createTime"]).Format("yyyy-MM-dd hh:mm:ss"));
         form.find("input[name='imageOneUrl']").val(data["imageOneUrl"]);
         form.find("[name=imageOne]").attr("src", data["imageOneUrl"]);
         form.find("[name=imageOne]").attr("width", "100px");
@@ -281,7 +285,7 @@
                 return;
             }
             if(unlock == "0") {
-                if (subscribeCount == "" || promptText == ""){
+                if (subscribeCount == ""){
                     toastr.error("订阅数/提示文字为必填项", "温馨提示");
                     return;
                 }

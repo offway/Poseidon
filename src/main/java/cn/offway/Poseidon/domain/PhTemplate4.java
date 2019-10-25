@@ -1,5 +1,7 @@
 package cn.offway.Poseidon.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -33,10 +35,14 @@ public class PhTemplate4 implements Serializable {
     private String imageThreeUrl;
 
     /** 创建时间 **/
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /** 备注 **/
     private String remark;
+
+    /** 提示文字 **/
+    private String promptText;
 
 
     @Id
@@ -112,6 +118,15 @@ public class PhTemplate4 implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Column(name = "prompt_text", length = 100)
+    public String getPromptText() {
+        return promptText;
+    }
+
+    public void setPromptText(String promptText) {
+        this.promptText = promptText;
     }
 
 }
