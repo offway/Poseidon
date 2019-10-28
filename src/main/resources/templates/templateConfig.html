@@ -153,25 +153,25 @@
 
 <script th:inline="javascript">
 	/*<![CDATA[*/
-	function gotoTemplate(gid, pid, id, name) {
-		switch (name) {
-			case "template1":
-				window.open('/template1.html?id=', "_blank");
-				break;
-			case "template2":
-				window.open('/template2.html?pid=AAA&gid=BBB'.replace("AAA", pid).replace("BBB", gid), "_blank");
-				break;
-			case "template3":
-				window.open('/template3.html?pid=AAA&gid=BBB&id=CCC'.replace("AAA", pid).replace("BBB", gid).replace("CCC", id == null ? "" : id), "_blank");
-				break;
-			case "template4":
-				window.open('/template4.html?id=', "_blank");
-				break;
-			case "template5":
-				window.open('/template5.html?id=', "_blank");
-				break;
-		}
-	}
+    function gotoTemplate(gid, pid, id, name) {
+        switch (name) {
+            case "template1":
+                window.open('/template1.html?goodsId=AAA&templateId=BBB&templateConfigId=CCC'.replace("AAA", gid).replace("BBB", id == null ? "" : id).replace("CCC", pid), "_blank");
+                break;
+            case "template2":
+                window.open('/template2.html?pid=AAA&gid=BBB'.replace("AAA", pid).replace("BBB", gid), "_blank");
+                break;
+            case "template3":
+                window.open('/template3.html?pid=AAA&gid=BBB&id=CCC'.replace("AAA", pid).replace("BBB", gid).replace("CCC", id == null ? "" : id), "_blank");
+                break;
+            case "template4":
+                window.open('/template4.html?goodsId=AAA&templateId=BBB&templateConfigId=CCC'.replace("AAA", gid).replace("BBB", id == null ? "" : id).replace("CCC", pid), "_blank");
+                break;
+            case "template5":
+                window.open('/template5.html?goodsId=AAA&templateId=BBB&templateConfigId=CCC'.replace("AAA", gid).replace("BBB", id == null ? "" : id).replace("CCC", pid), "_blank");
+                break;
+        }
+    }
 
 	var qiniuUrl = [[${qiniuUrl}]];
 	var pid = [[${pid}]];
