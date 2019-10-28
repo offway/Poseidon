@@ -14,12 +14,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,19 +81,26 @@ public class GoodsController {
     }
 
     @ResponseBody
-    @PostMapping("/goods-save")
+    @RequestMapping("/goods-save")
     public boolean save(PhTemplate template) {
+        template.setCreateTime(new Date());
+        if (template.getId() != null) {
+            PhTemplate saved = templateService.findOne(template.getId());
+            if (saved != null) {
+                template.setCreateTime(saved.getCreateTime());
+            }
+        }
         templateService.save(template);
         return true;
     }
 
     @ResponseBody
-    @PostMapping("/goods-one")
+    @RequestMapping("/goods-one")
     public PhTemplate findOne(Long id) {
         return templateService.findOne(id);
     }
 
-    @PostMapping("/goods-update")
+    @RequestMapping("/goods-update")
     @ResponseBody
     @Transactional
     public boolean goodsUpdate(@RequestParam("ids[]") Long[] ids, String status) {
@@ -108,7 +115,7 @@ public class GoodsController {
         return true;
     }
 
-    @PostMapping("/goods-delete")
+    @RequestMapping("/goods-delete")
     @ResponseBody
     @Transactional
     public boolean goodsDelete(@RequestParam("ids[]") Long[] ids) {
