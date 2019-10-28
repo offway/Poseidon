@@ -258,9 +258,9 @@
 		});
 
 		$(".deleteBtn").click(function () {
-			var ids = '';
+			var ids = [];
 			$("input[name='templateId']:checked").each(function (i, e) {
-				ids += e.value + ",";
+				ids.push(e.value);
 			});
 			$.post("/goods-delete", {
 				ids: ids
