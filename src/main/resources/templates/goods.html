@@ -160,6 +160,10 @@
 
 <script th:inline="javascript">
 	/*<![CDATA[*/
+	function gotoTemplate(id) {
+		window.open('/config.html?pid=' + id, "_blank");
+	}
+
 	jQuery(document).ready(function ($) {
 		var oTable = $("#example-1").dataTable({
 			language: {
@@ -230,6 +234,14 @@
 					title: "创建时间",
 					render: function (data, type, row, meta) {
 						return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+					}
+				},
+				{
+					targets: 8,
+					data: "id",
+					title: "内容管理",
+					render: function (data, type, row, meta) {
+						return `<button type="button" class="btn btn-rounded btn-warning" onclick="gotoTemplate(AA)">管理</button>`.replace("AA", data);
 					}
 				}
 			]
