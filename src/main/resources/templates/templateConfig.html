@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<head th:replace="head"></head>
+	<title>杂志页管理</title>
+	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+</head>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<header th:replace="navbar"></header>
+	<aside th:replace="sidebar-menu"></aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">杂志页管理</h3>
+				</div>
+				<div class="right-title">
+				</div>
+			</div>
+		</div>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<form role="form" class="form-inline">
+								<div class="form-group ">
+									<div class="input-group">
+										<input type="text" name="name" class="form-control" style="height:35px" placeholder="模版名称"/>
+									</div>
+								</div>
+								<div class="form-group ">
+									<div class="input-group">
+										<select name="status" class="form-control" style="height:35px">
+											<option value="">启用状态</option>
+											<option value="0">启用</option>
+											<option value="1">不启用</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-primary searchBtn" style="height:35px">查询</button>
+								</div>
+							</form>
+						</div>
+						<div class="box-body">
+							<div class="table-responsive">
+								<table id="example-1" class="table table-bordered table-striped">
+								</table>
+							</div>
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+							<button class="btn btn-info add">添加</button>
+							<button class="btn btn-info edit">修改</button>
+							<button class="btn btn-info delete">删除</button>
+						</div>
+						<!-- /.box-footer-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">温馨提示</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p>您确定要删除选中杂志页吗？</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="modal-6">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myLargeModalLabel">添加杂志页</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="saveForm">
+					<input type="hidden" name="id"/>
+					<input type="hidden" name="goodsId"/>
+					<input type="hidden" name="templateId"/>
+					<input type="hidden" name="sort"/>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">模版名称(更改模板类型会导致原有数据丢失)</label>
+								<select class="form-control" name="name">
+									<option value="template1">模版1</option>
+									<option value="template2">模版2</option>
+									<option value="template3">模版3</option>
+									<option value="template4">模版4</option>
+									<option value="template5">模版5</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">状态</label>
+								<select class="form-control" name="status" readonly="readonly">
+									<option value="0">启用</option>
+									<option value="1" selected="selected">不启用</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">备注</label>
+								<input type="text" class="form-control" name="remark" placeholder="备注"/>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-info save">保存</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	function gotoTemplate(gid, pid, id, name) {
+		switch (name) {
+			case "template1":
+				window.open('/template1.html?id=', "_blank");
+				break;
+			case "template2":
+				window.open('/template2.html?pid=AAA&gid=BBB'.replace("AAA", pid).replace("BBB", gid), "_blank");
+				break;
+			case "template3":
+				window.open('/template3.html?pid=AAA&gid=BBB&id=CCC'.replace("AAA", pid).replace("BBB", gid).replace("CCC", id == null ? "" : id), "_blank");
+				break;
+			case "template4":
+				window.open('/template4.html?id=', "_blank");
+				break;
+			case "template5":
+				window.open('/template5.html?id=', "_blank");
+				break;
+		}
+	}
+
+	var qiniuUrl = [[${qiniuUrl}]];
+	var pid = [[${pid}]];
+	jQuery(document).ready(function ($) {
+		var oTable = $("#example-1").dataTable({
+			language: {
+				url: "../assets/Chinese.txt"
+			},
+			bFilter: false,
+			bServerSide: true,//服务器处理分页，默认是false，需要服务器处理，必须true
+			sAjaxDataProp: "aData",//是服务器分页的标志，必须有
+			sAjaxSource: "/config-data",//通过ajax实现分页的url路径。
+			fnServerParams: function (aData) {
+				var searchArray = $(".form-inline").serializeArray();
+				$.merge(aData, searchArray);
+				aData.push({"name": "pid", "value": pid});//append pid
+			},
+			order: [[0, "desc"]],
+			columnDefs: [
+				{
+					targets: 0,
+					data: "id",
+					width: "5%",
+					orderable: false,
+					title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
+					render: function (data, type, full, meta) {
+						var uuid = UUID.randomUUID();
+						return '<div class="checkbox"><input type="checkbox" name="pageId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
+					}
+				},
+				{
+					targets: 1,
+					data: "id",
+					title: "序号"
+				},
+				{
+					targets: 2,
+					data: "goodsId",
+					title: "所属杂志ID"
+				},
+				{
+					targets: 3,
+					data: "name",
+					title: "模版名称"
+				},
+				{
+					targets: 4,
+					data: "templateId",
+					title: "模板id"
+				},
+				{
+					targets: 5,
+					data: "sort",
+					title: "排序"
+				},
+				{
+					targets: 6,
+					data: "status",
+					title: "启用状态",
+					render: function (data, type, full, meta) {
+						/** 启用状态[0-启用,1-不启用] **/
+						if (data == "0") {
+							return "启用";
+						} else {
+							return "不启用";
+						}
+					}
+				},
+				{
+					targets: 7,
+					data: "remark",
+					title: "备注"
+				},
+				{
+					targets: 8,
+					data: "createTime",
+					title: "创建时间",
+					render: function (data, type, row, meta) {
+						return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+					}
+				},
+				{
+					targets: 9,
+					data: "id",
+					title: "模板内容",
+					render: function (data, type, row, meta) {
+						return `<button type="button" class="btn btn-rounded btn-warning" onclick="gotoTemplate(AA,BB,'CC','DD')">编辑</button>`.replace("AA", pid).replace("BB", data).replace("CC", row["templateId"]).replace("DD", row["name"]);
+					}
+				}
+			]
+		});
+
+		$(".searchBtn").click(function () {
+			$("#checkbox-all").attr("checked", false);
+			oTable.fnDraw();  //or fnReloadAjax()
+			return false;
+		});
+
+		$('#example-1').on('click', "#checkbox-all", function () {
+			var obj = $(this);
+			$("input[name='pageId']").each(function (i, e) {
+				this.checked = obj[0].checked;
+			});
+		});
+
+		$(".btn.btn-info.delete").click(function () {
+			var pageId = $("input[name='pageId']:checked");
+			if (pageId.length < 1) {
+				toastr.error("请至少选择一条数据操作", "温馨提示");
+				return;
+			}
+			jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+		});
+
+		$(".deleteBtn").click(function () {
+			var ids = [];
+			$("input[name='pageId']:checked").each(function (i, e) {
+				ids.push(e.value);
+			});
+			$.post("/config-delete", {
+				ids: ids
+			}, function (data) {
+				if (data) {
+					jQuery('#modal-1').modal('hide');
+					toastr.success("您的操作已成功！", "温馨提示");
+					oTable.fnDraw(oTable.fnSettings());
+				} else {
+					toastr.error("操作失败,请稍后再试", "温馨提示");
+				}
+			});
+			return false;
+		});
+
+		$(".btn.btn-info.add").click(function () {
+			var form = $("#saveForm");
+			form.find("input[name='id']").val("");
+			form.find("input[name='goodsId']").val(pid);
+			form.find("select[name='name']").val("template1");
+			form.find("input[name='templateId']").val("");
+			form.find("input[name='sort']").val("");
+			form.find("select[name='status']").val("1");
+			form.find("input[name='remark']").val("");
+			jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+		});
+
+		//保存
+		$(".btn.btn-info.save").click(function () {
+			var form = $("#saveForm");
+			$.post("/config-save", form.serializeArray(), function (data) {
+				if (data) {
+					jQuery('#modal-6').modal('hide');
+					toastr.success("操作已成功！", "温馨提示");
+					oTable.fnDraw(oTable.fnSettings());
+				} else {
+					toastr.error("操作失败", "温馨提示");
+				}
+			});
+		});
+
+		$(".btn.btn-info.edit").click(function () {
+			var pageId = $("input[name='pageId']:checked");
+			if (pageId.length != 1) {
+				toastr.error("请选择一条数据操作", "温馨提示");
+				return;
+			}
+			$.get("/config-one", {id: pageId.val()}, function (data) {
+				var form = $("#saveForm");
+				form.find("input[name='id']").val(data.id);
+				form.find("input[name='goodsId']").val(pid);
+				form.find("select[name='name']").val(data.name);
+				form.find("input[name='templateId']").val(data.templateId);
+				form.find("input[name='sort']").val(data.sort);
+				form.find("select[name='status']").val(data.status);
+				form.find("input[name='remark']").val(data.remark);
+				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+			});
+		});
+	});
+	/*]]>*/
+</script>
+</body>
+</html>
