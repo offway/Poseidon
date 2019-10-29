@@ -114,6 +114,29 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
+								<label class="control-label">封面图</label>
+								<input class="btn btn-info" id="imageUrlFile" name="imageUrlFile"
+									   onchange="uploadMainFile(this,'0')" placeholder="封面图"
+									   type="file"/>
+								<img alt="" name="image" src="" style="display:none;"/>
+								<input class="form-control" name="imageUrl" type="hidden"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">音频</label>
+								<input class="btn btn-info" id="audioUrlFile" name="audioUrlFile"
+									   onchange="uploadMainFile(this,'1')" placeholder="封面图"
+									   type="file"/>
+								<input class="form-control" name="audioUrl" type="hidden"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
 								<label class="control-label">订阅数量</label>
 								<input type="text" class="form-control" name="subscribeSum" placeholder="订阅数量" readonly="readonly"/>
 							</div>
@@ -164,6 +187,89 @@
 		window.open('/config.html?pid=' + id, "_blank");
 	}
 
+	function uploadMainFile(self, type) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				bl= false;
+				if (type=='1'){
+					sizevideo = 50;
+					bl =true;
+				}
+				upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					if (type == "0") {
+						that.parent().find("[name=imageUrl]").val(url);
+						that.parent().find("[name=image]").attr("src", url);
+						that.parent().find("[name=image]").attr("width", "100px");
+						that.parent().find("[name=image]").attr("height", "100px");
+						that.parent().find("[name=image]").show();
+					} else if (type == "1") {
+						that.parent().find("[name=audioUrl]").val(url);
+					}
+				},bl);
+			},"0");
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
+
+	function getQNToken(cb,bol) {
+		var param = {};
+		if (bol == 1) {
+			param["isVideo"] = 1;
+		}
+		$.get("/qiniu/token_video", param, function (token) {
+			cb(token);
+		});
+	}
+
+	function upload(param, token, file, next, error, complete,isAudio) {
+		if (file == '') {
+			complete('');
+		} else {
+			var filename = file.name;
+			var postf = filename.substring(filename.lastIndexOf("."));
+
+			var config = {
+				useCdnDomain: true,
+				region: qiniu.region.z0
+			};
+			if (isAudio){
+				var filename = file.name;
+				var postf = filename.substring(filename.lastIndexOf("."));
+				var putExtra = {
+					fname: "",
+					params: {"x:param": param},
+					mimeType: ["audio/mp3"] || null
+				};
+				var newFileName = "audio/wx/" + UUID.randomUUID() + postf;
+				var observable = qiniu.upload(file, newFileName, token,
+						putExtra, config);
+				observable.subscribe(next, error, complete);
+			}else {
+				var putExtra = {
+					fname: "",
+					params: {"x:param": param},
+					mimeType: ["image/png", "image/jpeg", "image/gif"] || null
+				};
+				/* var observable = qiniu.upload(file, "image/wx/"+UUID.randomUUID()+postf, token,
+                        putExtra, config); */
+				var fname = filename.replace(postf, "");
+				var observable = qiniu.upload(file, "image/wx/" + param + "/" + (new Date().getTime()) + postf, token,
+						putExtra, config);
+				var subscription = observable.subscribe(next, error, complete);
+			}
+
+		}
+	}
+	var qiniuUrl = [[${qiniuUrl}]];
 	jQuery(document).ready(function ($) {
 		var oTable = $("#example-1").dataTable({
 			language: {
@@ -321,6 +427,12 @@
 			}
 			$.get("/goods-one", {id: templateId.val()}, function (data) {
 				var form = $("#saveForm");
+				form.find("input[name='imageUrl']").val(data.imageUrl);
+				form.parent().find("[name=image]").attr("src", data.imageUrl);
+				form.parent().find("[name=image]").attr("width", "100px");
+				form.parent().find("[name=image]").attr("height", "100px");
+				form.parent().find("[name=image]").show();
+				form.find("input[name='audioUrl']").val(data.audioUrl);
 				form.find("input[name='id']").val(data.id);
 				form.find("input[name='templateName']").val(data.templateName);
 				form.find("select[name='state']").val(data.state);

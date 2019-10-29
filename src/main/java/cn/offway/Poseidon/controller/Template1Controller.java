@@ -61,11 +61,13 @@ public class Template1Controller {
             template1.setId(Long.valueOf(templateId));
             lock.setId(Long.valueOf(lockId));
             templateConfig.setId(Long.valueOf(templateConfigId));
-        }
-        if("".equals(templateId) || "".equals(lockId)){
+        }else {
             template1.setCreateTime(new Date());
             templateConfig.setCreateTime(new Date());
             lock.setCreateTime(new Date());
+        }
+        if (!"".equals(templateConfigId)){
+            templateConfig = templateConfigService.findOne(Long.valueOf(templateConfigId));
         }
         PhTemplate1 template1save = template1Service.save(template1);
         templateConfig.setGoodsId(template1.getGoodsId());
