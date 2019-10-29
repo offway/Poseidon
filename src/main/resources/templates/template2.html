@@ -525,7 +525,15 @@
 
 	function saveObj() {
 		var postData = $("#saveForm").serializeArray();
-		$.post("/template2_save", postData, function (data) {
+		var newPostData = [];
+		for (var para of postData) {
+			if (["imageUrl", "promptText", "remark"].indexOf(para["name"]) >= 0 && para["value"] == '') {
+				newPostData.push({"name": para["name"], "value": " "});
+			} else {
+				newPostData.push(para);
+			}
+		}
+		$.post("/template2_save", newPostData, function (data) {
 			if (data) {
 				toastr.success("操作已成功！", "温馨提示");
 			} else {
