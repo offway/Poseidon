@@ -454,18 +454,24 @@
 
     function toggleLock(v) {
         var a = $("#subscribeCountDIV");
+        var aa = a.find("input");
         var b = $("#promptTextDIV");
+        var bb = b.find("input");
         switch (v) {
             case 0:
                 a.hide();
+                aa.val("");
                 b.hide();
+                bb.val("");
                 break;
             case 1:
                 a.show();
                 b.hide();
+                bb.val("");
                 break;
             case 2:
                 a.hide();
+                aa.val("");
                 b.show();
                 break;
         }
@@ -580,22 +586,22 @@
                             }
                         }
                     }
-					//restore lock
-					if (data["lock"]) {
-						form.find("input[name='islock']").val([data["lock"]["islock"]]);
-						form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
-						form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
-						if (data["lock"]["islock"] == "0") {
-							$("#saveForm").find("input[name='islock']").first().click()
-							// toggleLock(0);
-						} else if (data["lock"]["subscribeCount"] != "") {
-							$("#saveForm").find("input[name='islock']").eq(1).click()
-							// toggleLock(1);
-						} else {
-							$("#saveForm").find("input[name='islock']").last().click();
-							// toggleLock(2);
-						}
-					}
+                    //restore lock
+                    if (data["lock"]) {
+                        form.find("input[name='islock']").val([data["lock"]["islock"]]);
+                        form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
+                        form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
+                        if (data["lock"]["islock"] == "0") {
+                            $("#saveForm").find("input[name='islock']").first().click()
+                            // toggleLock(0);
+                        } else if (data["lock"]["subscribeCount"] != null) {
+                            $("#saveForm").find("input[name='islock']").eq(1).click()
+                            // toggleLock(1);
+                        } else {
+                            $("#saveForm").find("input[name='islock']").last().click();
+                            // toggleLock(2);
+                        }
+                    }
                 }
             });
         } else {
