@@ -51,7 +51,7 @@ public class Template3Controller {
     @ResponseBody
     @RequestMapping("/template3_save")
     @Transactional
-    public boolean save(Long pid, Long gid, PhTemplate3 template3, Long islock, String subscribeCount, String promptTextLock) {
+    public Object save(Long pid, Long gid, PhTemplate3 template3, Long islock, String subscribeCount, String promptTextLock) {
         PhTemplate template = templateService.findOne(gid);
         PhTemplateConfig templateConfig = templateConfigService.findOne(pid);
         if (template != null && templateConfig != null) {
@@ -92,9 +92,9 @@ public class Template3Controller {
                 lock.setPromptText("");
             }
             lockService.save(lock);
-            return true;
+            return savedObj.getId();
         }
-        return false;
+        return "";
     }
 
     @ResponseBody
