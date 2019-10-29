@@ -478,24 +478,30 @@
         }
     }
 
-    function toggleLock(v) {
-        var a = $("#subscribeCountDIV");
-        var b = $("#promptTextDIV");
-        switch (v) {
-            case 0:
-                a.hide();
-                b.hide();
-                break;
-            case 1:
-                a.show();
-                b.hide();
-                break;
-            case 2:
-                a.hide();
-                b.show();
-                break;
-        }
-    }
+	function toggleLock(v) {
+		var a = $("#subscribeCountDIV");
+		var aa = a.find("input");
+		var b = $("#promptTextDIV");
+		var bb = b.find("input");
+		switch (v) {
+			case 0:
+				a.hide();
+				aa.val("");
+				b.hide();
+				bb.val("");
+				break;
+			case 1:
+				a.show();
+				b.hide();
+				bb.val("");
+				break;
+			case 2:
+				a.hide();
+				aa.val("");
+				b.show();
+				break;
+		}
+	}
 
     function addRole(self) {
         $(self).parent().before(newRole);
@@ -622,99 +628,104 @@
         }
         postData.push({"name": "content", "value": JSON.stringify(jsonArr)});//append jsonStr
         $.post("/template3_save", postData, function (data) {
-            if (data) {
-                toastr.success("操作已成功！", "温馨提示");
-            } else {
+            if (isNaN(data)) {
                 toastr.error("操作失败!", "温馨提示");
+            } else {
+                toastr.success("操作已成功！", "温馨提示");
+                if (id == "") {
+                    setTimeout(function () {
+                        window.location.href = "/template3.html?pid=AAAA&gid=BBBB&id=CCCC".replace("AAAA", pid).replace("BBBB", gid).replace("CCCC", data);
+                    }, 500);
+                }
             }
         });
     }
 
-    var qiniuUrl = [[${qiniuUrl}]];
-    var pid = [[${pid}]];
-    var gid = [[${gid}]];
-    var id = [[${id}]];
-    jQuery(document).ready(function ($) {
-        if (pid && gid) {
-            $("#pid").val(pid);
-            $("#gid").val(gid);
-            if (id) {
-                $("#id").val(id);
-                $('tbody').empty();
-                $.post("/template3_get", {"gid": gid, "pid": pid, "id": id}, function (data) {
-                    if (data) {
-                        console.log(data);
-                        var form = $("#saveForm");
-                        //restore data
-                        var item = data["data"];
-                        for (var key in item) {
-                            var ele = form.find("input[name='" + key + "']").last();
-                            switch (ele.attr("type")) {
-                                case "radio":
-                                    ele.val([item[key]]);
-                                    break;
-                                default:
-                                    ele.val(item[key]);
-                            }
-                            //try image
-                            var imgEle = form.find("img[name='" + key + "Img']").last();
-                            imgEle.attr("src", item[key]);
-                            imgEle.attr("width", 100);
-                            imgEle.attr("length", 100);
-                            imgEle.show();
-                            //try select
-                            var selectEle = form.find("select[name='" + key + "']").last();
-                            selectEle.val(item[key]);
-                        }
-                        //rebuild role
-                        var jsonStr = item["content"];
-                        var jsonObj = JSON.parse(jsonStr);
-                        // first loop for header
-                        for (var roleObj of jsonObj) {
-                            if (!ROLE_MAP.hasOwnProperty(roleObj["role"])) {
-                                ROLE_MAP[roleObj["role"]] = roleObj["icon"];
-                                if (roleObj["role"] != "我") {
-                                    $("#addRoleBtn").click();
-                                }
-                                form.find("input[name='roleName']").last().val(roleObj["role"]);
-                                form.find("input[name='roleIcon']").last().val(roleObj["icon"]);
-                                var iconEle = form.find("img[name='roleIconImg']").last();
-                                iconEle.attr("src", roleObj["icon"]);
-                                iconEle.attr("width", 100);
-                                iconEle.attr("length", 100);
-                                iconEle.show();
-                            }
-                        }
-                        // second loop for table
-                        for (var wordObj of jsonObj) {
-                            $('.table-add i').click();
-                            form.find("select[name='role']").last().val(wordObj["role"]);
-                            form.find("select[name='way']").last().val(wordObj["way"]);
-                            form.find("input[name='audioUrl']").last().val(wordObj["audioUrl"]);
-                        }
-                        //restore lock
-                        if (data["lock"]) {
-                            form.find("input[name='islock']").val([data["lock"]["islock"]]);
-                            form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
-                            form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
-                            if (data["lock"]["islock"] == "0") {
-                                form.find("input[name='islock']").first().click()
-                                // toggleLock(0);
-                            } else if (data["lock"]["subscribeCount"] != "") {
-                                form.find("input[name='islock']").eq(1).click()
-                                // toggleLock(1);
-                            } else {
-                                form.find("input[name='islock']").last().click();
-                                // toggleLock(2);
-                            }
-                        }
-                    }
-                });
-            }
-        } else {
-            alert("数据非法！！");
-        }
-    });
+	var qiniuUrl = [[${qiniuUrl}]];
+	var pid = [[${pid}]];
+	var gid = [[${gid}]];
+	var id = [[${id}]];
+	jQuery(document).ready(function ($) {
+		if (pid && gid) {
+			$("#pid").val(pid);
+			$("#gid").val(gid);
+			if (id) {
+				$("#id").val(id);
+				$('tbody').empty();
+				$.post("/template3_get", {"gid": gid, "pid": pid, "id": id}, function (data) {
+					if (data) {
+						console.log(data);
+						var form = $("#saveForm");
+						//restore data
+						var item = data["data"];
+						for (var key in item) {
+							var ele = form.find("input[name='" + key + "']").last();
+							switch (ele.attr("type")) {
+								case "radio":
+									ele.val([item[key]]);
+									break;
+								default:
+									ele.val(item[key]);
+							}
+							//try image
+							var imgEle = form.find("img[name='" + key + "Img']").last();
+							imgEle.attr("src", item[key]);
+							imgEle.attr("width", 100);
+							imgEle.attr("length", 100);
+							imgEle.show();
+							//try select
+							var selectEle = form.find("select[name='" + key + "']").last();
+							selectEle.val(item[key]);
+						}
+						//rebuild role
+						var jsonStr = item["content"];
+						var jsonObj = JSON.parse(jsonStr);
+						// first loop for header
+						for (var roleObj of jsonObj) {
+							if (!ROLE_MAP.hasOwnProperty(roleObj["role"])) {
+								ROLE_MAP[roleObj["role"]] = roleObj["icon"];
+								if (roleObj["role"] != "我") {
+									$("#addRoleBtn").click();
+								}
+								form.find("input[name='roleName']").last().val(roleObj["role"]);
+								form.find("input[name='roleIcon']").last().val(roleObj["icon"]);
+								var iconEle = form.find("img[name='roleIconImg']").last();
+								iconEle.attr("src", roleObj["icon"]);
+								iconEle.attr("width", 100);
+								iconEle.attr("length", 100);
+								iconEle.show();
+							}
+						}
+						// second loop for table
+						for (var wordObj of jsonObj) {
+							$('.table-add i').click();
+							form.find("select[name='role']").last().val(wordObj["role"]);
+							form.find("select[name='way']").last().val(wordObj["way"]);
+							form.find("input[name='audioUrl']").last().val(wordObj["audioUrl"]);
+						}
+						//restore lock
+						if (data["lock"]) {
+							form.find("input[name='islock']").val([data["lock"]["islock"]]);
+							form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
+							form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
+							if (data["lock"]["islock"] == "0") {
+								form.find("input[name='islock']").first().click()
+								// toggleLock(0);
+							} else if (data["lock"]["subscribeCount"] != null) {
+								form.find("input[name='islock']").eq(1).click()
+								// toggleLock(1);
+							} else {
+								form.find("input[name='islock']").last().click();
+								// toggleLock(2);
+							}
+						}
+					}
+				});
+			}
+		} else {
+			alert("数据非法！！");
+		}
+	});
 	/*]]>*/
 </script>
 </body>

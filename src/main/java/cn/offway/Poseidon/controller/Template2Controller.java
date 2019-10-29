@@ -88,9 +88,13 @@ public class Template2Controller {
                 lock.setIslock(String.valueOf(islock));
                 if (StringUtils.isNotBlank(subscribeCount)) {
                     lock.setSubscribeCount(Long.valueOf(subscribeCount));
+                } else {
+                    lock.setSubscribeCount(null);
                 }
                 if (StringUtils.isNotBlank(promptTextLock)) {
                     lock.setPromptText(promptTextLock);
+                } else {
+                    lock.setPromptText("");
                 }
                 lockService.save(lock);
                 return true;
