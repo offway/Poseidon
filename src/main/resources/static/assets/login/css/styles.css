@@ -6,17 +6,19 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: 'Gudea', sans-serif;
-  background: #EA5C54;
+  background-image: url("../img/bg.jpg");
+  background-size: cover;
+  /*background: #EA5C54;*/
   /* Old browsers */
   /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #EA5C54), color-stop(100%, #bb6dec));
+  /*background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #EA5C54), color-stop(100%, #bb6dec));*/
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(-45deg, #EA5C54 0%, #bb6dec 100%);
+  /*background: -webkit-linear-gradient(-45deg, #EA5C54 0%, #bb6dec 100%);*/
   /* Chrome10+,Safari5.1+ */
   /* Opera 11.10+ */
   /* IE10+ */
-  background: -webkit-linear-gradient(315deg, #EA5C54 0%, #bb6dec 100%);
-  background: linear-gradient(135deg, #EA5C54 0%, #bb6dec 100%);
+  /*background: -webkit-linear-gradient(315deg, #EA5C54 0%, #bb6dec 100%);*/
+  /*background: linear-gradient(135deg, #EA5C54 0%, #bb6dec 100%);*/
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EA5C54 ', endColorstr='#bb6dec',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */
