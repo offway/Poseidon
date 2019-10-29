@@ -59,11 +59,13 @@ public class Template5Controller {
             template5.setId(Long.valueOf(templateId));
             lock.setId(Long.valueOf(lockId));
             templateConfig.setId(Long.valueOf(templateConfigId));
-        }
-        if("".equals(templateId) || "".equals(lockId)){
+        }else {
             template5.setCreateTime(new Date());
             templateConfig.setCreateTime(new Date());
             lock.setCreateTime(new Date());
+        }
+        if (!"".equals(templateConfigId)){
+            templateConfig = templateConfigService.findOne(Long.valueOf(templateConfigId));
         }
         template5 = template5Service.save(template5);
         templateConfig.setGoodsId(template5.getGoodsId());
