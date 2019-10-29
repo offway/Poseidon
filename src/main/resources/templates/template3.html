@@ -130,7 +130,9 @@
 												<th class="text-center">ID</th>
 												<th class="text-center">角色</th>
 												<th class="text-center">操作形式</th>
-												<th class="text-center">音频上传</th>
+                                                <th class="text-center">内容类型</th>
+												<th class="text-center">内容</th>
+                                                <th class="text-center">内容参数</th>
 												<th class="text-center">排序</th>
 												<th class="text-center">操作</th>
 											</tr>
@@ -154,13 +156,48 @@
 														</select>
 													</div>
 												</td>
+                                                <td class="pt-3-half" contenteditable="true">
+                                                    <div class="form-group">
+                                                        <label></label>
+                                                        <select name="contentType" class="form-control" onchange="toggleMode(this)">
+                                                            <option value="0" selected="selected">音频</option>
+                                                            <option value="1">文字</option>
+                                                            <option value="2">表情</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
 												<td class="pt-3-half" contenteditable="true">
-													<div class="form-group">
+													<div class="form-group audioUrl">
 														<label></label>
 														<input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
 														<input type="hidden" name="audioUrl" />
 													</div>
+                                                    <div class="form-group contentTxt" style="display: none">
+                                                        <label></label>
+                                                        <input type="text" name="contentTxt" placeholder="我是一段文本" />
+                                                    </div>
+                                                    <div class="form-group emotion" style="display: none">
+                                                        <label></label>
+                                                        <input type="file" name="emotionFile" onchange="uploadEmotion(this)" />
+                                                        <input type="hidden" name="emotion" />
+                                                        <img src="" name="emotionImg" style="display: none"/>
+                                                    </div>
 												</td>
+                                                <td class="pt-3-half" contenteditable="true">
+                                                    <div class="form-group audioUrlCfg">
+                                                        <label></label>
+                                                        <input type="text" name="audioUrlCfg" placeholder="例如 50s" />
+                                                    </div>
+                                                    <div class="form-group contentTxtCfg" style="display: none">
+                                                    </div>
+                                                    <div class="form-group emotionCfg" style="display: none">
+                                                        <label></label>
+                                                        <select name="emotionCfg" class="form-control">
+                                                            <option value="0" selected="selected">240*240</option>
+                                                            <option value="1">480*480</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
 												<td class="pt-3-half">
 													<span class="table-up">
 														<a href="#!" class="indigo-text">
@@ -358,8 +395,43 @@
 <td class="pt-3-half" contenteditable="true">
 <div class="form-group">
 <label></label>
+<select name="contentType" class="form-control" onchange="toggleMode(this)">
+<option value="0" selected="selected">音频</option>
+<option value="1">文字</option>
+<option value="2">表情</option>
+</select>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group audioUrl">
+<label></label>
 <input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
 <input type="hidden" name="audioUrl" />
+</div>
+<div class="form-group contentTxt" style="display: none">
+<label></label>
+<input type="text" name="contentTxt" placeholder="我是一段文本" />
+</div>
+<div class="form-group emotion" style="display: none">
+<label></label>
+<input type="file" name="emotionFile" onchange="uploadEmotion(this)" />
+<input type="hidden" name="emotion" />
+<img src="" name="emotionImg" style="display: none"/>
+</div>
+</td>
+<td class="pt-3-half" contenteditable="true">
+<div class="form-group audioUrlCfg">
+<label></label>
+<input type="text" name="audioUrlCfg" placeholder="例如 50s" />
+</div>
+<div class="form-group contentTxtCfg" style="display: none">
+</div>
+<div class="form-group emotionCfg" style="display: none">
+<label></label>
+<select name="emotionCfg" class="form-control">
+<option value="0" selected="selected">240*240</option>
+<option value="1">480*480</option>
+</select>
 </div>
 </td>
   <td class="pt-3-half">
@@ -467,14 +539,37 @@
     function toggleMode(self) {
         var that = $(self);
         var tr = that.parent().parent().parent();
-        if (that.val() == "0") {
-            tr.find("input[name='imageUrlFile']").removeAttr("disabled");
-            tr.find("input[name='promptText']").prop("readonly", "readonly");
-            tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
-        } else {
-            tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
-            tr.find("input[name='promptText']").removeAttr("readonly");
-            tr.find("input[name='remarkBtn']").removeAttr("disabled");
+        var td_audio = tr.find("div.audioUrl");
+        var td_audio_cfg = tr.find("div.audioUrlCfg");
+        var td_txt = tr.find("div.contentTxt");
+        var td_txt_cfg = tr.find("div.contentTxtCfg");
+        var td_emotion = tr.find("div.emotion");
+        var td_emotion_cfg = tr.find("div.emotionCfg");
+        switch (that.val()) {
+            case "0":
+                td_audio.show();
+                td_audio_cfg.show();
+                td_txt.hide();
+                td_txt_cfg.hide();
+                td_emotion.hide();
+                td_emotion_cfg.hide();
+                break;
+            case "1":
+                td_audio.hide();
+                td_audio_cfg.hide();
+                td_txt.show();
+                td_txt_cfg.show();
+                td_emotion.hide();
+                td_emotion_cfg.hide();
+                break;
+            case "2":
+                td_audio.hide();
+                td_audio_cfg.hide();
+                td_txt.hide();
+                td_txt_cfg.hide();
+                td_emotion.show();
+                td_emotion_cfg.show();
+                break;
         }
     }
 
@@ -594,6 +689,30 @@
                     that.parent().find("[name=roleIconImg]").attr("width", "100px");
                     that.parent().find("[name=roleIconImg]").attr("height", "100px");
                     that.parent().find("[name=roleIconImg]").show();
+                }, 5, false, false);
+            });
+        } else {
+            confirm("未选择任何文件!");
+        }
+    }
+
+    function uploadEmotion(self) {
+        var that = $(self);
+        if (self.files.length > 0) {
+            var file = self.files[0];
+            getQNToken(function (token) {
+                this.upload("", token, file, function () {
+                    //
+                }, function (err) {
+                    console.log("error");
+                    console.log(err);
+                }, function (res) {
+                    var url = qiniuUrl + "/" + res.key;
+                    that.parent().find("[name=emotion]").val(url);
+                    that.parent().find("[name=emotionImg]").attr("src", url);
+                    that.parent().find("[name=emotionImg]").attr("width", "100px");
+                    that.parent().find("[name=emotionImg]").attr("height", "100px");
+                    that.parent().find("[name=emotionImg]").show();
                 }, 5, false, false);
             });
         } else {
