@@ -86,7 +86,6 @@ body .test {
           filter: blur(1px);
 }
 body .login {
-  opacity: 1;
   top: 20px;
   -webkit-transition-timing-function: cubic-bezier(0.68, -0.25, 0.265, 0.85);
   -webkit-transition-property: -webkit-transform,opacity,box-shadow,top,left;
@@ -99,9 +98,9 @@ body .login {
   -webkit-transform: rotateX(0deg);
           transform: rotateX(0deg);
   position: relative;
-  width: 240px;
-  border-top: 2px solid #D8312A;
-  height: 300px;
+  width: 340px;
+  /*border-top: 2px solid #D8312A;*/
+  height: 400px;
   position: absolute;
   left: 0;
   right: 0;
@@ -109,16 +108,16 @@ body .login {
   top: 0;
   bottom: 0;
   padding: 100px 40px 40px 40px;
-  background: #35394a;
+  background: rgba(0,0,0,.5);
   /* Old browsers */
   /* FF3.6+ */
-  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #35394a), color-stop(100%, #1f222e));
+  /*background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #35394a), color-stop(100%, #1f222e));*/
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(45deg, #35394a 0%, #1f222e 100%);
+  /*background: -webkit-linear-gradient(45deg, #35394a 0%, #1f222e 100%);*/
   /* Chrome10+,Safari5.1+ */
   /* Opera 11.10+ */
   /* IE10+ */
-  background: linear-gradient(45deg, #35394a 0%, #1f222e 100%);
+  /*background: linear-gradient(45deg, #35394a 0%, #1f222e 100%);*/
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#35394a', endColorstr='#1f222e',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */
@@ -137,7 +136,7 @@ body .login .disclaimer {
   width: 250px;
 }
 body .login_title {
-  color: #afb1be;
+  color: #DBBF8E;
   height: 60px;
   text-align: left;
   font-size: 16px;
@@ -155,17 +154,17 @@ body .login_fields .icon {
   opacity: .5;
 }
 body .login_fields input[type='password'] {
-  color: #DC6180 !important;
+  color: #DBBF8E !important;
 }
 body .login_fields input[type='text'], body .login_fields input[type='password'] {
   color: #afb1be;
-  width: 190px;
+  width: 289px;
   margin-top: -2px;
-  background: #32364a;
+  background: rgba(0,0,0,.5);
   left: 0;
   padding: 10px 65px;
-  border-top: 2px solid #393d52;
-  border-bottom: 2px solid #393d52;
+  border-top: 1px solid #393d52;
+  border-bottom: 1px solid #393d52;
   border-right: none;
   border-left: none;
   outline: none;
@@ -177,6 +176,8 @@ body .login_fields__user, body .login_fields__password {
 }
 body .login_fields__submit {
   position: relative;
+  display: flex;
+  justify-content: center;
   top: 35px;
   left: 0;
   width: 80%;
@@ -196,8 +197,8 @@ body .login_fields__submit input {
   border-radius: 50px;
   background: transparent;
   padding: 10px 50px;
-  border: 2px solid #DC6180;
-  color: #DC6180;
+  border: 2px solid #DBBF8E;
+  color: #DBBF8E;
   text-transform: uppercase;
   font-size: 11px;
   -webkit-transition-property: background,color;
@@ -211,7 +212,7 @@ body .login_fields__submit input:focus {
 }
 body .login_fields__submit input:hover {
   color: white;
-  background: #DC6180;
+  background: #DBBF8E;
   cursor: pointer;
   -webkit-transition-property: background,color;
           transition-property: background,color;
