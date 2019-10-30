@@ -153,6 +153,14 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
+								<label class="control-label">价格</label>
+								<input type="number" class="form-control" id="field-6" name="price" placeholder="单价" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
 								<label class="control-label">状态</label>
 								<select class="form-control" name="state" readonly="readonly">
 									<option value="0">上架</option>
@@ -318,6 +326,11 @@
 				},
 				{
 					targets: 5,
+					data: "price",
+					title: "单价"
+				},
+				{
+					targets: 6,
 					data: "state",
 					title: "状态",
 					render: function (data, type, full, meta) {
@@ -330,12 +343,12 @@
 					}
 				},
 				{
-					targets: 6,
+					targets: 7,
 					data: "remark",
 					title: "备注"
 				},
 				{
-					targets: 7,
+					targets: 8,
 					data: "createTime",
 					title: "创建时间",
 					render: function (data, type, row, meta) {
@@ -343,7 +356,7 @@
 					}
 				},
 				{
-					targets: 8,
+					targets: 9,
 					data: "id",
 					title: "内容管理",
 					render: function (data, type, row, meta) {
@@ -434,6 +447,7 @@
 				form.parent().find("[name=image]").show();
 				form.find("input[name='audioUrl']").val(data.audioUrl);
 				form.find("input[name='id']").val(data.id);
+				form.find("input[name='price']").val(data.price);
 				form.find("input[name='templateName']").val(data.templateName);
 				form.find("select[name='state']").val(data.state);
 				form.find("input[name='subscribeSum']").val(data.subscribeSum);
