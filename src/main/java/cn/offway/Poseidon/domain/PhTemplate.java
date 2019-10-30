@@ -41,6 +41,9 @@ public class PhTemplate implements Serializable {
     /** 电子刊封面 **/
     private String audioUrl;
 
+    /** 价格 **/
+    private Double price;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -124,6 +127,15 @@ public class PhTemplate implements Serializable {
 
     public void setAudioUrl(String audioUrl) {
         this.audioUrl = audioUrl;
+    }
+
+    @Column(name = "price", precision = 15, scale = 2)
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
 }
