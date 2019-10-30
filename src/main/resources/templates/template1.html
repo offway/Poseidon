@@ -4,9 +4,6 @@
 	<head th:replace="head"></head>
 	<title>新加模板</title>
 	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
-	<link rel="stylesheet" href="assets/js/select2/select2.css"/>
-	<link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css"/>
-	<link rel="stylesheet" href="assets/js/multiselect/css/multi-select.css"/>
 </head>
 <body class="hold-transition skin-black light-sidebar sidebar-mini">
 <!-- Site wrapper -->
@@ -86,7 +83,7 @@
 					<input type="hidden" class="form-control" id="rollingImageUrl" name="rollingImageUrl" />
 				</div>
 				<div class="form-group col-md-7" id="rollingTxt" style="display: none">
-					<textarea class="form-control" rows="3" id="rollingText" name="rollingText"></textarea>
+					<textarea class="form-control" rows="3" id="rollingText" name="rollingText" style="width:700px;height:300px;"></textarea>
 				</div>
 				<div class="form-group col-md-7">
 					<label class="control-label">提示文字</label>
@@ -118,9 +115,21 @@
 </div>
 
 <script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
-<script src="assets/js/select2/select2.min.js"></script>
-<script src="assets/js/multiselect/js/jquery.multi-select.js"></script>
+<script src="https://admin.offway.cn/assets/kindeditor-4.1.12/kindeditor-all-min.js"></script>
+<script src="https://admin.offway.cn/assets/kindeditor-4.1.12/lang/zh-CN.js"></script>
 <script th:inline="javascript">
+
+	KindEditor.ready(function (K) {
+		window.editor = K.create('#rollingText', {
+			uploadJson: '/file/upload_qn',
+			allowFileManager: false,
+			afterUpload: function (url, data, name) {
+				console.log(url);
+				console.log(data);
+				console.log(name);
+			}
+		});
+	});
 
 	function unlockRadio(type) {
 		if (type == "0"){
@@ -131,13 +140,14 @@
             $("#subscribeCount").val("");
 		}
 	}
-	
+
 	function rollingTypeRadio(type) {
-		if (type == "0"){
+		if (type == "0") {
 			$("#rollingTxt").hide();
 			$("#rollingImageUrlDiv").show();
-			$("#rollingText").val("");
-		}else {
+			// $("#rollingText").val("");
+			editor.html("");
+		} else {
 			$("#rollingImageUrlDiv").hide();
 			$("#rollingTxt").show();
 			$("#rollingImage").attr("src", "");
@@ -230,23 +240,24 @@
 		form.find("[name=imageText]").attr("width", "100px");
 		form.find("[name=imageText]").attr("height", "100px");
 		form.find("[name=imageText]").show();
-		if (data["rollingType"] == "0"){
+		if (data["rollingType"] == "0") {
 			$("#rollingTxt").hide();
 			$("#rollingImageUrlDiv").show();
-			$("#rollingText").val("");
+			// $("#rollingText").val("");
+			editor.html("");
 			form.find("input[name='rollingImageUrl']").val(data["rollingImageUrl"]);
 			form.find("[name=rollingImage]").attr("src", data["rollingImageUrl"]);
 			form.find("[name=rollingImage]").attr("width", "100px");
 			form.find("[name=rollingImage]").attr("height", "100px");
 			form.find("[name=rollingImage]").show();
-		}else {
+		} else {
 			$("#rollingImageUrlDiv").hide();
 			$("#rollingTxt").show();
 			$("#rollingImage").attr("src", "");
 			$("#rollingImageUrl").val("");
-			form.find("textarea[name='rollingText']").val(data["rollingText"]);
+			// form.find("textarea[name='rollingText']").val(data["rollingText"]);
+			editor.html(data["rollingText"]);
 		}
-
 	}
 
 	function editIslock(data) {
@@ -292,7 +303,7 @@
 			var imageTextUrl = form.find("input[name='imageTextUrl']").val();
 			var rollingType = form.find("input[name='rollingType']:checked").val();
 			var rollingImageUrl = form.find("input[name='rollingImageUrl']").val();
-			var rollingText = form.find("textarea[name='rollingText']").val();
+			var rollingText = editor.html();//form.find("textarea[name='rollingText']").val();
 			var unlock = form.find("input[name='islock']:checked").val();
 			var subscribeCount = form.find("input[name='subscribeCount']").val();
 			var promptText = form.find("input[name='promptText']").val();
@@ -313,12 +324,20 @@
 					return;
 				}
 			}
-			var postData = $("#saveForm").serializeArray();
+			var postData = form.serializeArray();
 			postData.push({"name": "templateId", "value": form.find("input[name='templateIdEdit']").val()});
-			$.post("/template1_save",postData,function (data) {
-				if (data){
+			var newMap = {};
+			for (var i in postData) {
+				if (postData[i]["name"] == 'rollingText') {
+					newMap["rollingText"] = rollingText;
+				} else {
+					newMap[postData[i]["name"]] = postData[i]["value"];
+				}
+			}
+			$.post("/template1_save", newMap, function (data) {
+				if (data) {
 					toastr.success("操作已成功！", "温馨提示");
-				}else {
+				} else {
 					toastr.error("操作失败!", "温馨提示");
 					return;
 				}
