@@ -52,15 +52,6 @@
                                         <input type="text" name="phone" class="form-control" style="height:35px" placeholder="手机"/>
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <select name="isAuth" class="form-control" style="height:35px" placeholder="是否认证">
-                                            <option value="">是否认证</option>
-                                            <option value="0">未认证</option>
-                                            <option value="1">已认证</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <button class="btn btn-secondary searchBtn" style="height:35px">查询</button>
                                 </div>
@@ -134,7 +125,6 @@
                     data: "unionid",
                     title: "用户ID"
                 },
-
                 {
                     targets: 4,
                     data: "phone",
@@ -142,60 +132,20 @@
                 },
                 {
                     targets: 5,
-                    data: "position",
-                    title: "职位"
+                    data: "sex",
+                    title: "性别",
+                    render:function (data, type, row, meta) {
+                        if (data == "2"){
+                            return "女性";
+                        }else if (data == "1"){
+                            return "男性";
+                        }else {
+                            return "未知";
+                        }
+                    }
                 },
                 {
                     targets: 6,
-                    data: "realName",
-                    title: "姓名"
-                },
-                {
-                    targets: 7,
-                    data: "companyName",
-                    title: "企业名称"
-                },
-                {
-                    targets: 8,
-                    data: "creditScore",
-                    title: "信用分"
-                },
-                {
-                    targets: 9,
-                    data: "idcardPositive",
-                    title: "身份证正面",
-                    render: function (data, type, row, meta) {
-                        return null == data ? "" : "<img src=" + data + "></img>";
-                    }
-                },
-                {
-                    targets: 10,
-                    data: "idcardObverse",
-                    title: "身份证反面",
-                    render: function (data, type, row, meta) {
-                        return null == data ? "" : "<img src=" + data + "></img>";
-                    }
-                },
-                {
-                    targets: 11,
-                    data: "inCert",
-                    title: "在职证明",
-                    render: function (data, type, row, meta) {
-
-                        return null == data ? "" : "<img src=" + data + "></img>";
-                    }
-                },
-                {
-                    targets: 12,
-                    data: "isAuth",
-                    title: "是否认证",
-                    render: function (data, type, row, meta) {
-                        return "1" == data ? "已认证" : "未认证";
-                    }
-                },
-
-                {
-                    targets: 13,
                     data: "createTime",
                     title: "创建时间",
                     render: function (data, type, row, meta) {

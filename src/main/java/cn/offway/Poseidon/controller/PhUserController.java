@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.offway.Poseidon.domain.PhUser;
 import cn.offway.Poseidon.domain.PhUserInfo;
 import cn.offway.Poseidon.service.PhUserInfoService;
+import cn.offway.Poseidon.service.PhUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class PhUserController {
 	
 	@Autowired
 	private PhUserInfoService phUserInfoService;
+
+	@Autowired
+    private PhUserService userService;
 	
 	@RequestMapping("/phUsers.html")
 	public String phUsers(ModelMap map){
@@ -44,7 +49,7 @@ public class PhUserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/phUsers-data")
-	public Map<String, Object> phUsersData(HttpServletRequest request,String nickname, String unionid, String phone, String isAuth){
+	public Map<String, Object> phUsersData(HttpServletRequest request,String nickname, String unionid, String phone){
 		
 		String sortCol = request.getParameter("iSortCol_0");
 		String sortName = request.getParameter("mDataProp_"+sortCol);
@@ -52,7 +57,7 @@ public class PhUserController {
 		int sEcho = Integer.parseInt(request.getParameter("sEcho"));
 		int iDisplayStart = Integer.parseInt(request.getParameter("iDisplayStart"));
 		int iDisplayLength  = Integer.parseInt(request.getParameter("iDisplayLength"));
-		Page<PhUserInfo> pages = phUserInfoService.findByPage(nickname.trim(),unionid.trim(),phone.trim(),isAuth.trim(), new PageRequest(iDisplayStart==0?0:iDisplayStart/iDisplayLength, iDisplayLength<0?9999999:iDisplayLength,Direction.fromString(sortDir),sortName));
+		Page<PhUser> pages = userService.findByPage(nickname.trim(),unionid.trim(),phone.trim(), new PageRequest(iDisplayStart==0?0:iDisplayStart/iDisplayLength, iDisplayLength<0?9999999:iDisplayLength,Direction.fromString(sortDir),sortName));
 		 // 为操作次数加1，必须这样做  
         int initEcho = sEcho + 1;  
         Map<String, Object> map = new HashMap<>();
