@@ -119,17 +119,21 @@
 <script src="https://admin.offway.cn/assets/kindeditor-4.1.12/lang/zh-CN.js"></script>
 <script th:inline="javascript">
 
-	KindEditor.ready(function (K) {
-		window.editor = K.create('#rollingText', {
-			uploadJson: '/file/upload_qn',
-			allowFileManager: false,
-			afterUpload: function (url, data, name) {
-				console.log(url);
-				console.log(data);
-				console.log(name);
-			}
-		});
-	});
+    KindEditor.ready(function (K) {
+        window.editor = K.create('#rollingText', {
+            uploadJson: '/file/upload_qn',
+            allowFileManager: false,
+            allowImageUpload: false,
+            allowFlashUpload: false,
+            allowMediaUpload: false,
+            allowFileUpload: false,
+            afterUpload: function (url, data, name) {
+                console.log(url);
+                console.log(data);
+                console.log(name);
+            }
+        });
+    });
 
 	function unlockRadio(type) {
 		if (type == "0"){
