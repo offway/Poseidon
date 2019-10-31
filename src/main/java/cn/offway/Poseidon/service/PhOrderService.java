@@ -4,6 +4,8 @@ package cn.offway.Poseidon.service;
 import java.util.List;
 
 import cn.offway.Poseidon.domain.PhOrder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 电子刊购买订单Service接口
@@ -20,4 +22,6 @@ public interface PhOrderService{
     void delete(Long id);
 
     List<PhOrder> save(List<PhOrder> entities);
+
+    Page<PhOrder> findAllByPage(String userId, String orderNo, String status, Pageable page);
 }

@@ -50,6 +50,9 @@ public class OrderController {
 
 	@Autowired
 	private PhOrderRemarkService phOrderRemarkService;
+
+	@Autowired
+	private PhOrderService phOrderService;
 	
 	
 	@RequestMapping("/order.html")
@@ -78,8 +81,7 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping("/order-data")
-	public Map<String, Object> orderData(HttpServletRequest request, String orderNo, String unionid, String sku,
-										 String realName, String position, String status, Long brandId, String isOffway, String isUpload, Authentication authentication, String users) {
+	public Map<String, Object> orderData(HttpServletRequest request, String userId, String orderNo, String status, Authentication authentication) {
 		
 		String sortCol = request.getParameter("iSortCol_0");
 		String sortName = request.getParameter("mDataProp_"+sortCol);
@@ -92,8 +94,8 @@ public class OrderController {
 		List<Long> brandIds = phAdmin.getBrandIds();
 
 		PageRequest pr = new PageRequest(iDisplayStart == 0 ? 0 : iDisplayStart / iDisplayLength, iDisplayLength < 0 ? 9999999 : iDisplayLength, Direction.fromString(sortDir), sortName);
-		Page<PhOrderInfo> pages = phOrderInfoService.findByPage(sku, isUpload, realName.trim(), position.trim(), orderNo.trim(), null != unionid ? unionid.trim() : unionid, status.trim(), brandId, isOffway, brandIds, users, pr);
-		 // 为操作次数加1，必须这样做  
+		Page<PhOrder> pages = phOrderService.findAllByPage(userId,orderNo,status,pr);
+		// 为操作次数加1，必须这样做
         int initEcho = sEcho + 1;  
         Map<String, Object> map = new HashMap<>();
 		map.put("sEcho", initEcho);  

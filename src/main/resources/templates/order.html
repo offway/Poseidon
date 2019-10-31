@@ -40,50 +40,13 @@
                             <form class="form-inline" role="form">
                                 <div class="form-group ">
                                     <div class="input-group">
-                                        <select class="form-control" id="brandId" name="brandId" placeholder="品牌"
-                                                style="height:35px">
-                                            <option value="">品牌</option>
-                                            <option th:each="brand : ${brands}" th:text="${brand.name}"
-                                                    th:value="${brand.id}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <select class="form-control" name="isOffway" style="height:35px">
-                                            <option value="">是否自营</option>
-                                            <option value="0">否</option>
-                                            <option value="1">是</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
                                         <input class="form-control" name="orderNo" placeholder="订单号" style="height:35px"
                                                type="text"/>
                                     </div>
                                 </div>
                                 <div class="form-group ">
                                     <div class="input-group">
-                                        <input class="form-control" name="realName" placeholder="姓名" style="height:35px"
-                                               type="text"/>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <input class="form-control" name="position" placeholder="职位" style="height:35px"
-                                               type="text"/>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <input class="form-control" name="users" placeholder="使用者" style="height:35px"
-                                               type="text"/>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <input class="form-control" name="sku" placeholder="商品编码" style="height:35px"
+                                        <input class="form-control" name="userId" placeholder="用户id" style="height:35px"
                                                type="text"/>
                                     </div>
                                 </div>
@@ -92,20 +55,8 @@
                                         <select class="form-control" name="status" style="height:35px">
                                             <option value="">状态</option>
                                             <option value="0">已下单</option>
-                                            <option value="1">已发货</option>
-                                            <option value="2">已寄回</option>
-                                            <option value="3">已收货</option>
-                                            <option value="4">已取消</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <select class="form-control" name="isUpload" style="height:35px">
-                                            <option value="">是否返图</option>
-                                            <option value="0">未返图</option>
-                                            <option value="1">已返图</option>
+                                            <option value="1">已付款</option>
+                                            <option value="2">取消</option>
                                         </select>
                                     </div>
                                 </div>
@@ -240,13 +191,13 @@
             columnDefs: [
                 {
                     targets: 0,
-                    data: "orderNo",
+                    data: "id",
                     width: "5%",
                     orderable: false,
-                    className: 'select-checkbox',
-                    title: '<input type="checkbox" id="checkbox-all"/>',
+                    title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
                     render: function (data, type, full, meta) {
-                        return '<input type="checkbox" name="authId" value="' + data + '" />';
+                        var uuid = UUID.randomUUID();
+                        return '<div class="checkbox"><input type="checkbox" name="templateId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
                     }
                 },
                 {
@@ -262,142 +213,66 @@
 
                 {
                     targets: 3,
-                    data: "useDate",
-                    title: "使用日期",
-                    render: function (data, type, row, meta) {
-                        return new Date(data).Format("yyyy-MM-dd");
-                    }
+                    data: "userId",
+                    title: "用户id"
                 },
                 {
                     targets: 4,
-                    data: "realName",
-                    title: "姓名"
+                    data: "unionid",
+                    title: "微信id"
                 },
                 {
                     targets: 5,
-                    data: "position",
-                    title: "职位"
+                    data: "templateId",
+                    title: "杂志id"
                 },
                 {
                     targets: 6,
-                    data: "users",
-                    title: "使用者"
+                    data: "templateName",
+                    title: "杂志名称"
                 },
                 {
                     targets: 7,
-                    data: "brandLogo",
-                    title: "品牌LOGO",
-                    render: function (data, type, row, meta) {
-                        return "<img src=" + data + "></img>";
+                    data: "status",
+                    title: "状态",
+                    render:function (data, type, row, meta) {
+                        if (data == "0"){
+                            return "已下单";
+                        }else if (data == "1"){
+                            return "已付款";
+                        }else if(data == "2"){
+                            return "取消";
+                        }else {
+                            return "未知";
+                        }
                     }
                 },
                 {
                     targets: 8,
-                    data: "brandName",
-                    title: "品牌名称"
+                    data: "price",
+                    title: "订单总价"
                 },
                 {
                     targets: 9,
-                    data: "isOffway",
-                    title: "是否自营",
-                    render: function (data, type, row, meta) {
-                        return "1" == data ? "是" : "否";
-                    }
+                    data: "amount",
+                    title: "实付金额"
                 },
                 {
                     targets: 10,
-                    data: "status",
-                    title: "状态",
-                    render: function (data, type, row, meta) {
-                        if ("0" == data) {
-                            return "已下单";
-                        } else if ("1" == data) {
-                            return "已发货";
-                        } else if ("2" == data) {
-                            return "已寄回";
-                        } else if ("3" == data) {
-                            return "已收货";
-                        } else if ("4" == data) {
-                            return "已取消";
-                        }
-                    }
+                    data: "sum",
+                    title: "购买总数量"
                 },
                 {
                     targets: 11,
-                    data: "isUpload",
-                    title: "是否返图",
-                    render: function (data, type, row, meta) {
-                        if ("0" == data) {
-                            return "<font color='red'>未返图</font>";
-                        } else if ("1" == data) {
-                            return "已返图";
-                        }
-                    }
+                    data: "phone",
+                    title: "手机"
                 },
-
                 {
                     targets: 12,
-                    data: "orderNo",
-                    title: "商品明细",
-                    render: function (data, type, row, meta) {
-                        return "<a href='javascript:void(0)' class='showGoods' orderNo='" + data + "' color='blue'>查看</a>";
-                    }
-                },
-                {
-                    targets: 13,
-                    data: "orderNo",
-                    title: "物流明细",
-                    render: function (data, type, row, meta) {
-                        return "<a href='javascript:void(0)' class='showEx' orderNo='" + data + "' type='0' color='blue'>寄</a> &nbsp; <a href='javascript:void(0)' class='showEx' orderNo='" + data + "' type='1' color='blue'>返</a>";
-                    }
-                },
-
-                {
-                    targets: 14,
                     data: "createTime",
                     title: "创建时间",
                     render: function (data, type, row, meta) {
                         return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-                    }
-                },
-
-                {
-                    targets: 15,
-                    data: "returnTime",
-                    title: "归还时间",
-                    render: function (data, type, row, meta) {
-                        if (data == null) {
-                            return "";
-                        } else {
-                            return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-                        }
-                    }
-                },
-
-                {
-                    targets: 16,
-                    data: "showTime",
-                    title: "返图时间",
-                    render: function (data, type, row, meta) {
-                        if (data == null) {
-                            return "";
-                        } else {
-                            return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
-                        }
-                    }
-                },
-                {
-                    targets: 17,
-                    data: "id",
-                    title: "备注",
-                    render: function (data, type, row, meta) {
-                        var isnull = row["extra"];
-                        if (isnull == 1) {
-                            return '<input type="button" style="background-color: #21b3e6;color: #ebf7fd" name="remark" id="remark" onclick="addremark(' + data + ')" value="修改备注"/>';
-                        } else {
-                            return '<input type="button" name="remark" id="remark" onclick="addremark(' + data + ')" value="添加备注"/>';
-                        }
-
                     }
                 }
             ]
