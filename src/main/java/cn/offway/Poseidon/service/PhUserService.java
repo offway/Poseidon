@@ -13,15 +13,17 @@ import org.springframework.data.domain.Pageable;
  * @author wn
  * @version $v: 1.0.0, $time:2019-10-30 14:42:36 Exp $
  */
-public interface PhUserService{
+public interface PhUserService {
 
     PhUser save(PhUser phUser);
-	
+
     PhUser findOne(Long id);
 
     void delete(Long id);
 
     List<PhUser> save(List<PhUser> entities);
 
-    Page<PhUser> findByPage(String nickname, String unionid, String phone, Pageable page);
+    Page<PhUser> findByPage(String nickname, String unionid, String phone, String isVirtual, Pageable page);
+
+    int getMaxId();
 }
