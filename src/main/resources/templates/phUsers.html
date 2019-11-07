@@ -3,9 +3,7 @@
 <head>
     <head th:replace="head"></head>
     <title>用户查询</title>
-    <link href="assets/js/select2/select2.css" rel="stylesheet"/>
-    <link href="assets/js/select2/select2-bootstrap.css" rel="stylesheet"/>
-    <link href="assets/js/daterangepicker/daterangepicker-bs3.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://admin.offway.cn/assets/css/jquery.datetimepicker.min.css"/>
     <script src="js/qiniu.min.js"></script>
     <style type="text/css">
         .form-group img {
@@ -52,6 +50,15 @@
                                         <input type="text" name="phone" class="form-control" style="height:35px" placeholder="手机"/>
                                     </div>
                                 </div>
+                                <div class="form-group ">
+                                    <div class="input-group">
+                                        <select name="isVirtual" class="form-control" style="height:35px">
+                                            <option value="">全部</option>
+                                            <option value="0">真实用户</option>
+                                            <option value="1">虚拟用户</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary searchBtn" style="height:35px">查询</button>
                                 </div>
@@ -65,6 +72,9 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
+                            <button class="btn btn-info add">添加虚拟用户</button>
+                            <button class="btn btn-info edit">修改虚拟用户</button>
+                            <button class="btn btn-info delete">删除用户</button>
                         </div>
                         <!-- /.box-footer-->
                     </div>
@@ -76,23 +86,177 @@
     <footer th:replace="footer"></footer>
 </div>
 
-<div th:replace="body-under"></div>
+<div class="modal fade" id="modal-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">温馨提示</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>您确定要删除选中用户吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
-<script src="assets/js/moment.min.js"></script>
-<script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
-<script src="assets/js/daterangepicker/daterangepicker.js"></script>
-<script src="assets/js/timepicker/bootstrap-timepicker.min.js"></script>
-<script src="assets/js/select2/select2.min.js"></script>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;" id="modal-6">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">添加虚拟用户</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="saveForm">
+                    <input type="hidden" name="id"/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">用户昵称</label>
+                                <input type="text" class="form-control" name="nickname" placeholder="用户昵称"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class=" control-label">选择性别</label>
+                                <select class="form-control" name="sex">
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="distpicker">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class=" control-label">选择省</label>
+                                <select class="form-control" name="province"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class=" control-label">选择市</label>
+                                <select class="form-control" name="city"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class=" control-label">选择区</label>
+                                <select class="form-control" name="country"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">用户头像</label>
+                                <img src="" name="headimgurlImg" style="display: none;"/>
+                                <input type="file" name="headimgurlFile" class="form-control" onchange="uploadIcon(this)"/>
+                                <input type="hidden" name="headimgurl"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">手机</label>
+                                <input type="text" class="form-control" name="phone" placeholder="手机"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">生日</label>
+                                <input type="text" class="form-control" name="birthday" id="birthday" placeholder="生日"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info save">保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script src="https://admin.offway.cn/assets/js/distpicker.js"></script>
+<script src="https://admin.offway.cn/assets/js/jquery.datetimepicker.full.min.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
+
+    function formatTime(time) {
+        return new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+    }
+
+    function formatDate(time) {
+        return new Date(time).Format("yyyy-MM-dd");
+    }
+
+    function buildImg(url) {
+        return "<img width='100px' height='100px' src='#' />".replace("#", url);
+    }
+
+    function getQNToken(cb) {
+        $.get("/qiniu/token", {}, function (token) {
+            cb(token);
+        });
+    }
+
+    function uploadIcon(self) {
+        var that = $(self);
+        if (self.files.length > 0) {
+            var file = self.files[0];
+            getQNToken(function (token) {
+                this.upload("", token, file, function () {
+                    //
+                }, function (err) {
+                    console.log("error");
+                    console.log(err);
+                }, function (res) {
+                    var url = qiniuUrl + "/" + res.key;
+                    that.parent().find("[name=headimgurl]").val(url);
+                    that.parent().find("[name=headimgurlImg]").attr("src", url);
+                    that.parent().find("[name=headimgurlImg]").attr("width", "100px");
+                    that.parent().find("[name=headimgurlImg]").attr("height", "100px");
+                    that.parent().find("[name=headimgurlImg]").show();
+                }, 5, false, false);
+            });
+        } else {
+            confirm("未选择任何文件!");
+        }
+    }
+    var qiniuUrl = [[${qiniuUrl}]];
     jQuery(document).ready(function ($) {
+        jQuery.datetimepicker.setLocale('zh');
+        jQuery('#birthday').datetimepicker(
+            {
+                "lang": "zh",
+                "format": "Y-m-d",
+                "timepicker": false,
+                "datepicker": true,
+                "defaultDate": new Date(),
+                "defaultTime": "00:00:00"
+            }
+        );
+
         var oTable = $("#example-1").dataTable({
             language: {
                 url: "../assets/Chinese.txt"
             },
-            aLengthactivity: [
-                [10, 25, 50, 100], [10, 25, 50, 100]
-            ],
             bFilter: false,
             bServerSide: true,//服务器处理分页，默认是false，需要服务器处理，必须true
             sAjaxDataProp: "aData",//是服务器分页的标志，必须有
@@ -101,37 +265,49 @@
                 var searchArray = $(".form-inline").serializeArray();
                 $.merge(aData, searchArray);
             },
-            order: [[0, "desc"]], columnDefs: [
+            order: [[0, "desc"]],
+            columnDefs: [
                 {
                     targets: 0,
+                    data: "id",
+                    width: "5%",
+                    orderable: false,
+                    title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
+                    render: function (data, type, full, meta) {
+                        var uuid = UUID.randomUUID();
+                        return '<div class="checkbox"><input type="checkbox" name="userId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
+                    }
+                },
+                {
+                    targets: 1,
                     data: "id",
                     title: "序号"
                 },
                 {
-                    targets: 1,
+                    targets: 2,
                     data: "headimgurl",
                     title: "头像",
                     render: function (data, type, row, meta) {
-                        return "<img src=" + data + "></img>";
+                        return buildImg(data);
                     }
                 },
                 {
-                    targets: 2,
+                    targets: 3,
                     data: "nickname",
                     title: "用户昵称"
                 },
                 {
-                    targets: 3,
+                    targets: 4,
                     data: "unionid",
                     title: "用户ID"
                 },
                 {
-                    targets: 4,
+                    targets: 5,
                     data: "phone",
                     title: "手机"
                 },
                 {
-                    targets: 5,
+                    targets: 6,
                     data: "sex",
                     title: "性别",
                     render:function (data, type, row, meta) {
@@ -145,7 +321,7 @@
                     }
                 },
                 {
-                    targets: 6,
+                    targets: 7,
                     data: "birthday",
                     title: "生日",
                     render:function (data, type, row, meta) {
@@ -153,7 +329,7 @@
                     }
                 },
                 {
-                    targets: 7,
+                    targets: 8,
                     data: "createTime",
                     title: "注册时间",
                     render: function (data, type, row, meta) {
@@ -169,7 +345,108 @@
             return false;
         });
 
+        $('#example-1').on('click', "#checkbox-all", function () {
+            var obj = $(this);
+            $("input[name='userId']").each(function (i, e) {
+                this.checked = obj[0].checked;
+            });
+        });
 
+        $(".btn.btn-info.add").click(function () {
+            var saveForm = $("#saveForm");
+            saveForm.find("input").val("");
+            $("#distpicker").distpicker('destroy');
+            $("#distpicker").distpicker({
+                province: '---- 所在省 ----',
+                city: '---- 所在市 ----',
+                district: '---- 所在区 ----'
+            });
+            jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+        });
+
+        $(".btn.btn-info.edit").click(function () {
+            var userId = $("input[name='userId']:checked");
+            if (userId.length != 1) {
+                toastr.error("请选择一条数据操作", "温馨提示");
+                return;
+            }
+            $.get("/phUsers-get", {id: userId.val()}, function (data) {
+                if (data["id"] < 50000) {
+                    toastr.error("真实用户不允许编辑", "温馨提示");
+                    return;
+                }
+                var saveForm = $("#saveForm");
+                for (var i in data) {
+                    var ele = saveForm.find("input[name='" + i + "']");
+                    switch (ele.attr("type")) {
+                        case "radio":
+                            ele.val([data[i]]);
+                            break;
+                        default:
+                            if (data[i] != undefined && !isNaN(data[i]) && String(data[i]).length == 13) {
+                                ele.val(formatDate(data[i]));
+                                $("#" + i).val(formatDate(data[i]));
+                            } else {
+                                ele.val(data[i]);
+                            }
+                    }
+                    saveForm.find("img[name='" + i + "Img']").attr("src", data[i]);
+                    saveForm.find("img[name='" + i + "Img']").attr("width", 200);
+                    saveForm.find("img[name='" + i + "Img']").attr("length", 200);
+                    saveForm.find("img[name='" + i + "Img']").show();
+                    //try select
+                    saveForm.find("select[name='" + i + "']").val(data[i]);
+                }
+                $("#distpicker").distpicker('destroy');
+                $("#distpicker").distpicker({
+                    province: data["province"],
+                    city: data["city"],
+                    district: data["country"]
+                });
+                jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+            });
+        });
+
+        $(".btn.btn-info.save").click(function () {
+            var form = $("#saveForm");
+            //提交保存
+            $.post("/phUsers-save", form.serializeArray(), function (data) {
+                if (data) {
+                    jQuery('#modal-6').modal('hide');
+                    toastr.success("操作已成功！", "温馨提示");
+                } else {
+                    toastr.error("操作失败", "温馨提示");
+                }
+            });
+        });
+
+        $(".btn.btn-info.delete").click(function () {
+            var userId = $("input[name='userId']:checked");
+            if (userId.length < 1) {
+                toastr.error("请至少选择一条数据操作", "温馨提示");
+                return;
+            }
+            jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+        });
+
+        $(".btn.btn-primary.float-right.deleteBtn").click(function () {
+            var ids = [];
+            $("input[name='userId']:checked").each(function (i, e) {
+                ids.push(e.value);
+            });
+            $.post("/phUsers-del", {
+                ids: ids
+            }, function (data) {
+                if (data) {
+                    jQuery('#modal-1').modal('hide');
+                    toastr.success("您的操作已成功！", "温馨提示");
+                    oTable.fnDraw(oTable.fnSettings());
+                } else {
+                    toastr.error("操作失败,请稍后再试", "温馨提示");
+                }
+            });
+            return false;
+        });
     });
     /*]]>*/
 </script>

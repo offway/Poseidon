@@ -1,5 +1,7 @@
 package cn.offway.Poseidon.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
@@ -51,11 +53,11 @@ public class PhUser implements Serializable {
     private String remark;
 
     /** 生日 **/
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     public Long getId() {
         return id;
