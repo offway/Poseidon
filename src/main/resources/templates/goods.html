@@ -103,6 +103,8 @@
 			<div class="modal-body">
 				<form role="form" id="saveForm">
 					<input type="hidden" name="id"/>
+					<input type="hidden" name="readingNumber" value="0"/>
+					<input type="hidden" name="soldNumber" value="0"/>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -461,6 +463,8 @@
 				form.find("input[name='subscribeSum']").val(data.subscribeSum);
 				form.find("input[name='pagesSum']").val(data.pagesSum);
 				form.find("input[name='remark']").val(data.remark);
+				form.find("input[name='readingNumber']").val(data.readingNumber);
+				form.find("input[name='soldNumber']").val(data.soldNumber);
 				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
 			});
 		});

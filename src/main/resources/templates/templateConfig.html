@@ -225,7 +225,10 @@
 				{
 					targets: 5,
 					data: "sort",
-					title: "排序"
+					title: "页面",
+					render:function (data, type, full, meta) {
+						return "页面"+data;
+					}
 				},
 				{
 					targets: 6,
