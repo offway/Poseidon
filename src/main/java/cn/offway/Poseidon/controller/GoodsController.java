@@ -107,9 +107,13 @@ public class GoodsController {
 
     @ResponseBody
     @RequestMapping("/goods-rank-add")
-    public boolean addRank(String gid, String uid, double count) {
+    public boolean addRank(String gid, @RequestParam(name = "userId") String[] uid, @RequestParam(name = "count") double[] count) {
         String key = MessageFormat.format("{0}_{1}", KEY_RANK, gid);
-        stringRedisTemplate.opsForZSet().incrementScore(key, uid, count);
+        if (uid.length == count.length) {
+            for (int i = 0; i < uid.length; i++) {
+                stringRedisTemplate.opsForZSet().add(key, uid[i], count[i]);
+            }
+        }
         return true;
     }
 
