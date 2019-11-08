@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,6 +93,12 @@ public class PhUserController {
     @RequestMapping("/phUsers-get")
     public PhUser get(long id) {
         return userService.findOne(id);
+    }
+
+    @ResponseBody
+    @RequestMapping("/phUsers-get-faker")
+    public List<PhUser> getFaker() {
+        return userService.getFakers();
     }
 
     @ResponseBody

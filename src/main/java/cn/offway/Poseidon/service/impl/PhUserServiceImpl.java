@@ -62,6 +62,20 @@ public class PhUserServiceImpl implements PhUserService {
     }
 
     @Override
+    public List<PhUser> getFakers() {
+        return phUserRepository.findAll(new Specification<PhUser>() {
+            @Override
+            public Predicate toPredicate(Root<PhUser> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> params = new ArrayList<Predicate>();
+                params.add(cb.greaterThanOrEqualTo(root.get("id"), 50000));
+                Predicate[] predicates = new Predicate[params.size()];
+                query.where(params.toArray(predicates));
+                return null;
+            }
+        });
+    }
+
+    @Override
     public Page<PhUser> findByPage(final String nickname, final String unionid, final String phone, String isVirtual, Pageable page) {
         return phUserRepository.findAll(new Specification<PhUser>() {
             @Override
