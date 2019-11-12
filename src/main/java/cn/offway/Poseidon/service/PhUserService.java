@@ -26,4 +26,6 @@ public interface PhUserService {
     Page<PhUser> findByPage(String nickname, String unionid, String phone, String isVirtual, Pageable page);
 
     int getMaxId();
+
+    List<PhUser> getFakers();
 }

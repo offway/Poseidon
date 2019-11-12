@@ -60,6 +60,7 @@
 							<button class="btn btn-info add">添加</button>
 							<button class="btn btn-info edit">修改</button>
 							<button class="btn btn-info delete">删除</button>
+							<button class="btn btn-info addRank">添加虚拟用户</button>
 						</div>
 						<!-- /.box-footer-->
 					</div>
@@ -191,8 +192,63 @@
 	<!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none; padding-right: 17px;" aria-modal="true" id="modal-7">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">虚拟用户详情</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="userForm">
+				</form>
+				<button type="button" class="btn btn-info" onclick="addUserRow()">增加虚拟用户</button>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info waves-effect" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-info waves-effect saveRank">保存</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
 <script th:inline="javascript">
 	/*<![CDATA[*/
+
+	var ROW = `
+\t\t\t\t\t<div class="row">
+\t\t\t\t\t\t<div class="col-md-6">
+\t\t\t\t\t\t\t<div class="form-group">
+\t\t\t\t\t\t\t\t<label class="control-label">虚拟用户</label>
+\t\t\t\t\t\t\t\t<select class="form-control" name="userId">
+\t\t\t\t\t\t\t\t</select>
+\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t</div>
+\t\t\t\t\t\t<div class="col-md-6">
+\t\t\t\t\t\t\t<div class="form-group">
+\t\t\t\t\t\t\t\t<label class="control-label">购买数</label>
+\t\t\t\t\t\t\t\t<input type="number" class="form-control" name="count" placeholder="购买数" />
+\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t</div>
+\t\t\t\t\t</div>
+	`;
+
+	var OPTION = "";
+
+	function addUserRow() {
+		$("#userForm").append(ROW);
+		setOption();
+	}
+
+	function setOption() {
+		var obj = $("#userForm").find("select[name='userId']").last();
+		if (OPTION != "") {
+			obj.html(OPTION);
+		}
+	}
+
 	function gotoTemplate(id) {
 		window.open('/config.html?pid=' + id, "_blank");
 	}
@@ -279,6 +335,8 @@
 
 		}
 	}
+
+	var theId = "";
 	var qiniuUrl = [[${qiniuUrl}]];
 	jQuery(document).ready(function ($) {
 		var oTable = $("#example-1").dataTable({
@@ -376,6 +434,16 @@
 			]
 		});
 
+		if (OPTION == "") {
+			$.get("/phUsers-get-faker", {}, function (data) {
+				var str = "";
+				for (var i of data) {
+					str += "<option value='AA'>BB</option>".replace("AA", i["id"]).replace("BB", i["nickname"]);
+				}
+				OPTION = str;
+			});
+		}
+
 		$(".searchBtn").click(function () {
 			$("#checkbox-all").attr("checked", false);
 			oTable.fnDraw();  //or fnReloadAjax()
@@ -466,6 +534,42 @@
 				form.find("input[name='readingNumber']").val(data.readingNumber);
 				form.find("input[name='soldNumber']").val(data.soldNumber);
 				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+			});
+		});
+
+		$(".btn.btn-info.addRank").click(function () {
+			var templateId = $("input[name='templateId']:checked");
+			if (templateId.length != 1) {
+				toastr.error("请选择一条数据操作", "温馨提示");
+				return;
+			}
+			$.get("/goods-rank", {gid: templateId.val()}, function (data) {
+				var form = $("#userForm");
+				form.empty();
+				console.log(data);
+				for (var obj of data) {
+					if (obj["userId"] >= 50000) {
+						addUserRow();
+						form.find("select[name='userId']").last().val(obj["userId"]);
+						form.find("input[name='count']").last().val(obj["count"]);
+					}
+				}
+				theId = templateId.val();
+				jQuery('#modal-7').modal('show', {backdrop: 'fade'});
+			});
+		});
+
+		$(".btn.btn-info.waves-effect.saveRank").click(function () {
+			var form = $("#userForm");
+			var param = form.serializeArray();
+			param.push({"name": "gid", "value": theId});//append gid
+			$.post("/goods-rank-add", param, function (data) {
+				if (data) {
+					jQuery('#modal-7').modal('hide');
+					toastr.success("操作已成功！", "温馨提示");
+				} else {
+					toastr.error("操作失败", "温馨提示");
+				}
 			});
 		});
 	});

@@ -49,7 +49,14 @@ spring:
   http:
     multipart:
       max-file-size: 10MB
-      
+  #redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:  10000
+    pool:
+      max-wait: 1000
 ph: 
   default:  
     #默认密码

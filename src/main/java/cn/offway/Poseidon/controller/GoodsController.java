@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 
@@ -42,6 +46,11 @@ public class GoodsController {
 
     @Autowired
     private QiniuService qiniuService;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    private final static String KEY_RANK = "GOODS_SELL_RANK";
 
 
     /**
@@ -78,6 +87,34 @@ public class GoodsController {
         map.put("iTotalDisplayRecords", pages.getTotalElements());//显示的条数  
         map.put("aData", pages.getContent());//数据集合 
         return map;
+    }
+
+    @ResponseBody
+    @RequestMapping("/goods-rank")
+    public LinkedList<Map<String, Object>> getRank(String gid) {
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
+        String key = MessageFormat.format("{0}_{1}", KEY_RANK, gid);
+        if (stringRedisTemplate.hasKey(key)) {
+            for (ZSetOperations.TypedTuple<String> obj : stringRedisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 100)) {
+                Map<String, Object> m = new HashMap<>();
+                m.put("userId", obj.getValue());
+                m.put("count", obj.getScore().intValue());
+                list.add(m);
+            }
+        }
+        return list;
+    }
+
+    @ResponseBody
+    @RequestMapping("/goods-rank-add")
+    public boolean addRank(String gid, @RequestParam(name = "userId") String[] uid, @RequestParam(name = "count") double[] count) {
+        String key = MessageFormat.format("{0}_{1}", KEY_RANK, gid);
+        if (uid.length == count.length) {
+            for (int i = 0; i < uid.length; i++) {
+                stringRedisTemplate.opsForZSet().add(key, uid[i], count[i]);
+            }
+        }
+        return true;
     }
 
     @ResponseBody
