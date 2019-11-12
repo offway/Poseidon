@@ -1,5 +1,6 @@
 package cn.offway.Poseidon.controller;
 
+import cn.offway.Poseidon.domain.PhConfig;
 import cn.offway.Poseidon.domain.PhTemplateConfig;
 import cn.offway.Poseidon.properties.QiniuProperties;
 import cn.offway.Poseidon.service.PhTemplateConfigService;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class TemplateConfigController {
@@ -117,6 +116,26 @@ public class TemplateConfigController {
             templateConfigService.delete(id);
             //TODO 还需要删除 子模版数据、模板锁数据
         }
+        return true;
+    }
+
+    @RequestMapping("/config-sorting")
+    @ResponseBody
+    @Transactional
+    public boolean sorting(Long id,Long sort){
+        List<PhTemplateConfig> templateConfigList = new ArrayList<>();
+        PhTemplateConfig config = templateConfigService.findOne(id);
+        List<PhTemplateConfig> templateConfigs = templateConfigService.findByGoodsIdList(config.getGoodsId());
+        for (PhTemplateConfig templateConfig : templateConfigs) {
+            if (templateConfig.getId()==id){
+                templateConfig.setSort(sort);
+                templateConfigService.save(templateConfig);
+            }else if (templateConfig.getSort()>=sort){
+                templateConfig.setSort(templateConfig.getSort()+1);
+                templateConfigList.add(templateConfig);
+            }
+        }
+        templateConfigService.save(templateConfigList);
         return true;
     }
 }

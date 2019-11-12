@@ -24,4 +24,6 @@ public interface PhTemplateConfigService {
     List<PhTemplateConfig> save(List<PhTemplateConfig> entities);
 
     Page<PhTemplateConfig> list(Pageable pageable, String pid);
+
+    List<PhTemplateConfig> findByGoodsIdList(Long id);
 }

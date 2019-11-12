@@ -73,6 +73,7 @@ public class Template2Controller {
                 }
                 // update config
                 templateConfig.setTemplateId(StringUtils.join(ids, ","));
+                templateConfig.setSort(0L);
                 templateConfigService.save(templateConfig);
                 // update lock
                 //模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板]
