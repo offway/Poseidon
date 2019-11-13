@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import cn.offway.Poseidon.domain.PhTemplateConfig;
 
+import java.util.List;
+
 /**
  * 杂志模板配置Repository接口
  *
@@ -14,4 +16,5 @@ import cn.offway.Poseidon.domain.PhTemplateConfig;
 public interface PhTemplateConfigRepository extends JpaRepository<PhTemplateConfig,Long>,JpaSpecificationExecutor<PhTemplateConfig> {
 
 	/** 此处写一些自定义的方法 **/
+	List<PhTemplateConfig> findByGoodsId(Long id);
 }

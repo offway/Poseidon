@@ -121,6 +121,7 @@ public class GoodsController {
     @RequestMapping("/goods-save")
     public boolean save(PhTemplate template) {
         template.setCreateTime(new Date());
+        template.setReadingNumber(0L);
         if (template.getId() != null) {
             PhTemplate saved = templateService.findOne(template.getId());
             if (saved != null) {

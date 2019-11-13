@@ -105,7 +105,7 @@
 					<input type="hidden" name="id"/>
 					<input type="hidden" name="goodsId"/>
 					<input type="hidden" name="templateId"/>
-					<input type="hidden" name="sort"/>
+<!--					<input type="hidden" name="sort"/>-->
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -128,6 +128,14 @@
 									<option value="0">启用</option>
 									<option value="1" selected="selected">不启用</option>
 								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">页数</label>
+								<input type="text" class="form-control" name="sort" placeholder="页数"/>
 							</div>
 						</div>
 					</div>
@@ -173,10 +181,28 @@
         }
     }
 
+    function sorting(id) {
+		var num = prompt("输入排序值", "0");
+		if (!isNaN(num)) {
+			$.post("/config-sorting",{id:id,sort:num},function (data) {
+				if (data){
+					toastr.success("操作已成功！", "温馨提示");
+					oTable.fnDraw();
+				}else {
+					toastr.error("操作失败!", "温馨提示");
+					oTable.fnDraw();
+				}
+			})
+		} else {
+			alert("请输入数字!");
+		}
+	}
+
+	var oTable;
 	var qiniuUrl = [[${qiniuUrl}]];
 	var pid = [[${pid}]];
 	jQuery(document).ready(function ($) {
-		var oTable = $("#example-1").dataTable({
+		 oTable = $("#example-1").dataTable({
 			language: {
 				url: "../assets/Chinese.txt"
 			},
@@ -227,7 +253,7 @@
 					data: "sort",
 					title: "页面",
 					render:function (data, type, full, meta) {
-						return "页面"+data;
+						return "第"+data+"页";
 					}
 				},
 				{
@@ -262,6 +288,14 @@
 					title: "模板内容",
 					render: function (data, type, row, meta) {
 						return `<button type="button" class="btn btn-rounded btn-warning" onclick="gotoTemplate(AA,BB,'CC','DD')">编辑</button>`.replace("AA", pid).replace("BB", data).replace("CC", row["templateId"]).replace("DD", row["name"]);
+					}
+				},
+				{
+					targets: 10,
+					data: "id",
+					title: "排序",
+					render: function (data, type, row, meta) {
+						return `<button type="button" class="btn btn-rounded btn-success" onclick="sorting(AA)">排序</button>`.replace("AA", data);
 					}
 				}
 			]
