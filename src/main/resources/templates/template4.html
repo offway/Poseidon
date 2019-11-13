@@ -292,11 +292,13 @@
             }
             var postData = $("#saveForm").serializeArray();
             postData.push({"name": "templateId", "value": form.find("input[name='templateIdEdit']").val()});
-            $.post("/template4_save",postData,function (data) {
-                if (data){
+            $.post("/template4_save", postData, function (data) {
+                if (data) {
                     toastr.success("操作已成功！", "温馨提示");
-                    window.close();
-                }else {
+                    setTimeout(function () {
+                        window.close();
+                    }, 1000);
+                } else {
                     toastr.error("操作失败!", "温馨提示");
                 }
             });

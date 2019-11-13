@@ -580,7 +580,9 @@
 		$.post("/template2_save", newPostData, function (data) {
 			if (data) {
 				toastr.success("操作已成功！", "温馨提示");
-				window.close();
+				setTimeout(function () {
+					window.close();
+				}, 1000);
 			} else {
 				toastr.error("操作失败!", "温馨提示");
 			}

@@ -751,19 +751,21 @@
             }
         }
         postData.push({"name": "content", "value": JSON.stringify(jsonArr)});//append jsonStr
-        $.post("/template3_save", postData, function (data) {
-            if (isNaN(data)) {
-                toastr.error("操作失败!", "温馨提示");
-            } else {
-                toastr.success("操作已成功！", "温馨提示");
-				window.close();
-                if (id == "") {
-                    setTimeout(function () {
-                        window.location.href = "/template3.html?pid=AAAA&gid=BBBB&id=CCCC".replace("AAAA", pid).replace("BBBB", gid).replace("CCCC", data);
-                    }, 500);
-                }
-            }
-        });
+		$.post("/template3_save", postData, function (data) {
+			if (isNaN(data)) {
+				toastr.error("操作失败!", "温馨提示");
+			} else {
+				toastr.success("操作已成功！", "温馨提示");
+				setTimeout(function () {
+					window.close();
+				}, 1000);
+				if (id == "" && false) {
+					setTimeout(function () {
+						window.location.href = "/template3.html?pid=AAAA&gid=BBBB&id=CCCC".replace("AAAA", pid).replace("BBBB", gid).replace("CCCC", data);
+					}, 500);
+				}
+			}
+		});
     }
 
     var qiniuUrl = [[${qiniuUrl}]];
