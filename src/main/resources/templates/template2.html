@@ -544,6 +544,7 @@
 		$.post("/template2_save", newPostData, function (data) {
 			if (data) {
 				toastr.success("操作已成功！", "温馨提示");
+				window.close();
 			} else {
 				toastr.error("操作失败!", "温馨提示");
 			}
