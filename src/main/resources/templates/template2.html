@@ -172,6 +172,18 @@
 											</tbody>
 										</table>
 									</div>
+									<div class="row col-md-6">
+										<div class="col-lg-12">
+											<div class="form-group validate">
+												<h5>背景图<span class="text-danger">*</span></h5>
+												<div class="controls">
+													<img src="" name="imageUnderUrlImg" style="display: none;"/>
+													<input type="file" name="imageUnderUrlFile" class="form-control" onchange="uploadBG(this)"/>
+													<input type="hidden" name="imageUnderUrl"/>
+												</div>
+											</div>
+										</div>
+									</div>
                                     <div class="row col-md-3">
                                         <div class="col-lg-4">
                                             <div class="input-group">
@@ -524,6 +536,30 @@
             confirm("未选择任何文件!");
         }
     }
+
+	function uploadBG(self) {
+		var that = $(self);
+		if (self.files.length > 0) {
+			var file = self.files[0];
+			getQNToken(function (token) {
+				this.upload("", token, file, function () {
+					//
+				}, function (err) {
+					console.log("error");
+					console.log(err);
+				}, function (res) {
+					var url = qiniuUrl + "/" + res.key;
+					that.parent().find("[name=imageUnderUrl]").val(url);
+					that.parent().find("[name=imageUnderUrlImg]").attr("src", url);
+					that.parent().find("[name=imageUnderUrlImg]").attr("width", "100px");
+					that.parent().find("[name=imageUnderUrlImg]").attr("height", "100px");
+					that.parent().find("[name=imageUnderUrlImg]").show();
+				}, 5, false, false);
+			});
+		} else {
+			confirm("未选择任何文件!");
+		}
+	}
 
     function getQNToken(cb) {
         $.get("/qiniu/token", {}, function (token) {

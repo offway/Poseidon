@@ -48,7 +48,7 @@ public class Template2Controller {
     @ResponseBody
     @RequestMapping("/template2_save")
     @Transactional
-    public boolean save(Long pid, Long gid, String[] type, String[] way, String[] imageUrl, String[] promptText, String[] remark, String[] location, Long islock, String subscribeCount, String promptTextLock) {
+    public boolean save(Long pid, Long gid, String[] type, String[] way, String[] imageUrl, String[] promptText, String[] remark, String[] location, Long islock, String subscribeCount, String promptTextLock, String imageUnderUrl) {
         PhTemplate template = templateService.findOne(gid);
         PhTemplateConfig templateConfig = templateConfigService.findOne(pid);
         if (template != null && templateConfig != null) {
@@ -68,6 +68,7 @@ public class Template2Controller {
                     template2.setPromptText(promptText[i]);
                     template2.setRemark(remark[i]);
                     template2.setLocation(location[i]);
+                    template2.setImageUnderUrl(imageUnderUrl);
                     PhTemplate2 savedObj = template2Service.save(template2);
                     ids.add(savedObj.getId());
                 }
