@@ -48,6 +48,11 @@ public class PhTemplateServiceImpl implements PhTemplateService {
     }
 
     @Override
+    public List<PhTemplate> list() {
+        return phTemplateRepository.findAll();
+    }
+
+    @Override
     public List<PhTemplate> save(List<PhTemplate> entities) {
         return phTemplateRepository.save(entities);
     }

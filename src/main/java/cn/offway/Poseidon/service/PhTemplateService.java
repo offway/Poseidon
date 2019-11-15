@@ -24,4 +24,6 @@ public interface PhTemplateService {
     List<PhTemplate> save(List<PhTemplate> entities);
 
     Page<PhTemplate> list(Pageable pageable);
+
+    List<PhTemplate> list();
 }

@@ -25,19 +25,115 @@
 
 		<!-- Main content -->
 		<section class="content">
-			<div class="row">
-				<div class="col-12">
-					<div class="box">
-						<div class="box-header with-border">
-							<h4 class="box-title">后台首页</h4>
+			<div class="container-full">
+				<div class="row">
+					<div class="col-12">
+						<div class="box">
+							<div class="box-header with-border">
+								<h4 class="box-title">后台首页</h4>
+							</div>
+							<div class="box-body">
+								欢迎使用OFFWAY 后台
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+							</div>
+							<!-- /.box-footer-->
 						</div>
-						<div class="box-body">
-							欢迎使用OFFWAY 后台
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-12">
+						<div class="box box-primary pull-up">
+							<div class="box-body">
+								<div class="d-flex align-items-center font-size-18">
+									<div class="icon">
+										<i class="mdi mdi-star-circle text-white mr-10"></i>
+									</div>
+									<p class="font-weight-medium mb-0 text-white">电子刊数量</p>
+								</div>
+								<div class="d-flex align-items-center flex-wrap">
+									<h2 class="font-weight-normal text-white" th:text="${bookNumber}">587</h2>
+									<div class="badge badge-outline badge-pill ml-5">
+										<div class="d-flex align-items-baseline">
+<!--											<span class="mr-2">Hi.</span>-->
+<!--											<span class="mb-0">85</span>-->
+<!--											<span class="mdi mdi-arrow-up"></span>-->
+										</div>
+									</div>
+								</div>
+								<small class="font-weight-medium d-block text-white-50">发售至今</small>
+							</div>
 						</div>
-						<!-- /.box-body -->
-						<div class="box-footer">
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<div class="box box-info pull-up">
+							<div class="box-body">
+								<div class="d-flex align-items-center font-size-18">
+									<div class="icon">
+										<i class="mdi mdi-truck text-white mr-10"></i>
+									</div>
+									<p class="font-weight-medium mb-0 text-white">电子刊销量</p>
+								</div>
+								<div class="d-flex align-items-center flex-wrap">
+									<h2 class="font-weight-normal text-white" th:text="${soldNumber}">469</h2>
+									<div class="badge badge-outline badge-pill ml-5">
+										<div class="d-flex align-items-baseline">
+<!--											<span class="mr-2">Hi.</span>-->
+<!--											<span class="mb-0">56</span>-->
+<!--											<span class="mdi mdi-arrow-up"></span>-->
+										</div>
+									</div>
+								</div>
+								<small class="font-weight-medium d-block text-white-50">发售至今</small>
+							</div>
 						</div>
-						<!-- /.box-footer-->
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<div class="box box-warning pull-up">
+							<div class="box-body">
+								<div class="d-flex align-items-center font-size-18">
+									<div class="icon">
+										<i class="mdi mdi-basket text-white mr-10"></i>
+									</div>
+									<p class="font-weight-medium mb-0 text-white">电子刊订阅数</p>
+								</div>
+								<div class="d-flex align-items-center flex-wrap">
+									<h2 class="font-weight-normal text-white" th:text="${subscribeSum}">745</h2>
+									<div class="badge badge-outline badge-pill ml-5">
+										<div class="d-flex align-items-baseline">
+<!--											<span class="mr-2">Low</span>-->
+<!--											<span class="mb-0">12</span>-->
+<!--											<span class="mdi mdi-arrow-down"></span>-->
+										</div>
+									</div>
+								</div>
+								<small class="font-weight-medium d-block text-white-50">发售至今</small>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<div class="box box-danger pull-up">
+							<div class="box-body">
+								<div class="d-flex align-items-center font-size-18">
+									<div class="icon">
+										<i class="mdi mdi-package-down text-white mr-10"></i>
+									</div>
+									<p class="font-weight-medium mb-0 text-white">电子刊阅读数</p>
+								</div>
+								<div class="d-flex align-items-center flex-wrap">
+									<h2 class="font-weight-normal text-white" th:text="${readingNumber}">254</h2>
+									<div class="badge badge-outline badge-pill ml-5">
+										<div class="d-flex align-items-baseline">
+<!--											<span class="mr-2">Low</span>-->
+<!--											<span class="mb-0">23</span>-->
+<!--											<span class="mdi mdi-arrow-down"></span>-->
+										</div>
+									</div>
+								</div>
+								<small class="font-weight-medium d-block text-white-50">发售至今</small>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
