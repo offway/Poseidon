@@ -60,6 +60,7 @@
                                 <input class="btn btn-info" id="videoFile" name="videoFile"
                                        onchange="uploadMainFile(this,'1')" placeholder="视频"
                                        type="file"/>
+                                <a id="videoA" name="videoA" style="display: none" href="">点击下载视频</a>
                                 <input class="form-control" name="videoUrl" type="hidden"/>
                             </div>
                             <div class="row form-group" id="videoCoverDiv">
@@ -135,6 +136,8 @@
         form.find("[name=imageUnder]").attr("height", "100px");
         form.find("[name=imageUnder]").show();
         form.find("input[name='videoUrl']").val(data["videoUrl"]);
+        form.find("[name='videoA']").attr("href",data["videoUrl"]);
+        form.find("[name='videoA']").show();
         form.find("input[name='videoCoverUrl']").val(data["videoCoverUrl"]);
         form.find("[name=videoCover]").attr("src", data["videoCoverUrl"]);
         form.find("[name=videoCover]").attr("width", "100px");
@@ -181,6 +184,8 @@
                         that.parent().find("[name=imageUnder]").show();
                     } else if (type == "1") {
                         that.parent().find("[name=videoUrl]").val(url);
+                        that.parent().find("[name=videoA]").attr("href", url);
+                        that.parent().find("[name=videoA]").show();
                     } else if (type == "2") {
                         that.parent().find("[name=videoCoverUrl]").val(url);
                         that.parent().find("[name=videoCover]").attr("src", url);
