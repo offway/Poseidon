@@ -82,10 +82,10 @@
                         <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
-                                <input id="unlock_2" name="islock" onclick="unlockRadio('0')" type="radio" value="0"/>
+                                <input id="unlock_2" name="islock" onclick="unlockRadio('1')" type="radio" value="1"/>
                                 <label for="unlock_2">解锁条件</label>
-                                <input checked="checked" id="unlock_1" name="islock" onclick="unlockRadio('1')" type="radio"
-                                       value="1"/>
+                                <input checked="checked" id="unlock_1" name="islock" onclick="unlockRadio('0')" type="radio"
+                                       value="0"/>
                                 <label for="unlock_1">开放</label>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
 <script th:inline="javascript">
 
     function unlockRadio(type) {
-        if (type == "0") {
+        if (type == "1") {
             $("#unlockText").show();
         } else {
             $("#unlockText").hide();
