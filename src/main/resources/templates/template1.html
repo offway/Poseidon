@@ -94,9 +94,9 @@
 				<div class="form-group col-md-7">
 					<label class="control-label">解锁</label>
 					<div class="radio">
-						<input name="islock" type="radio" id="unlock_2" value="0" onclick="unlockRadio('0')"/>
+						<input name="islock" type="radio" id="unlock_2" value="1" onclick="unlockRadio('1')"/>
 						<label for="unlock_2">解锁条件</label>
-						<input name="islock" type="radio" id="unlock_1" value="1" checked="checked" onclick="unlockRadio('1')"/>
+						<input name="islock" type="radio" id="unlock_1" value="0" checked="checked" onclick="unlockRadio('0')"/>
 						<label for="unlock_1">开放</label>
 					</div>
 				</div>
@@ -138,7 +138,7 @@
     });
 
 	function unlockRadio(type) {
-		if (type == "0"){
+		if (type == "1"){
 			$("#unlockText").show();
 		}else {
 			$("#unlockText").hide();
