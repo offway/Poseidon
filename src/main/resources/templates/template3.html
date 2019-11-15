@@ -171,6 +171,7 @@
 														<label></label>
 														<input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
 														<input type="hidden" name="audioUrl" />
+														<a href="#" target="_blank" name="download" style="display: none;">下载音频</a>
 													</div>
                                                     <div class="form-group contentTxt" style="display: none">
                                                         <label></label>
@@ -407,6 +408,7 @@
 <label></label>
 <input type="file" name="audioUrlFile" onchange="uploadAudio(this)" />
 <input type="hidden" name="audioUrl" />
+<a href="#" target="_blank" name="download" style="display: none;">下载音频</a>
 </div>
 <div class="form-group contentTxt" style="display: none">
 <label></label>
@@ -641,6 +643,8 @@
 				}, function (res) {
 					var url = qiniuUrl + "/" + res.key;
 					that.parent().find("[name=audioUrl]").val(url);
+					that.parent().find("a[name='download']").prop("href", url);
+					that.parent().find("a[name='download']").show();
 				}, 50, false, true);
 			});
 		} else {
@@ -840,6 +844,11 @@
                             if (wordObj["emotion"] != "") {
                                 emoEle.show();
                             }
+							var audioEle = form.find("a[name='download']").last();
+							if (wordObj["audioUrl"] != "") {
+								audioEle.prop("href", wordObj["audioUrl"]);
+								audioEle.show();
+							}
                             form.find("input[name='audioUrlCfg']").last().val(wordObj["audioUrlCfg"]);
                             form.find("select[name='emotionCfg']").last().val(wordObj["emotionCfg"]);
                             toggleMode(typeEle);
