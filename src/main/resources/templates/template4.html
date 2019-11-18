@@ -214,8 +214,8 @@
         form.find("[name=imageTwo]").attr("width", "100px");
         form.find("[name=imageTwo]").attr("height", "100px");
         form.find("[name=imageTwo]").show();
-        //类型[0-类型1(两张图片),1-类型2(三张图片),2-类型3(三张图片),3-类型4(三张图片),4-类型5(两张图片),5-类型6(两张图片),6-类型7(两张图片),7-类型8(两张图片)]
-        if (data["type"] == "1" || data["type"] == "2" ||data["type"] == "3"){
+        //类型[0-类型1(两张图片),1-类型2(两张图片),2-类型3(三张图片),3-类型4(两张图片)]
+        if (data["type"] == "2" ){
             $("#imageThreediv").show();
             form.find("input[name='imageThreeUrl']").val(data["imageThreeUrl"]);
             form.find("[name=imageThree]").attr("src", data["imageThreeUrl"]);
@@ -267,7 +267,7 @@
             });
         }
         $(".btn.btn-success.save").click(function () {
-            //类型[0-类型1(两张图片),1-类型2(三张图片),2-类型3(三张图片),3-类型4(三张图片),4-类型5(两张图片),5-类型6(两张图片),6-类型7(两张图片),7-类型8(两张图片)]
+            //类型[0-类型1(两张图片),1-类型2(两张图片),2-类型3(三张图片),3-类型4(两张图片)]
             var form = $("#saveForm");
             var type = form.find("input[name='type']:checked").val();
             var imageOneUrl = form.find("input[name='imageOneUrl']").val();
@@ -280,7 +280,7 @@
                 toastr.error("图片为必填项", "温馨提示");
                 return;
             }
-            if ((type == "1" || type == "2" || type == "3") && (imageOneUrl == "" || imageTwoUrl == "" || imageThreeUrl == "" )) {
+            if (type == "2" && (imageOneUrl == "" || imageTwoUrl == "" || imageThreeUrl == "" )) {
                 toastr.error("图片必须为三张", "温馨提示");
                 return;
             }
