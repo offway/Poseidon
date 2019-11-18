@@ -97,6 +97,9 @@
                             <button class="btn btn-success save" type="button">保存</button>
                         </div>
                     </form>
+                    <div class="fx-card-avatar fx-overlay-1" style="height: 667px;width: 375px;">
+                        <img id="styleImage" src="https://qiniu.offway.cn/%E6%A8%A1%E7%89%885-1@3x.png" alt="user" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -120,6 +123,25 @@
         }
     }
 
+    function setimg(type) {
+        switch (type) {
+            case "0":
+                $("#styleImage").attr("src","https://qiniu.offway.cn/%E6%A8%A1%E7%89%885-1@3x.png");
+                break;
+            case "1":
+                $("#styleImage").attr("src","https://qiniu.offway.cn/%E6%A8%A1%E7%89%885-2@3x.png");
+                break;
+            case "2":
+                $("#styleImage").attr("src","https://qiniu.offway.cn/%E6%A8%A1%E7%89%885-3@3x.png");
+                break;
+            case "3":
+                $("#styleImage").attr("src","https://qiniu.offway.cn/%E6%A8%A1%E7%89%885-4@3x.png");
+                break;
+            default:
+                break;
+        }
+    }
+
     function typeRadio(type) {
 		//类型[0-类型1(两张图片),1-类型2(两张图片),2-类型3(三张图片),3-类型4(两张图片)]
         if (type == "2"){
@@ -129,6 +151,7 @@
             $("#imageThree").attr("src", "");
             $("#imageThreeUrl").val("");
         }
+        setimg(type);
     }
 
     function uploadMainFile(self, type) {
@@ -227,6 +250,7 @@
             $("#imageThree").attr("src", "");
             $("#imageThreeUrl").val("");
         }
+        setimg(data["type"]);
     }
 
     function editIslock(data) {
