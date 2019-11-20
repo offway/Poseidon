@@ -5,6 +5,7 @@
 	<title>新加模板</title>
 	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
 	<link rel="stylesheet" href="new/MDB-Free_4.8.11/css/mdb.css"/>
+	<link rel="stylesheet" href="new/colorPicker/themes/nano.min.css"/>
     <style>
         .fa-long-arrow-alt-down:before {
             content: "\f309";
@@ -305,15 +306,8 @@
                             <div class="form-group">
                                 <label class=" control-label">颜色</label>
                                 <div class="col-md-12">
-                                    <select class="form-control" name="color">
-                                        <option value="0">赤</option>
-                                        <option value="1">橙</option>
-                                        <option value="2">黄</option>
-                                        <option value="3">绿</option>
-                                        <option value="5">青</option>
-                                        <option value="6">蓝</option>
-                                        <option value="7">紫</option>
-                                    </select>
+									<button type="button" class="btn btn-rounded btn-primary" onclick="showColorPicker(this)">颜色拾取器</button>
+									<input type="hidden" name="color" />
                                 </div>
                             </div>
                         </div>
@@ -332,6 +326,7 @@
 
 <script src="assets/js/datepicker/bootstrap-datepicker.js"></script>
 <script src="new/MDB-Free_4.8.11/js/mdb.js"></script>
+<script src="new/colorPicker/pickr.min.js"></script>
 <script th:inline="javascript">
 	/*<![CDATA[*/
 
@@ -501,7 +496,7 @@
     function saveFont() {
         var form = $("#fontForm");
         var size = form.find("select[name='size']").val();
-        var color = form.find("select[name='color']").val();
+        var color = form.find("input[name='color']").val();
         if (THE_FONT_BTN) {
             var remarkEle = THE_FONT_BTN.parent().find("input[name='remark']");
             var jsonObj = {
@@ -512,6 +507,71 @@
         }
         jQuery('#modal-2').modal('hide');
     }
+
+	let pickr = null;
+
+	function showColorPicker(self) {
+		var that = $(self);
+		var colorEle = that.parent().find("input[name='color']");
+		var color = colorEle.val() ? colorEle.val() : "#42445a";
+		// Delete previous instance
+		if (pickr) {
+			pickr.destroyAndRemove();
+		}
+		that.after(`<p id="colorPickerEle"></p>`);
+		// Create fresh instance
+		pickr = Pickr.create({
+			el: '#colorPickerEle',
+			theme: 'nano', // or 'monolith', or 'nano'
+			defaultRepresentation: 'HEX',
+			default: color,
+			swatches: [
+				'rgba(244, 67, 54, 1)',
+				'rgba(233, 30, 99, 0.95)',
+				'rgba(156, 39, 176, 0.9)',
+				'rgba(103, 58, 183, 0.85)',
+				'rgba(63, 81, 181, 0.8)',
+				'rgba(33, 150, 243, 0.75)',
+				'rgba(3, 169, 244, 0.7)'
+			],
+			components: {
+				preview: true,
+				opacity: true,
+				hue: true,
+				interaction: {
+					hex: false,
+					rgba: false,
+					hsva: false,
+					input: true,
+					clear: true,
+					save: true
+				}
+			}
+		});
+		pickr.on('init', instance => {
+			console.log('init', instance);
+		}).on('hide', instance => {
+			console.log('hide', instance);
+		}).on('show', (color, instance) => {
+			console.log('show', color, instance);
+		}).on('save', (color, instance) => {
+			console.log('save', color, instance);
+			pickr.hide();
+			console.log(color.toHEXA().toString());
+			colorEle.val(color.toHEXA().toString());
+		}).on('clear', instance => {
+			console.log('clear', instance);
+		}).on('change', (color, instance) => {
+			console.log('change', color, instance);
+		}).on('changestop', instance => {
+			console.log('changestop', instance);
+		}).on('cancel', instance => {
+			console.log('cancel', instance);
+		}).on('swatchselect', (color, instance) => {
+			console.log('swatchselect', color, instance);
+		});
+		pickr.show();
+	}
 
     function uploadFile(self) {
         var that = $(self);
