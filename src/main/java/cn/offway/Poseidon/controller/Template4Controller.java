@@ -72,7 +72,7 @@ public class Template4Controller {
         templateConfig.setName("template4");
         templateConfig.setTemplateId(template4.getId().toString());
         templateConfig.setSort(0L);
-        if ("1".equals(lock.getIslock())){
+        if ("0".equals(lock.getIslock())){
             templateConfig.setIslock("0");
             templateConfig.setConditions("0");
         }else {

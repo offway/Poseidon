@@ -53,6 +53,9 @@ public class PhTemplate1 implements Serializable {
     /** 备注 **/
     private String remark;
 
+    /** 文字底图 **/
+    private String imageUnderTextUrl;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -165,4 +168,12 @@ public class PhTemplate1 implements Serializable {
         this.promptText = promptText;
     }
 
+    @Column(name = "image_under_text_url", length = 200)
+    public String getImageUnderTextUrl() {
+        return imageUnderTextUrl;
+    }
+
+    public void setImageUnderTextUrl(String imageUnderTextUrl) {
+        this.imageUnderTextUrl = imageUnderTextUrl;
+    }
 }

@@ -53,6 +53,12 @@
 					<input type="hidden" class="form-control" name="imageTextUrl" />
 				</div>
 				<div class="form-group col-md-7">
+					<label class="control-label">文字底图</label>
+					<input type="file" id="imageUnderTextUrl" name="imageUnderTextFile" placeholder="文字底图" onchange="uploadMainFile(this,'3')"/>
+					<img alt="" src="" name="imageUnderText" style="display:none;" />
+					<input type="hidden" class="form-control" name="imageUnderTextUrl" />
+				</div>
+				<div class="form-group col-md-7">
 					<label class="control-label">浮窗位置</label>
 					<div class="radio">
 <!--						//** 浮窗位置[0-左下,1-左上,2-正局中,3-右上,4-右下] **/-->
@@ -191,6 +197,12 @@
 						that.parent().find("[name=rollingImage]").attr("width", "100px");
 						that.parent().find("[name=rollingImage]").attr("height", "100px");
 						that.parent().find("[name=rollingImage]").show();
+					}else if(type == "3"){
+						that.parent().find("[name=imageUnderTextUrl]").val(url);
+						that.parent().find("[name=imageUnderText]").attr("src", url);
+						that.parent().find("[name=imageUnderText]").attr("width", "100px");
+						that.parent().find("[name=imageUnderText]").attr("height", "100px");
+						that.parent().find("[name=imageUnderText]").show();
 					}
 				});
 			});
@@ -246,6 +258,11 @@
 		form.find("[name=imageText]").attr("width", "100px");
 		form.find("[name=imageText]").attr("height", "100px");
 		form.find("[name=imageText]").show();
+		form.find("[name=imageUnderTextUrl]").val(data["imageUnderTextUrl"]);
+		form.find("[name=imageUnderText]").attr("src", data["imageUnderTextUrl"]);
+		form.find("[name=imageUnderText]").attr("width", "100px");
+		form.find("[name=imageUnderText]").attr("height", "100px");
+		form.find("[name=imageUnderText]").show();
 		if (data["rollingType"] == "0") {
 			$("#rollingTxt").hide();
 			$("#rollingImageUrlDiv").show();
@@ -324,7 +341,7 @@
 				toastr.error("滚动区域文字为必填项", "温馨提示");
 				return;
 			}
-			if(unlock == "0") {
+			if(unlock == "1") {
 				if (subscribeCount == ""){
 					toastr.error("订阅数/提示文字为必填项", "温馨提示");
 					return;
