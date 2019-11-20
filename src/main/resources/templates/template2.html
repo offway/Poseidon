@@ -292,13 +292,7 @@
 							<div class="form-group">
 								<label class=" control-label">大小</label>
 								<div class="col-md-12">
-									<select class="form-control" name="size">
-                                        <option value="0">XS</option>
-                                        <option value="1">S</option>
-                                        <option value="2">M</option>
-                                        <option value="3">L</option>
-                                        <option value="4">XL</option>
-									</select>
+									<input type="number" name="size" placeholder="像素大小"/>
 								</div>
 							</div>
 						</div>
@@ -488,14 +482,21 @@
 
     var THE_FONT_BTN;
 
-    function showFont(self) {
-        THE_FONT_BTN = $(self);
-        jQuery('#modal-2').modal('show', {backdrop: 'fade'});
-    }
+	function showFont(self) {
+		THE_FONT_BTN = $(self);
+		var remarkStr = THE_FONT_BTN.parent().find("input[name='remark']").val();
+		if (remarkStr != "") {
+			var obj = JSON.parse(remarkStr);
+			var form = $("#fontForm");
+			form.find("input[name='size']").val(obj["size"]);
+			form.find("input[name='color']").val(obj["color"]);
+		}
+		jQuery('#modal-2').modal('show', {backdrop: 'fade'});
+	}
 
     function saveFont() {
         var form = $("#fontForm");
-        var size = form.find("select[name='size']").val();
+        var size = form.find("input[name='size']").val();
         var color = form.find("input[name='color']").val();
         if (THE_FONT_BTN) {
             var remarkEle = THE_FONT_BTN.parent().find("input[name='remark']");
