@@ -129,7 +129,7 @@
 												<td class="pt-3-half" contenteditable="true">
 													<div class="form-group">
 														<label></label>
-														<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
+														<textarea name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" rows="2"></textarea>
 													</div>
 												</td>
 												<td class="pt-3-half" contenteditable="true">
@@ -149,6 +149,8 @@
 															<option value="3">文字右下滑出</option>
 															<option value="4">文字居中显示</option>
                                                             <option value="5">全屏居中显示</option>
+															<option value="6">屏幕上半部滑出</option>
+															<option value="7">屏幕下半部滑出</option>
 														</select>
 													</div>
 												</td>
@@ -359,7 +361,7 @@
 <td class="pt-3-half" contenteditable="true">
 <div class="form-group">
 <label></label>
-<input type="text" name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" />
+<textarea name="promptText" class="form-control" placeholder="提示文案" readonly="readonly" rows="2"></textarea>
 </div>
 </td>
 <td class="pt-3-half" contenteditable="true">
@@ -379,6 +381,8 @@
 <option value="3">文字右下滑出</option>
 <option value="4">文字居中显示</option>
 <option value="5">全屏居中显示</option>
+<option value="6">屏幕上半部滑出</option>
+<option value="7">屏幕下半部滑出</option>
 </select>
 </div>
 </td>
@@ -446,11 +450,11 @@
         var tr = that.parent().parent().parent();
         if (that.val() == "0") {
             tr.find("input[name='imageUrlFile']").removeAttr("disabled");
-            tr.find("input[name='promptText']").prop("readonly", "readonly");
+            tr.find("textarea[name='promptText']").prop("readonly", "readonly");
             tr.find("input[name='remarkBtn']").prop("disabled", "disabled");
         } else {
             tr.find("input[name='imageUrlFile']").prop("disabled", "disabled");
-            tr.find("input[name='promptText']").removeAttr("readonly");
+            tr.find("textarea[name='promptText']").removeAttr("readonly");
             tr.find("input[name='remarkBtn']").removeAttr("disabled");
         }
     }
