@@ -75,12 +75,6 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-7">
-                            <label class="control-label">提示文字</label>
-                            <input class="form-control" id="promptText" name="promptText" type="text"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-7">
                             <label class="control-label">解锁</label>
                             <div class="radio">
                                 <input checked="checked" id="unlock_1" name="islock" onclick="unlockRadio('0')"
@@ -98,6 +92,8 @@
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
                             <label class="control-label">订阅数</label>
                             <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
+                            <label class="control-label">提示文字</label>
+                            <input class="form-control" id="promptText" name="promptText" type="text"/>
                         </div>
                     </div>
                     <div class="actions clearfix">
@@ -148,7 +144,7 @@
     function editIslock(data) {
         var form = $("#saveForm");
         form.find("input[name=islock][value="+data["islock"]+"]").attr("checked",true);
-        if (data["islock"] == "0"){
+        if (data["islock"] == "1"){
             $("#unlockText").show();
             form.find("input[name='promptText']").val(data["promptText"]);
             form.find("input[name='subscribeCount']").val(data["subscribeCount"]);

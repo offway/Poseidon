@@ -94,10 +94,6 @@
 					<textarea class="form-control" rows="3" id="rollingText" name="rollingText" style="width:700px;height:300px;"></textarea>
 				</div>
 				<div class="form-group col-md-7">
-					<label class="control-label">提示文字</label>
-					<input type="text" class="form-control" id="promptText" name="promptText"/>
-				</div>
-				<div class="form-group col-md-7">
 					<label class="control-label">解锁</label>
 					<div class="radio">
 						<input name="islock" type="radio" id="unlock_2" value="1" onclick="unlockRadio('1')"/>
@@ -109,6 +105,8 @@
 				<div class="form-group col-md-7" id="unlockText" style="display: none">
 					<label class="control-label">订阅数</label>
 					<input type="text" class="form-control" id="subscribeCount" name="subscribeCount"/>
+					<label class="control-label">提示文字</label>
+					<input type="text" class="form-control" id="promptText" name="promptText"/>
 				</div>
 				<div class="actions clearfix">
 					<button type="button" class="btn btn-success save">保存</button>
@@ -286,7 +284,7 @@
 	function editIslock(data) {
 		var form = $("#saveForm");
 		form.find("input[name=islock][value="+data["islock"]+"]").attr("checked",true);
-		if (data["islock"] == "0"){
+		if (data["islock"] == "1"){
 			$("#unlockText").show();
 			form.find("input[name='promptText']").val(data["promptText"]);
 			form.find("input[name='subscribeCount']").val(data["subscribeCount"]);
