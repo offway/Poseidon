@@ -489,7 +489,15 @@
 		THE_FONT_BTN = $(self);
 		var remarkStr = THE_FONT_BTN.parent().find("input[name='remark']").val();
 		if (remarkStr != "") {
-			var obj = JSON.parse(remarkStr);
+			var obj = {
+				"size": "0",
+				"color": "#42445a",
+			};
+			try {
+				obj = JSON.parse(remarkStr);
+			} catch (e) {
+				console.log("JSON ERROR")
+			}
 			var form = $("#fontForm");
 			form.find("input[name='size']").val(obj["size"]);
 			form.find("input[name='color']").val(obj["color"]);
@@ -677,6 +685,9 @@
                                 default:
                                     ele.val(item[key]);
                             }
+							//try textarea
+							var areaEle = form.find("textarea[name='" + key + "']").last();
+							areaEle.val(item[key]);
                             //try image
                             var imgEle = form.find("img[name='" + key + "Img']").last();
                             imgEle.attr("src", item[key]);
