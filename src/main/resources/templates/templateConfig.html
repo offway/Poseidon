@@ -215,7 +215,7 @@
 				$.merge(aData, searchArray);
 				aData.push({"name": "pid", "value": pid});//append pid
 			},
-			order: [[0, "desc"]],
+			order: [[5, "asc"]],
 			columnDefs: [
 				{
 					targets: 0,
@@ -241,7 +241,30 @@
 				{
 					targets: 3,
 					data: "name",
-					title: "模版名称"
+					title: "模版名称",
+					render:function (data, type, full, meta) {
+						switch (data) {
+							case "template1":
+								return "模板一";
+								break;
+							case "template2":
+								return "模板二";
+								break;
+							case "template3":
+								return "模板三";
+								break;
+							case "template4":
+								return "模板四";
+								break;
+							case "template5":
+								return "模板五";
+								break;
+							default:
+								return "未知";
+								break;
+						}
+
+					}
 				},
 				{
 					targets: 4,
