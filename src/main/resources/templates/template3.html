@@ -242,7 +242,7 @@
                                             <!-- /input-group -->
                                         </div>
                                         <!-- /.col-lg-6 -->
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-4" style="display: none;">
                                             <div class="input-group">
                                                 <span class="input-group-addon">
                                                   <input name="islock" value="1" type="radio" id="addon_Option_3" onclick="toggleLock(2)"/>
@@ -591,8 +591,7 @@
 				break;
 			case 1:
 				a.show();
-				b.hide();
-				bb.val("");
+				b.show();
 				break;
 			case 2:
 				a.hide();
@@ -869,16 +868,13 @@
                             form.find("input[name='islock']").val([data["lock"]["islock"]]);
                             form.find("input[name='subscribeCount']").val(data["lock"]["subscribeCount"]);
                             form.find("input[name='promptTextLock']").val(data["lock"]["promptText"]);
-                            if (data["lock"]["islock"] == "0") {
-                                form.find("input[name='islock']").first().click()
-                                // toggleLock(0);
-                            } else if (data["lock"]["subscribeCount"] != null) {
-                                form.find("input[name='islock']").eq(1).click()
-                                // toggleLock(1);
-                            } else {
-                                form.find("input[name='islock']").last().click();
-                                // toggleLock(2);
-                            }
+							if (data["lock"]["islock"] == "0") {
+								form.find("input[name='islock']").first().click()
+								// toggleLock(0);
+							} else {
+								form.find("input[name='islock']").eq(1).click()
+								// toggleLock(1);
+							}
                         }
                     }
                 });
