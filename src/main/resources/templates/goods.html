@@ -239,7 +239,7 @@
 	`;
 
 	var COVER_ELE = `
-\t\t\t\t\t<div class="row">
+\t\t\t\t\t<div class="row delMe">
 \t\t\t\t\t\t<div class="col-md-12">
 \t\t\t\t\t\t\t<div class="form-group">
 \t\t\t\t\t\t\t\t<label class="control-label">封面图</label>
@@ -517,16 +517,18 @@
 			return false;
 		});
 
-		$(".btn.btn-info.add").click(function () {
-			var form = $("#saveForm");
-			form.find("input[name='id']").val("");
-			form.find("input[name='templateName']").val("");
-			form.find("select[name='state']").val("1");
-			form.find("input[name='subscribeSum']").val("0");
-			form.find("input[name='pagesSum']").val("0");
-			form.find("input[name='remark']").val("");
-			jQuery('#modal-6').modal('show', {backdrop: 'fade'});
-		});
+        $(".btn.btn-info.add").click(function () {
+            var form = $("#saveForm");
+            form.find("input[name='id']").val("");
+            form.find("input[name='templateName']").val("");
+            form.find("select[name='state']").val("1");
+            form.find("input[name='subscribeSum']").val("0");
+            form.find("input[name='pagesSum']").val("0");
+            form.find("input[name='remark']").val("");
+            form.find("div.delMe").remove();
+            form.find("img").hide();
+            jQuery('#modal-6').modal('show', {backdrop: 'fade'});
+        });
 
 		//保存
 		$(".btn.btn-info.save").click(function () {
@@ -548,8 +550,10 @@
 				toastr.error("请选择一条数据操作", "温馨提示");
 				return;
 			}
+            var form = $("#saveForm");
+            form.find("div.delMe").remove();
+            form.find("img").hide();
 			$.get("/goods-one", {id: templateId.val()}, function (data) {
-				var form = $("#saveForm");
 				var i = 0;
 				for (var img of data.imageUrl.split(",")) {
 					if (i > 0) {
