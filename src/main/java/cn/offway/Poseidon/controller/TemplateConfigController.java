@@ -83,6 +83,15 @@ public class TemplateConfigController {
                 config.setCreateTime(saved.getCreateTime());
             }
         }
+        Long sort = 0L;
+        if (null == config.getSort() || config.getSort() == 0L){
+            sort = templateConfigService.findByMaxSort(config.getGoodsId());
+            if (null == sort){
+                config.setSort(1L);
+            }else {
+                config.setSort(sort+1L);
+            }
+        }
         templateConfigService.save(config);
         return true;
     }

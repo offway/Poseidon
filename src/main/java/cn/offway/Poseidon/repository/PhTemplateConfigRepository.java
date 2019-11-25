@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import cn.offway.Poseidon.domain.PhTemplateConfig;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface PhTemplateConfigRepository extends JpaRepository<PhTemplateConf
 
 	/** 此处写一些自定义的方法 **/
 	List<PhTemplateConfig> findByGoodsId(Long id);
+
+	@Query(nativeQuery=true,value="select sort from ph_template_config where goods_id = ?1 ORDER BY sort DESC LIMIT 1")
+	Long findByMaxSort(Long id);
 }

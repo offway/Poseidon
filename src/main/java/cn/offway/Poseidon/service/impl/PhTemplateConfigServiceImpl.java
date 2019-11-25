@@ -71,4 +71,9 @@ public class PhTemplateConfigServiceImpl implements PhTemplateConfigService {
     public List<PhTemplateConfig> findByGoodsIdList(Long id){
         return phTemplateConfigRepository.findByGoodsId(id);
     }
+
+    @Override
+    public Long findByMaxSort(Long id){
+        return phTemplateConfigRepository.findByMaxSort(id);
+    }
 }

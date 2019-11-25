@@ -71,7 +71,7 @@ public class Template5Controller {
         templateConfig.setGoodsId(template5.getGoodsId());
         templateConfig.setName("template5");
         templateConfig.setTemplateId(template5.getId().toString());
-        templateConfig.setSort(0L);
+        //templateConfig.setSort(0L);
         if ("0".equals(lock.getIslock())){
             templateConfig.setIslock("0");
             templateConfig.setConditions("0");

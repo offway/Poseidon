@@ -68,7 +68,7 @@ public class Template3Controller {
             PhTemplate3 savedObj = template3Service.save(template3);
             // update config
             templateConfig.setTemplateId(String.valueOf(savedObj.getId()));
-            templateConfig.setSort(0L);
+            //templateConfig.setSort(0L);
             templateConfigService.save(templateConfig);
             // update lock
             //模版类型:[0-1号模板,1-2号模板,2-3号模板,3-4号模板,4-5号模板]

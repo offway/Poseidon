@@ -26,4 +26,6 @@ public interface PhTemplateConfigService {
     Page<PhTemplateConfig> list(Pageable pageable, String pid);
 
     List<PhTemplateConfig> findByGoodsIdList(Long id);
+
+    Long findByMaxSort(Long id);
 }
