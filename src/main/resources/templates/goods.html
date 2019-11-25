@@ -122,17 +122,20 @@
 									   onchange="uploadMainFile(this,'0')" placeholder="封面图"
 									   type="file"/>
 								<img alt="" name="image" src="" style="display:none;"/>
+								<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
 								<input class="form-control" name="imageUrl" type="hidden"/>
 							</div>
 						</div>
 					</div>
+					<button type="button" class="btn btn-secondary btn-sm" id="addCoverElementBtn" onclick="addCoverElement(this)">增加封面图</button>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="control-label">音频</label>
 								<input class="btn btn-info" id="audioUrlFile" name="audioUrlFile"
-									   onchange="uploadMainFile(this,'1')" placeholder="封面图"
+									   onchange="uploadMainFile(this,'1')" placeholder="音频"
 									   type="file"/>
+								<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
 								<input class="form-control" name="audioUrl" type="hidden"/>
 							</div>
 						</div>
@@ -235,11 +238,38 @@
 \t\t\t\t\t</div>
 	`;
 
+	var COVER_ELE = `
+\t\t\t\t\t<div class="row">
+\t\t\t\t\t\t<div class="col-md-12">
+\t\t\t\t\t\t\t<div class="form-group">
+\t\t\t\t\t\t\t\t<label class="control-label">封面图</label>
+\t\t\t\t\t\t\t\t<input class="btn btn-info" id="imageUrlFile" name="imageUrlFile"
+\t\t\t\t\t\t\t\t\t   onchange="uploadMainFile(this,'0')" placeholder="封面图"
+\t\t\t\t\t\t\t\t\t   type="file"/>
+\t\t\t\t\t\t\t\t<img alt="" name="image" src="" style="display:none;"/>
+\t\t\t\t\t\t\t\t<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
+\t\t\t\t\t\t\t\t<input class="form-control" name="imageUrl" type="hidden"/>
+\t\t\t\t\t\t\t\t<button type="button" class="btn btn-rounded btn-danger" onclick="delNode(this)">删除</button>
+\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t</div>
+\t\t\t\t\t</div>
+	`;
+
 	var OPTION = "";
 
 	function addUserRow() {
 		$("#userForm").append(ROW);
 		setOption();
+	}
+
+	function delNode(self) {
+		var that = $(self);
+		that.parent().parent().remove();
+	}
+
+	function addCoverElement(self, obj) {
+		var that = $(self);
+		that.before(COVER_ELE);
 	}
 
 	function setOption() {
@@ -255,13 +285,14 @@
 
 	function uploadMainFile(self, type) {
 		var that = $(self);
+		that.parent().find("img[name='okPic']").hide();
 		if (self.files.length > 0) {
 			var file = self.files[0];
 			getQNToken(function (token) {
-				bl= false;
-				if (type=='1'){
+				bl = false;
+				if (type == '1') {
 					sizevideo = 50;
-					bl =true;
+					bl = true;
 				}
 				upload("", token, file, function () {
 					//
@@ -279,8 +310,9 @@
 					} else if (type == "1") {
 						that.parent().find("[name=audioUrl]").val(url);
 					}
-				},bl);
-			},"0");
+					that.parent().find("img[name='okPic']").show();
+				}, bl);
+			}, "0");
 		} else {
 			confirm("未选择任何文件!");
 		}
@@ -518,11 +550,18 @@
 			}
 			$.get("/goods-one", {id: templateId.val()}, function (data) {
 				var form = $("#saveForm");
-				form.find("input[name='imageUrl']").val(data.imageUrl);
-				form.parent().find("[name=image]").attr("src", data.imageUrl);
-				form.parent().find("[name=image]").attr("width", "100px");
-				form.parent().find("[name=image]").attr("height", "100px");
-				form.parent().find("[name=image]").show();
+				var i = 0;
+				for (var img of data.imageUrl.split(",")) {
+					if (i > 0) {
+						addCoverElement("#addCoverElementBtn", img);
+					}
+					i++;
+					form.find("input[name='imageUrl']").last().val(img);
+					form.parent().find("[name=image]").last().attr("src", img);
+					form.parent().find("[name=image]").last().attr("width", "100px");
+					form.parent().find("[name=image]").last().attr("height", "100px");
+					form.parent().find("[name=image]").last().show();
+				}
 				form.find("input[name='audioUrl']").val(data.audioUrl);
 				form.find("input[name='id']").val(data.id);
 				form.find("input[name='price']").val(data.price);

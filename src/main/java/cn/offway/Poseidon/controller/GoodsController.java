@@ -119,9 +119,10 @@ public class GoodsController {
 
     @ResponseBody
     @RequestMapping("/goods-save")
-    public boolean save(PhTemplate template) {
+    public boolean save(PhTemplate template, @RequestParam(name = "imageUrl") String[] imageUrls) {
         template.setCreateTime(new Date());
         template.setReadingNumber(0L);
+        template.setImageUrl(StringUtils.join(imageUrls, ","));
         if (template.getId() != null) {
             PhTemplate saved = templateService.findOne(template.getId());
             if (saved != null) {
