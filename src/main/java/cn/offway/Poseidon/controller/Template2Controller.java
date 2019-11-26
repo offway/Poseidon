@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 @Controller
@@ -74,6 +75,11 @@ public class Template2Controller {
                 }
                 // update config
                 templateConfig.setTemplateId(StringUtils.join(ids, ","));
+                if (StringUtils.isNotBlank(subscribeCount)) {
+                    templateConfig.setConditionsRemark(MessageFormat.format("订阅数达到{0}本即可解锁～", subscribeCount));
+                } else {
+                    templateConfig.setConditionsRemark(null);
+                }
                 //templateConfig.setSort(0L);
                 templateConfigService.save(templateConfig);
                 // update lock

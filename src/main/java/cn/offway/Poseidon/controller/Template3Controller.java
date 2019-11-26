@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +69,11 @@ public class Template3Controller {
             PhTemplate3 savedObj = template3Service.save(template3);
             // update config
             templateConfig.setTemplateId(String.valueOf(savedObj.getId()));
+            if (StringUtils.isNotBlank(subscribeCount)) {
+                templateConfig.setConditionsRemark(MessageFormat.format("订阅数达到{0}本即可解锁～", subscribeCount));
+            } else {
+                templateConfig.setConditionsRemark(null);
+            }
             //templateConfig.setSort(0L);
             templateConfigService.save(templateConfig);
             // update lock
