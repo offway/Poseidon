@@ -80,7 +80,7 @@ public class Template1Controller {
         }else {
             templateConfig.setIslock("1");
             templateConfig.setConditions("1");
-            templateConfig.setConditionsRemark("达到"+lock.getSubscribeCount().toString()+"人后解锁");
+            templateConfig.setConditionsRemark("订阅数达到"+lock.getSubscribeCount().toString()+"本即可解锁～");
         }
         templateConfig.setStatus("0");
         templateConfig = templateConfigService.save(templateConfig);
