@@ -92,8 +92,25 @@
                         <div class="form-group col-md-7" id="unlockText" style="display: none">
                             <label class="control-label">订阅数</label>
                             <input class="form-control" id="subscribeCount" name="subscribeCount" type="text"/>
-                            <label class="control-label">提示文字</label>
+                            <input checked="checked" id="contentType_1" name="contentType" onclick="contentRadio('0')" type="radio"
+                                   value="0"/>
+                            <label for="contentType_1">文字</label>
+                            <input id="contentType_2" name="contentType" type="radio" onclick="contentRadio('1')" value="1"/>
+                            <label for="contentType_2">图片</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-7" id="prompt" style="display: none">
+
                             <input class="form-control" id="promptText" name="promptText" type="text"/>
+                        </div>
+                        <div class="form-group col-md-7" id="mage">
+
+                            <input class="btn btn-info" id="promptImageFile" name="promptImageFile"
+                                   onchange="uploadMainFile(this,'3')" placeholder="视频封面"
+                                   type="file"/>
+                            <img alt="" id="promptImageThree" name="promptImageThree" src="" style="display:none;"/>
+                            <input class="form-control" id="promptImagerUrl" name="promptImage" type="hidden"/>
                         </div>
                     </div>
                     <div class="actions clearfix">
@@ -119,6 +136,19 @@
             $("#unlockText").hide();
             $("#promptText").val("");
             $("#subscribeCount").val("");
+        }
+    }
+    
+    function contentRadio(type) {
+        if (type == "0") {
+            $("#prompt").show();
+            $("#mage").hide();
+            $("#promptImageThree").attr("src", "");
+            $("#promptImagerUrl").val("");
+        } else {
+            $("#mage").show();
+            $("#prompt").hide();
+            $("#promptText").val("");
         }
     }
 
@@ -148,6 +178,15 @@
             $("#unlockText").show();
             form.find("input[name='promptText']").val(data["promptText"]);
             form.find("input[name='subscribeCount']").val(data["subscribeCount"]);
+            form.find("input[name=contentType][value="+data["contentType"]+"]").attr("checked",true);
+            if (data["contentType"] == "1"){
+                form.find("[name=promptImage]").val(data["promptImage"]);
+                form.find("[name=promptImageThree]").attr("src", data["promptImage"]);
+                form.find("[name=promptImageThree]").attr("width", "100px");
+                form.find("[name=promptImageThree]").attr("height", "100px");
+                form.find("[name=promptImageThree]").show();
+            }
+            contentRadio(data["contentType"]);
         }else {
             $("#unlockText").hide();
             $("#promptText").val("");
@@ -188,6 +227,12 @@
                         that.parent().find("[name=videoCover]").attr("width", "100px");
                         that.parent().find("[name=videoCover]").attr("height", "100px");
                         that.parent().find("[name=videoCover]").show();
+                    }else if (type == "3") {
+                        that.parent().find("[name=promptImage]").val(url);
+                        that.parent().find("[name=promptImageThree]").attr("src", url);
+                        that.parent().find("[name=promptImageThree]").attr("width", "100px");
+                        that.parent().find("[name=promptImageThree]").attr("height", "100px");
+                        that.parent().find("[name=promptImageThree]").show();
                     }
                 },bl);
             },type);
