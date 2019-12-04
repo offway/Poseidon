@@ -85,6 +85,7 @@ public class Template4Controller {
         lock.setTemplateType("3");
         lock.setPid(templateConfig.getId());
         lock.setTemplateId(template4.getId());
+        lock.setContentType("0");
         lockService.save(lock);
         return true;
     }

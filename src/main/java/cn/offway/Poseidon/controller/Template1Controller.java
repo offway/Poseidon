@@ -78,6 +78,7 @@ public class Template1Controller {
             templateConfig.setIslock("0");
             templateConfig.setConditions("0");
         }else {
+            lock.setContentType("0");
             templateConfig.setIslock("1");
             templateConfig.setConditions("1");
             templateConfig.setConditionsRemark("订阅数达到"+lock.getSubscribeCount().toString()+"本即可解锁～");

@@ -95,6 +95,7 @@ public class Template2Controller {
                 //是否解锁[0-否,1-是]
                 lock.setIslock(String.valueOf(islock));
                 if (StringUtils.isNotBlank(subscribeCount)) {
+                    lock.setContentType("0");
                     lock.setSubscribeCount(Long.valueOf(subscribeCount));
                 } else {
                     lock.setSubscribeCount(null);
