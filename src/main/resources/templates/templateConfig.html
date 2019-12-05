@@ -275,8 +275,8 @@
 					targets: 5,
 					data: "sort",
 					title: "页面",
-					render:function (data, type, full, meta) {
-						return "第"+data+"页";
+					render: function (data, type, full, meta) {
+						return "第" + (parseInt(data) + 1) + "页";
 					}
 				},
 				{
