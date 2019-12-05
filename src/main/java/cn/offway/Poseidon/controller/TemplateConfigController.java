@@ -1,6 +1,5 @@
 package cn.offway.Poseidon.controller;
 
-import cn.offway.Poseidon.domain.PhConfig;
 import cn.offway.Poseidon.domain.PhTemplateConfig;
 import cn.offway.Poseidon.properties.QiniuProperties;
 import cn.offway.Poseidon.service.PhTemplateConfigService;
@@ -84,12 +83,12 @@ public class TemplateConfigController {
             }
         }
         Long sort = 0L;
-        if (null == config.getSort() || config.getSort() == 0L){
+        if (null == config.getSort() || config.getSort() == 0L) {
             sort = templateConfigService.findByMaxSort(config.getGoodsId());
-            if (null == sort){
+            if (null == sort) {
                 config.setSort(1L);
-            }else {
-                config.setSort(sort+1L);
+            } else {
+                config.setSort(sort + 1L);
             }
         }
         templateConfigService.save(config);
@@ -131,18 +130,26 @@ public class TemplateConfigController {
     @RequestMapping("/config-sorting")
     @ResponseBody
     @Transactional
-    public boolean sorting(Long id,Long sort){
+    public boolean sorting(Long id, Long sort) {
         List<PhTemplateConfig> templateConfigList = new ArrayList<>();
         PhTemplateConfig config = templateConfigService.findOne(id);
         List<PhTemplateConfig> templateConfigs = templateConfigService.findByGoodsIdList(config.getGoodsId());
+        long i = 0;
         for (PhTemplateConfig templateConfig : templateConfigs) {
-            if (templateConfig.getId()==id){
+            if (id.equals(templateConfig.getId())) {
                 templateConfig.setSort(sort);
                 templateConfigService.save(templateConfig);
-            }else if (templateConfig.getSort()>=sort){
-                templateConfig.setSort(templateConfig.getSort()+1);
+                if (i != sort) {
+                    continue;
+                }
+            } else {
+                if (i == sort) {
+                    i++;
+                }
+                templateConfig.setSort(i);
                 templateConfigList.add(templateConfig);
             }
+            i++;
         }
         templateConfigService.save(templateConfigList);
         return true;
