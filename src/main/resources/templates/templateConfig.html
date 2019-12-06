@@ -182,7 +182,8 @@
     }
 
     function sorting(id) {
-		var num = prompt("输入排序值", "0");
+		var num = prompt("输入排序值", "1");
+		num = num-1;
 		if (!isNaN(num)) {
 			$.post("/config-sorting",{id:id,sort:num},function (data) {
 				if (data){
