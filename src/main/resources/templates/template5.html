@@ -64,6 +64,7 @@
                                        type="file"/>
                                 <a href="" id="videoA" name="videoA" style="display: none">点击下载视频</a>
                                 <input class="form-control" name="videoUrl" type="hidden"/>
+                                <img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
                             </div>
                             <div class="row form-group" id="videoCoverDiv">
                                 <label class="control-label">视频封面</label>
@@ -72,7 +73,7 @@
                                        type="file"/>
                                 <img alt="" id="imageThree" name="videoCover" src="" style="display:none;"/>
                                 <input class="form-control" id="videoCoverUrl" name="videoCoverUrl" type="hidden"/>
-                                <img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
+                                <img alt="" name="okPic" src="new/ok.png" style=" display:none;"/>
                             </div>
                         </div>
                     </div>
@@ -351,6 +352,7 @@
     }
 
     function uploadMainFile(self, type) {
+        $(".btn.btn-success.save").hide();
         var that = $(self);
         if (self.files.length > 0) {
             var file = self.files[0];
@@ -391,6 +393,7 @@
                         that.parent().find("[name=promptImageThree]").show();
                     }
                     that.parent().find("img[name='okPic']").show();
+                    $(".btn.btn-success.save").show();
                 }, bl);
             }, type);
         } else {
