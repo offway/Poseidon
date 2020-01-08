@@ -194,6 +194,30 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
+								<label class="control-label">福利1</label>
+								<input type="text" class="form-control" name="welfare1" placeholder="福利1"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">福利2</label>
+								<input type="text" class="form-control" name="welfare2" placeholder="福利2"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">福利3</label>
+								<input type="text" class="form-control" name="welfare3" placeholder="福利3"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
 								<label class="control-label">备注</label>
 								<input type="text" class="form-control" name="remark" placeholder="备注"/>
 							</div>
@@ -604,6 +628,9 @@
 				form.find("input[name='remark']").val(data.remark);
 				form.find("input[name='readingNumber']").val(data.readingNumber);
 				form.find("input[name='soldNumber']").val(data.soldNumber);
+				form.find("input[name='welfare1']").val(data.welfare1);
+				form.find("input[name='welfare2']").val(data.welfare2);
+				form.find("input[name='welfare3']").val(data.welfare3);
 				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
 			});
 		});
