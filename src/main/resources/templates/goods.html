@@ -4,6 +4,7 @@
 	<head th:replace="head"></head>
 	<title>杂志管理</title>
 	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+	<link rel="stylesheet" href="new/colorPicker/themes/nano.min.css"/>
 	<style type="text/css">
 		#div1{
 			width: 30px;
@@ -127,6 +128,15 @@
 							<div class="form-group">
 								<label class="control-label">杂志名称</label>
 								<input type="text" class="form-control" name="templateName" placeholder="杂志名称"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">杂志名称颜色</label>
+								<button type="button" class="btn btn-rounded btn-primary" onclick="showColorPicker(this)">颜色拾取器</button>
+								<input type="hidden" name="nameColor" />
 							</div>
 						</div>
 					</div>
@@ -270,6 +280,7 @@
 	<!-- /.modal-dialog -->
 </div>
 
+<script src="new/colorPicker/pickr.min.js"></script>
 <script th:inline="javascript">
 	/*<![CDATA[*/
 
@@ -309,6 +320,71 @@
 	`;
 
 	var OPTION = "";
+
+	let pickr = null;
+
+	function showColorPicker(self) {
+		var that = $(self);
+		var colorEle = that.parent().find("input[name='nameColor']");
+		var color = colorEle.val() ? colorEle.val() : "#42445a";
+		// Delete previous instance
+		if (pickr) {
+			pickr.destroyAndRemove();
+		}
+		that.after(`<p id="colorPickerEle"></p>`);
+		// Create fresh instance
+		pickr = Pickr.create({
+			el: '#colorPickerEle',
+			theme: 'nano', // or 'monolith', or 'nano'
+			defaultRepresentation: 'HEX',
+			default: color,
+			swatches: [
+				'rgba(244, 67, 54, 1)',
+				'rgba(233, 30, 99, 0.95)',
+				'rgba(156, 39, 176, 0.9)',
+				'rgba(103, 58, 183, 0.85)',
+				'rgba(63, 81, 181, 0.8)',
+				'rgba(33, 150, 243, 0.75)',
+				'rgba(3, 169, 244, 0.7)'
+			],
+			components: {
+				preview: true,
+				opacity: true,
+				hue: true,
+				interaction: {
+					hex: false,
+					rgba: false,
+					hsva: false,
+					input: true,
+					clear: true,
+					save: true
+				}
+			}
+		});
+		pickr.on('init', instance => {
+			console.log('init', instance);
+		}).on('hide', instance => {
+			console.log('hide', instance);
+		}).on('show', (color, instance) => {
+			console.log('show', color, instance);
+		}).on('save', (color, instance) => {
+			console.log('save', color, instance);
+			pickr.hide();
+			console.log(color.toHEXA().toString());
+			colorEle.val(color.toHEXA().toString());
+		}).on('clear', instance => {
+			console.log('clear', instance);
+		}).on('change', (color, instance) => {
+			console.log('change', color, instance);
+		}).on('changestop', instance => {
+			console.log('changestop', instance);
+		}).on('cancel', instance => {
+			console.log('cancel', instance);
+		}).on('swatchselect', (color, instance) => {
+			console.log('swatchselect', color, instance);
+		});
+		pickr.show();
+	}
 
 	function addUserRow() {
 		$("#userForm").append(ROW);
@@ -650,6 +726,7 @@
 				form.find("input[name='welfare1']").val(data.welfare1);
 				form.find("input[name='welfare2']").val(data.welfare2);
 				form.find("input[name='welfare3']").val(data.welfare3);
+				form.find("input[name='nameColor']").val(data.nameColor);
 				jQuery('#modal-6').modal('show', {backdrop: 'fade'});
 			});
 		});
