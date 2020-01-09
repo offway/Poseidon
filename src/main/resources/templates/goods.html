@@ -134,8 +134,21 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label class="control-label">封面图</label>
+								<input class="btn btn-info" id="coverImageUrlFile" name="coverImageUrlFile"
+									   onchange="uploadMainFile(this,'2')" placeholder="封面图"
+									   type="file"/>
+								<img alt="" name="coverImage" src="" style="display:none;"/>
+								<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
+								<input class="form-control" name="coverImageUrl" type="hidden"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">轮播图</label>
 								<input class="btn btn-info" id="imageUrlFile" name="imageUrlFile"
-									   onchange="uploadMainFile(this,'0')" placeholder="封面图"
+									   onchange="uploadMainFile(this,'0')" placeholder="轮播图"
 									   type="file"/>
 								<img alt="" name="image" src="" style="display:none;"/>
 								<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
@@ -143,7 +156,7 @@
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-secondary btn-sm" id="addCoverElementBtn" onclick="addCoverElement(this)">增加封面图</button>
+					<button type="button" class="btn btn-secondary btn-sm" id="addCoverElementBtn" onclick="addCoverElement(this)">增加轮播图</button>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
@@ -282,9 +295,9 @@
 \t\t\t\t\t<div class="row delMe">
 \t\t\t\t\t\t<div class="col-md-12">
 \t\t\t\t\t\t\t<div class="form-group">
-\t\t\t\t\t\t\t\t<label class="control-label">封面图</label>
+\t\t\t\t\t\t\t\t<label class="control-label">轮播图</label>
 \t\t\t\t\t\t\t\t<input class="btn btn-info" id="imageUrlFile" name="imageUrlFile"
-\t\t\t\t\t\t\t\t\t   onchange="uploadMainFile(this,'0')" placeholder="封面图"
+\t\t\t\t\t\t\t\t\t   onchange="uploadMainFile(this,'0')" placeholder="轮播图"
 \t\t\t\t\t\t\t\t\t   type="file"/>
 \t\t\t\t\t\t\t\t<img alt="" name="image" src="" style="display:none;"/>
 \t\t\t\t\t\t\t\t<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
@@ -349,6 +362,12 @@
 						that.parent().find("[name=image]").show();
 					} else if (type == "1") {
 						that.parent().find("[name=audioUrl]").val(url);
+					}else if (type == "2"){
+						that.parent().find("[name=coverImageUrl]").val(url);
+						that.parent().find("[name=coverImage]").attr("src", url);
+						that.parent().find("[name=coverImage]").attr("width", "100px");
+						that.parent().find("[name=coverImage]").attr("height", "100px");
+						that.parent().find("[name=coverImage]").show();
 					}
 					that.parent().find("img[name='okPic']").show();
 				}, bl);
