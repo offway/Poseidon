@@ -104,14 +104,14 @@
                             <label for="contentType_2">图片</label>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-7" id="prompt" style="display: none">
+                    <div class="row" id="unlockCfg" style="display: none">
+                        <div class="form-group col-md-7" id="prompt" style="display: block">
                             <textarea class="form-control" id="promptText" name="promptText" rows="5"/>
                             <input class="form-control" name="remarkBtn" onclick="showFont(this)" type="button"
                                    value="设置字体"/>
                             <input id="remark" name="attribute" type="hidden"/>
                         </div>
-                        <div class="form-group col-md-7" id="mage">
+                        <div class="form-group col-md-7" id="mage" style="display: none">
                             <input class="btn btn-info" id="promptImageFile" name="promptImageFile"
                                    onchange="uploadMainFile(this,'3')" type="file"/>
                             <img alt="" id="promptImageThree" name="promptImageThree" src="" style="display:none;"/>
@@ -283,8 +283,10 @@
 
     function unlockRadio(type) {
         if (type == "1") {
+            $("#unlockCfg").show();
             $("#unlockText").show();
         } else {
+            $("#unlockCfg").hide();
             $("#unlockText").hide();
             $("#promptText").val("");
             $("#remark").val("");
