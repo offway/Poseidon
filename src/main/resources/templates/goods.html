@@ -174,6 +174,7 @@
 								<input class="btn btn-info" id="audioUrlFile" name="audioUrlFile"
 									   onchange="uploadMainFile(this,'1')" placeholder="音频"
 									   type="file"/>
+								<a href="#" name="download" target="_blank" style="display:none;">下载</a>
 								<img alt="" name="okPic" src="new/ok.png" style="display:none;"/>
 								<input class="form-control" name="audioUrl" type="hidden"/>
 							</div>
@@ -430,21 +431,23 @@
 					console.log(err);
 				}, function (res) {
 					var url = qiniuUrl + "/" + res.key;
-					if (type == "0") {
-						that.parent().find("[name=imageUrl]").val(url);
-						that.parent().find("[name=image]").attr("src", url);
-						that.parent().find("[name=image]").attr("width", "100px");
-						that.parent().find("[name=image]").attr("height", "100px");
-						that.parent().find("[name=image]").show();
-					} else if (type == "1") {
-						that.parent().find("[name=audioUrl]").val(url);
-					}else if (type == "2"){
-						that.parent().find("[name=coverImageUrl]").val(url);
-						that.parent().find("[name=coverImage]").attr("src", url);
-						that.parent().find("[name=coverImage]").attr("width", "100px");
-						that.parent().find("[name=coverImage]").attr("height", "100px");
-						that.parent().find("[name=coverImage]").show();
-					}
+                    if (type == "0") {
+                        that.parent().find("[name=imageUrl]").val(url);
+                        that.parent().find("[name=image]").attr("src", url);
+                        that.parent().find("[name=image]").attr("width", "100px");
+                        that.parent().find("[name=image]").attr("height", "100px");
+                        that.parent().find("[name=image]").show();
+                    } else if (type == "1") {
+                        that.parent().find("[name=audioUrl]").val(url);
+                        that.parent().find("[name=download]").attr("href", url);
+                        that.parent().find("[name=download]").show();
+                    } else if (type == "2") {
+                        that.parent().find("[name=coverImageUrl]").val(url);
+                        that.parent().find("[name=coverImage]").attr("src", url);
+                        that.parent().find("[name=coverImage]").attr("width", "100px");
+                        that.parent().find("[name=coverImage]").attr("height", "100px");
+                        that.parent().find("[name=coverImage]").show();
+                    }
 					that.parent().find("img[name='okPic']").show();
 				}, bl);
 			}, "0");
@@ -713,7 +716,17 @@
 					form.parent().find("[name=image]").last().attr("height", "100px");
 					form.parent().find("[name=image]").last().show();
 				}
-				form.find("input[name='audioUrl']").val(data.audioUrl);
+                //封面图
+                form.find("input[name='coverImageUrl']").val(data.coverImageUrl);
+                form.find("[name=coverImage]").attr("src", data.coverImageUrl);
+                form.find("[name=coverImage]").attr("width", "100px");
+                form.find("[name=coverImage]").attr("height", "100px");
+                form.find("[name=coverImage]").show();
+                //音频
+                form.find("input[name='audioUrl']").val(data.audioUrl);
+                form.find("[name=download]").attr("href", data.audioUrl);
+                form.find("[name=download]").show();
+                //其他
 				form.find("input[name='id']").val(data.id);
 				form.find("input[name='price']").val(data.price);
 				form.find("input[name='templateName']").val(data.templateName);
