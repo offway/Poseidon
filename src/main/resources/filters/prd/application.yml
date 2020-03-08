@@ -13,7 +13,7 @@ spring:
   #数据源
   datasource: 
     type: com.alibaba.druid.pool.DruidDataSource
-    url:  jdbc:mysql://rm-uf6bdv92a95017474oo.mysql.rds.aliyuncs.com:3306/phbooks_dev?useUnicode=true&amp;characterEncoding=utf-8
+    url:  jdbc:mysql://rm-uf6bdv92a95017474oo.mysql.rds.aliyuncs.com:3306/phbooks?useUnicode=true&amp;characterEncoding=utf-8
     username:  puhao
     password:  Puhao2018
     driverClassName:  com.mysql.jdbc.Driver
