@@ -1,9 +1,12 @@
 package cn.offway.Poseidon.controller;
 
+import cn.offway.Poseidon.domain.PhReadcode;
 import cn.offway.Poseidon.domain.PhTemplate;
 import cn.offway.Poseidon.properties.QiniuProperties;
+import cn.offway.Poseidon.service.PhReadcodeService;
 import cn.offway.Poseidon.service.PhTemplateService;
 import cn.offway.Poseidon.service.QiniuService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -45,6 +45,9 @@ public class GoodsController {
     private PhTemplateService templateService;
 
     @Autowired
+    private PhReadcodeService readcodeService;
+
+    @Autowired
     private QiniuService qiniuService;
 
     @Autowired
@@ -61,6 +64,12 @@ public class GoodsController {
         map.addAttribute("qiniuUrl", qiniuProperties.getUrl());
         map.addAttribute("token", qiniuService.token());
         return "goods";
+    }
+
+    @RequestMapping("/readCode.html")
+    public String code(ModelMap map, String id) {
+        map.addAttribute("id", id);
+        return "readCode";
     }
 
     /**
@@ -86,6 +95,26 @@ public class GoodsController {
         map.put("iTotalRecords", pages.getTotalElements());//数据总条数  
         map.put("iTotalDisplayRecords", pages.getTotalElements());//显示的条数  
         map.put("aData", pages.getContent());//数据集合 
+        return map;
+    }
+
+    @ResponseBody
+    @RequestMapping("/readCode-data")
+    public Map<String, Object> codeData(HttpServletRequest request, int sEcho, int iDisplayStart, int iDisplayLength, long gid) {
+        //paging start
+        String sortCol = request.getParameter("iSortCol_0");
+        String sortName = request.getParameter("mDataProp_" + sortCol);
+        String sortDir = request.getParameter("sSortDir_0");
+        PageRequest pr = new PageRequest(iDisplayStart == 0 ? 0 : iDisplayStart / iDisplayLength, iDisplayLength < 0 ? 9999999 : iDisplayLength, Direction.fromString(sortDir), sortName);
+        //paging end
+        Page<PhReadcode> pages = readcodeService.findByBuyersIdAndBooksId(null, 0L, gid, pr);
+        // 为操作次数加1，必须这样做
+        int initEcho = sEcho + 1;
+        Map<String, Object> map = new HashMap<>();
+        map.put("sEcho", initEcho);
+        map.put("iTotalRecords", pages.getTotalElements());//数据总条数
+        map.put("iTotalDisplayRecords", pages.getTotalElements());//显示的条数
+        map.put("aData", pages.getContent());//数据集合
         return map;
     }
 
@@ -162,5 +191,28 @@ public class GoodsController {
             templateService.delete(id);
         }
         return true;
+    }
+
+    @ResponseBody
+    @RequestMapping("/goods-generateCode")
+    public boolean generateCode(Long id, int count) {
+        List<PhReadcode> codeList = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            String uuid = RandomStringUtils.randomAlphanumeric(10).toUpperCase();
+            PhReadcode code = new PhReadcode();
+            code.setBooksId(id);
+            code.setState("0");
+            code.setCode(uuid);
+            code.setBuyersId(0L);
+            code.setCreateTime(new Date());
+            code.setRemark("后台生成");
+            codeList.add(code);
+        }
+        if (codeList.isEmpty()) {
+            return false;
+        } else {
+            readcodeService.save(codeList);
+            return true;
+        }
     }
 }

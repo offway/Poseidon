@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<head th:replace="head"></head>
+	<title>阅读码</title>
+	<script src="https://unpkg.com/qiniu-js@2.5.3/dist/qiniu.min.js"></script>
+	<style type="text/css">
+		#div1{
+			width: 30px;
+			height: 30px;
+			border: #000 solid 0px;
+			margin: 30px auto;
+			/* overflow: hidden; */
+		}
+		#div1 img{
+			cursor: pointer;
+			transition: all 0.6s;
+		}
+		#div1 img:hover{
+			transform: scale(10);
+		}
+	</style>
+</head>
+<body class="hold-transition skin-black light-sidebar sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+	<header th:replace="navbar"></header>
+	<aside th:replace="sidebar-menu"></aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header d-none d-md-block">
+			<div class="d-flex align-items-center">
+				<div class="mr-auto">
+					<h3 class="page-title br-0">阅读码</h3>
+				</div>
+				<div class="right-title">
+				</div>
+			</div>
+		</div>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-12">
+					<div class="box">
+						<div class="box-header with-border">
+							<form role="form" class="form-inline">
+							</form>
+						</div>
+						<div class="box-body">
+							<div class="table-responsive">
+								<table id="example-1" class="table table-bordered table-striped">
+								</table>
+							</div>
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+						</div>
+						<!-- /.box-footer-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	<footer th:replace="footer"></footer>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">温馨提示</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<p>您确定要删除选中杂志吗？</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary float-right deleteBtn">确定</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+	var theId = [[${id}]];
+	jQuery(document).ready(function ($) {
+        var oTable = $("#example-1").dataTable({
+            language: {
+                url: "../assets/Chinese.txt"
+            },
+            bFilter: false,
+            bServerSide: true,//服务器处理分页，默认是false，需要服务器处理，必须true
+            sAjaxDataProp: "aData",//是服务器分页的标志，必须有
+            sAjaxSource: "/readCode-data",//通过ajax实现分页的url路径。
+            fnServerParams: function (aData) {
+                var searchArray = $(".form-inline").serializeArray();
+                $.merge(aData, searchArray);
+                aData.push({"name": "gid", "value": theId});//append pid
+            },
+            order: [[0, "desc"]],
+            columnDefs: [
+                {
+                    targets: 0,
+                    data: "id",
+                    width: "5%",
+                    orderable: false,
+                    title: '<div class="checkbox"><input type="checkbox" id="checkbox-all"><label for="checkbox-all"></label></div>',
+                    render: function (data, type, full, meta) {
+                        var uuid = UUID.randomUUID();
+                        return '<div class="checkbox"><input type="checkbox" name="templateId" id="UUID" value="DATA"><label for="UUID"></label></div>'.replace(/UUID/g, uuid).replace("DATA", data);
+                    }
+                },
+                {
+                    targets: 1,
+                    data: "id",
+                    title: "序号"
+                },
+                {
+                    targets: 2,
+                    data: "booksId",
+                    title: "电子刊id"
+                },
+                {
+                    targets: 3,
+                    data: "state",
+                    title: "状态",
+                    render: function (data, type, full, meta) {
+                        /** 状态[0-未使用,1-使用] **/
+                        if (data == "0") {
+                            return "未使用";
+                        } else {
+                            return "已使用";
+                        }
+                    }
+                },
+                {
+                    targets: 4,
+                    data: "code",
+                    title: "阅读码"
+                },
+                {
+                    targets: 5,
+                    data: "buyersId",
+                    title: "购买用户id"
+                },
+                {
+                    targets: 6,
+                    data: "useId",
+                    title: "使用者id"
+                },
+                {
+                    targets: 7,
+                    data: "useTime",
+                    title: "使用时间",
+                    render: function (data, type, row, meta) {
+                        return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                    }
+                },
+                {
+                    targets: 8,
+                    data: "createTime",
+                    title: "创建时间",
+                    render: function (data, type, row, meta) {
+                        return new Date(data).Format("yyyy-MM-dd hh:mm:ss");
+                    }
+                },
+                {
+                    targets: 9,
+                    data: "remark",
+                    title: "备注"
+                }
+            ]
+        });
+
+        $('#example-1').on('click', "#checkbox-all", function () {
+            var obj = $(this);
+            $("input[name='templateId']").each(function (i, e) {
+                this.checked = obj[0].checked;
+            });
+        });
+
+        $(".btn.btn-info.delete").click(function () {
+            var templateId = $("input[name='templateId']:checked");
+            if (templateId.length < 1) {
+                toastr.error("请至少选择一条数据操作", "温馨提示");
+                return;
+            }
+            jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+        });
+
+        $(".deleteBtn").click(function () {
+            var ids = [];
+            $("input[name='templateId']:checked").each(function (i, e) {
+                ids.push(e.value);
+            });
+            $.post("/goods-delete", {
+                ids: ids
+            }, function (data) {
+                if (data) {
+                    jQuery('#modal-1').modal('hide');
+                    toastr.success("您的操作已成功！", "温馨提示");
+                    oTable.fnDraw(oTable.fnSettings());
+                } else {
+                    toastr.error("操作失败,请稍后再试", "温馨提示");
+                }
+            });
+            return false;
+        });
+	});
+	/*]]>*/
+</script>
+</body>
+</html>

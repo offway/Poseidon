@@ -78,6 +78,8 @@
 							<button class="btn btn-info edit">修改</button>
 							<button class="btn btn-info delete">删除</button>
 							<button class="btn btn-info addRank">添加虚拟用户</button>
+							<button class="btn btn-info generateCode">生成阅读码</button>
+							<button class="btn btn-info listCode">查看阅读码</button>
 						</div>
 						<!-- /.box-footer-->
 					</div>
@@ -779,6 +781,35 @@
 				}
 			});
 		});
+
+        $(".btn.btn-info.generateCode").click(function () {
+            var templateId = $("input[name='templateId']:checked");
+            if (templateId.length != 1) {
+                toastr.error("请选择一条数据操作", "温馨提示");
+                return;
+            }
+            var count = prompt("输入优惠券数量", "10");
+            if (isNaN(count)) {
+                toastr.error("输入优惠券数量", "温馨提示");
+                return;
+            }
+            $.get("/goods-generateCode", {"id": templateId.val(), "count": count}, function (data) {
+                if (data) {
+                    toastr.success("操作已成功！", "温馨提示");
+                } else {
+                    toastr.error("操作失败", "温馨提示");
+                }
+            });
+        });
+
+        $(".btn.btn-info.listCode").click(function () {
+            var templateId = $("input[name='templateId']:checked");
+            if (templateId.length != 1) {
+                toastr.error("请选择一条数据操作", "温馨提示");
+                return;
+            }
+            window.open('/readCode.html?id=' + templateId.val(), "_blank");
+        });
 	});
 	/*]]>*/
 </script>
