@@ -65,7 +65,7 @@ public class PhOrderServiceImpl implements PhOrderService {
 				if(StringUtils.isNotBlank(orderNo)){
 					params.add(criteriaBuilder.equal(root.get("orderNo"), orderNo));
 				}
-				if(StringUtils.isNotBlank(orderNo)){
+				if(StringUtils.isNotBlank(status)){
 					params.add(criteriaBuilder.equal(root.get("status"), status));
 				}
 				if(StringUtils.isNotBlank(userId)){
