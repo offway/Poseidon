@@ -1,8 +1,10 @@
 package cn.offway.Poseidon.controller;
 
+import cn.offway.Poseidon.domain.PhLock;
 import cn.offway.Poseidon.domain.PhReadcode;
 import cn.offway.Poseidon.domain.PhTemplate;
 import cn.offway.Poseidon.properties.QiniuProperties;
+import cn.offway.Poseidon.service.PhLockService;
 import cn.offway.Poseidon.service.PhReadcodeService;
 import cn.offway.Poseidon.service.PhTemplateService;
 import cn.offway.Poseidon.service.QiniuService;
@@ -46,6 +48,9 @@ public class GoodsController {
 
     @Autowired
     private PhReadcodeService readcodeService;
+
+    @Autowired
+    private PhLockService lockService;
 
     @Autowired
     private QiniuService qiniuService;
@@ -137,11 +142,29 @@ public class GoodsController {
     @ResponseBody
     @RequestMapping("/goods-rank-add")
     public boolean addRank(String gid, @RequestParam(name = "userId") String[] uid, @RequestParam(name = "count") double[] count) {
+        double total = 0;
         String key = MessageFormat.format("{0}_{1}", KEY_RANK, gid);
         if (uid.length == count.length) {
             for (int i = 0; i < uid.length; i++) {
                 stringRedisTemplate.opsForZSet().add(key, uid[i], count[i]);
+                total += count[i];
             }
+        }
+        //更新总订阅数
+        PhTemplate template = templateService.findOne(Long.valueOf(gid));
+        template.setSubscribeSum(template.getSubscribeSum() + (long) total);
+        templateService.save(template);
+        //检查解锁情况
+        List<PhLock> locks = lockService.findAllByGoodsId(template.getId());
+        List<PhLock> lockList = new ArrayList<>();
+        for (PhLock lock : locks) {
+            if ("1".equals(lock.getUnlock()) && (template.getSubscribeSum() >= lock.getSubscribeCount())) {
+                lock.setUnlock("0");
+                lockList.add(lock);
+            }
+        }
+        if (lockList.size() > 0) {
+            lockService.save(lockList);
         }
         return true;
     }

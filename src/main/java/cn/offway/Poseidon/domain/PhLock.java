@@ -103,6 +103,14 @@ public class PhLock implements Serializable {
         this.islock = islock;
     }
 
+    public String getUnlock() {
+        return getIslock();
+    }
+
+    public void setUnlock(String islock) {
+        setIslock(islock);
+    }
+
     @Column(name = "subscribe_count", length = 11)
     public Long getSubscribeCount() {
         return subscribeCount;

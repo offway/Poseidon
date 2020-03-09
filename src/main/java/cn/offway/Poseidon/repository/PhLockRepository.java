@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import cn.offway.Poseidon.domain.PhLock;
 
+import java.util.List;
+
 /**
  * 解锁条件表Repository接口
  *
@@ -19,4 +21,6 @@ public interface PhLockRepository extends JpaRepository<PhLock, Long>, JpaSpecif
     PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId, String type, Long templateId);
 
     PhLock findByGoodsIdAndTemplateTypeAndPid(Long goodsId, String type, Long pid);
+
+    List<PhLock> findByGoodsId(Long id);
 }

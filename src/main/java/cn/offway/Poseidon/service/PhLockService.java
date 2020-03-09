@@ -24,4 +24,6 @@ public interface PhLockService {
     PhLock findByGoodsIdAndTemplateTypeAndTemplateId(Long goodsId, String type, Long templateId);
 
     PhLock findByGoodsIdAndTemplateTypeAndConfigId(Long goodsId, String type, Long configId);
+
+    List<PhLock> findAllByGoodsId(Long id);
 }
