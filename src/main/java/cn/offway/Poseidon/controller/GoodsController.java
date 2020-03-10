@@ -142,17 +142,20 @@ public class GoodsController {
     @ResponseBody
     @RequestMapping("/goods-rank-add")
     public boolean addRank(String gid, @RequestParam(name = "userId") String[] uid, @RequestParam(name = "count") double[] count) {
-        double total = 0;
         String key = MessageFormat.format("{0}_{1}", KEY_RANK, gid);
         if (uid.length == count.length) {
             for (int i = 0; i < uid.length; i++) {
                 stringRedisTemplate.opsForZSet().add(key, uid[i], count[i]);
-                total += count[i];
             }
+        }
+        //重新计算总订阅数
+        double total = 0;
+        for (ZSetOperations.TypedTuple<String> obj : stringRedisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 1000)) {
+            total += obj.getScore().intValue();
         }
         //更新总订阅数
         PhTemplate template = templateService.findOne(Long.valueOf(gid));
-        template.setSubscribeSum(template.getSubscribeSum() + (long) total);
+        template.setSubscribeSum((long) total);
         templateService.save(template);
         //检查解锁情况
         List<PhLock> locks = lockService.findAllByGoodsId(template.getId());
