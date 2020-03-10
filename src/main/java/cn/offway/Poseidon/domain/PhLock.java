@@ -103,6 +103,7 @@ public class PhLock implements Serializable {
         this.islock = islock;
     }
 
+    @Transient
     public String getUnlock() {
         return getIslock();
     }
